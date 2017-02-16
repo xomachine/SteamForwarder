@@ -1,6 +1,6 @@
 import re
 import parseopt
-from os import walkFiles
+from os import walkFiles, existsFile
 from strutils import `%`, join, strip, toUpperAscii
 from sequtils import mapIt
 from ospaths import `/`, extractFilename, changeFileExt,
@@ -28,17 +28,18 @@ type SpecFile = tuple
   args: seq[string]
   newnames: seq[string]
  
-let classre = re"^class\s+(\w+)[^;]*({?)\s*$"
+let classre = re"^class\s+(\w+)[^#;]*({?)\s*$"
 let enumterm = re"^\s+};\s*$"
 let argre = re("""\s*($1)\s*(\w+)\s*""" % tdesc)
 let enumre = re"^\s+enum\s+(\w+)\s*$"
 let closere = re"^};\s*$"
 let methodre = re("""^\s*.*virtual\s+(""" & tdesc &
-  """)\s*(\w+)\((.*)\)[^)]*;.*$""")
+  """)\s*(\w+)\(([^{}]*)\)[^)]*;.*$""")
 let openre = re"^{\s*$"
 let ifdefre = re"^\s*\#ifdef\s+.*$"
 let ifre = re"^\s*\#if\s+.*$"
 let endifre = re"^\s*\#endif\s*$"
+let elsere = re"^\s*\#else\s*$"
 let sapire = re("""^(S_API|inline)\s+("""& tdesc &
               """)(S_CALLTYPE\s+)?(\w+)\(([^{}]*)\)""" &
               """[^{})]*;.*$""")
@@ -260,7 +261,17 @@ proc addCall(oss: File, call: CallInfo, spec: var SpecFile) =
 proc readHeader(oss: File, spec: var SpecFile,
                 source, dest, name: string) =
   var matches = newSeq[string](5)
+  var skipper = 0
   for line in (source / name).lines():
+    if line.match(ifre) or line.match(ifdefre):
+      if skipper > 0 or re"_PS3" in line or
+         re"_SERVER" in line:
+        skipper += 1
+      continue
+    elif skipper > 0:
+      if line.match(endifre) or line.match(elsere):
+        skipper -= 1
+      continue
     if line.match(sapire, matches):
       let fname = matches[3]
       let rettype = matches[1].strip()
@@ -277,7 +288,8 @@ proc parseSteamApiH(source, dest: string,
   let osfile = "steam_api.cpp"
   let oss = open(osfile, fmWrite)
   oss.writeLine """#include "config.h""""
-  oss.writeLine """#include "steam_api_flat.h""""
+  if existsFile(source / "steam_api_flat.h"):
+    oss.writeLine """#include "steam_api_flat.h""""
   oss.writeLine """#include "steam_api.h""""
   oss.writeLine """#include "$1/steam_api_.h"""" % dest
   oss.writeLine """#include "stdint.h""""
@@ -285,8 +297,10 @@ proc parseSteamApiH(source, dest: string,
   oss.writeLine """extern "C" {"""
   oss.writeLine """#endif"""
   oss.readHeader(spec, source, dest, "steam_api.h")
-  oss.readHeader(spec, source, dest, "steam_api_flat.h")
-  oss.readHeader(spec, source, dest, "steam_api_internal.h")
+  if existsFile(source / "steam_api_flat.h"):
+    oss.readHeader(spec, source, dest, "steam_api_flat.h")
+  if existsFile(source / "steam_api_internal.h"):
+    oss.readHeader(spec, source, dest, "steam_api_internal.h")
   #oss.addCall((name: "SteamClient", args: @[],
   #             rettype: "ISteamClient *", prefix: "")
   oss.writeLine """#ifdef __cplusplus"""
@@ -333,7 +347,7 @@ proc makeClasses(filename: string, targetdir:string,
         skipper += 1
       continue
     elif skipper > 0:
-      if line.match(endifre):
+      if line.match(endifre) or line.match(elsere):
         skipper -= 1
       continue
     if line.match(classre, matches):
@@ -361,12 +375,13 @@ proc makeClasses(filename: string, targetdir:string,
            matches[2], prereturn & "*")
         else: (matches[2], prereturn)
       let mname = matches[1]
+      if cur_class.len <= 0:
+        continue
       if otype == header:
           outs.writeLine "  virtual $1 $2($3)" %
             [returntype, mname, args] &
             " __attribute__((thiscall));"
       else:
-        assert cur_class.len > 0
         let pargs = (thetype:"this[$1]" % cur_class,
                      name: "this") & parseArgs(args)
         outs.writeLine "$1 $2_::$3($4)" %

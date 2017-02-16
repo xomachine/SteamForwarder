@@ -53,28 +53,8 @@ steam_api_dll_OBJS    = $(steam_api_dll_C_SRCS:.c=.o) \
 			$(steam_api_dll_CXX_SRCS:.cpp=.o) \
 			$(steam_api_dll_RC_SRCS:.rc=.res)
 PROTOFILES = steam_api_dll.h steam_api_main.cpp
-WRAPPERS = autoclass/wrap_isteamapplist.o \
-           autoclass/wrap_isteamapps.o \
-           autoclass/wrap_isteamclient.o \
-           autoclass/wrap_isteamcontroller.o \
-           autoclass/wrap_isteamfriends.o \
-           autoclass/wrap_isteamgameserver.o \
-           autoclass/wrap_isteamgameserverstats.o \
-           autoclass/wrap_isteamhtmlsurface.o \
-           autoclass/wrap_isteamhttp.o \
-           autoclass/wrap_isteaminventory.o \
-           autoclass/wrap_isteammatchmaking.o \
-           autoclass/wrap_isteammusic.o \
-           autoclass/wrap_isteammusicremote.o \
-           autoclass/wrap_isteamnetworking.o \
-           autoclass/wrap_isteamremotestorage.o \
-           autoclass/wrap_isteamscreenshots.o \
-           autoclass/wrap_isteamugc.o \
-           autoclass/wrap_isteamunifiedmessages.o \
-           autoclass/wrap_isteamuser.o \
-           autoclass/wrap_isteamuserstats.o \
-           autoclass/wrap_isteamutils.o \
-           autoclass/wrap_isteamvideo.o
+WRAPPER_CPPS = $(wildcard autoclass/*.cpp)
+WRAPPERS = $(WRAPPER_CPPS:.cpp=.o)
 
 ### Global source lists
 
