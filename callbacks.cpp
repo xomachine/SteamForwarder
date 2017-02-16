@@ -1,6 +1,5 @@
-#include "callbacks.h"
 #include <map>
-
+#include "callbacks.h"
 std::map<WinCallback*, WrappedCallback*> callbackHolder;
 
 WrappedCallback::WrappedCallback(WinCallback *wc)
