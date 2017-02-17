@@ -15,7 +15,7 @@ void WrappedCallback::Run(void *pvParams)
 }
 void WrappedCallback::Run(void *pvParams, bool onIOFailure, SteamAPICall_t hSteamAPICall)
 {
-  TRACE("((WrappedCallback*)%p, (void*)%p), (bool)%d, (SteamAPICall_t)%ld\n", this, pvParams, onIOFailure, hSteamAPICall);
+  TRACE("((WrappedCallback*)%p, (void*)%p), (bool)%d, (SteamAPICall_t)%p\n", this, pvParams, onIOFailure, hSteamAPICall);
   this->internal->Run(pvParams, onIOFailure, hSteamAPICall);
 }
 int WrappedCallback::GetCallbackSizeBytes()
@@ -30,11 +30,10 @@ WrappedCallback *wrap(WinCallback *p)
   WrappedCallback *result= callbackHolder[p];
   if (result == NULL)
   {
-    TRACE("Created new wrapper\n", p);
     result = new WrappedCallback(p);
     callbackHolder[p] = result;
   }
-  TRACE("Wrapper for (WinCallback*)%p is (WrappedCallback*)%ld\n", p, result);
+  TRACE("Wrapper for (WinCallback*)%p is (WrappedCallback*)%p\n", p, result);
   return result;
 }
 #ifdef __cplusplus
