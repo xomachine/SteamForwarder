@@ -6,16 +6,22 @@ WrappedCallback::WrappedCallback(WinCallback *wc)
 {
   TRACE("((WrappedCallback*)%p = wrapped[(WinCallback)%p])\n", this, wc);
   internal = wc;
+  m_nCallbackFlags = wc->m_nCallbackFlags;
+  m_iCallback = wc->m_iCallback;
 }
+
+#define ARGSBACK this->internal->m_nCallbackFlags = this->m_nCallbackFlags; this->internal->m_iCallback = this->m_iCallback;
 
 void WrappedCallback::Run(void *pvParams)
 {
   TRACE("((WrappedCallback*)%p, (void*)%p)\n", this, pvParams);
+  ARGSBACK;
   this->internal->Run(pvParams);
 }
 void WrappedCallback::Run(void *pvParams, bool onIOFailure, SteamAPICall_t hSteamAPICall)
 {
   TRACE("((WrappedCallback*)%p, (void*)%p), (bool)%d, (SteamAPICall_t)%p\n", this, pvParams, onIOFailure, hSteamAPICall);
+  ARGSBACK;
   this->internal->Run(pvParams, onIOFailure, hSteamAPICall);
 }
 int WrappedCallback::GetCallbackSizeBytes()
