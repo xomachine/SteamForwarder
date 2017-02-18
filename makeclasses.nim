@@ -117,6 +117,11 @@ proc genBody(outs: File, cinfo: CallInfo,
       [basereturntype, outval, cond] 
     outs.writeLine "  $4->internal = $3$1($2);" %
       [cinfo.name, namelist, cinfo.prefix, outval]
+    outs.writeLine """  if (!$1->internal) {
+    delete $1;
+    TRACE("() = nil\n");
+    return NULL;
+  }""" % outval
     outs.writeLine("""  TRACE(" = $1 wrapped[$2]\n",""" %
       [mapper(basereturntype & "_*"), mapper(cinfo.rettype)] &
       """ $1, $1->internal);""" % outval)

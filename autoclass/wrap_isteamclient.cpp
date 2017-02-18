@@ -42,6 +42,11 @@ ISteamUser * ISteamClient_::GetISteamUser( HSteamUser hSteamUser, HSteamPipe hSt
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamUser, hSteamPipe, pchVersion);
   auto result = new ISteamUser_();
   result->internal = this->internal->GetISteamUser(hSteamUser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamUser_*)%p wrapped[(ISteamUser *)%p]\n", result, result->internal);
   return (ISteamUser *)result;
 }
@@ -50,6 +55,11 @@ ISteamGameServer * ISteamClient_::GetISteamGameServer( HSteamUser hSteamUser, HS
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamUser, hSteamPipe, pchVersion);
   auto result = new ISteamGameServer_();
   result->internal = this->internal->GetISteamGameServer(hSteamUser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamGameServer_*)%p wrapped[(ISteamGameServer *)%p]\n", result, result->internal);
   return (ISteamGameServer *)result;
 }
@@ -63,6 +73,11 @@ ISteamFriends * ISteamClient_::GetISteamFriends( HSteamUser hSteamUser, HSteamPi
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamUser, hSteamPipe, pchVersion);
   auto result = new ISteamFriends_();
   result->internal = this->internal->GetISteamFriends(hSteamUser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamFriends_*)%p wrapped[(ISteamFriends *)%p]\n", result, result->internal);
   return (ISteamFriends *)result;
 }
@@ -71,6 +86,11 @@ ISteamUtils * ISteamClient_::GetISteamUtils( HSteamPipe hSteamPipe, const char *
   TRACE("((this[ISteamClient])%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamPipe, pchVersion);
   auto result = new ISteamUtils_();
   result->internal = this->internal->GetISteamUtils(hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamUtils_*)%p wrapped[(ISteamUtils *)%p]\n", result, result->internal);
   return (ISteamUtils *)result;
 }
@@ -79,6 +99,11 @@ ISteamMatchmaking * ISteamClient_::GetISteamMatchmaking( HSteamUser hSteamUser, 
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamUser, hSteamPipe, pchVersion);
   auto result = new ISteamMatchmaking_();
   result->internal = this->internal->GetISteamMatchmaking(hSteamUser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamMatchmaking_*)%p wrapped[(ISteamMatchmaking *)%p]\n", result, result->internal);
   return (ISteamMatchmaking *)result;
 }
@@ -87,6 +112,11 @@ ISteamMatchmakingServers * ISteamClient_::GetISteamMatchmakingServers( HSteamUse
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamUser, hSteamPipe, pchVersion);
   auto result = new ISteamMatchmakingServers_();
   result->internal = this->internal->GetISteamMatchmakingServers(hSteamUser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamMatchmakingServers_*)%p wrapped[(ISteamMatchmakingServers *)%p]\n", result, result->internal);
   return (ISteamMatchmakingServers *)result;
 }
@@ -102,6 +132,11 @@ ISteamUserStats * ISteamClient_::GetISteamUserStats( HSteamUser hSteamUser, HSte
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamUser, hSteamPipe, pchVersion);
   auto result = new ISteamUserStats_();
   result->internal = this->internal->GetISteamUserStats(hSteamUser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamUserStats_*)%p wrapped[(ISteamUserStats *)%p]\n", result, result->internal);
   return (ISteamUserStats *)result;
 }
@@ -110,6 +145,11 @@ ISteamGameServerStats * ISteamClient_::GetISteamGameServerStats( HSteamUser hSte
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamuser, hSteamPipe, pchVersion);
   auto result = new ISteamGameServerStats_();
   result->internal = this->internal->GetISteamGameServerStats(hSteamuser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamGameServerStats_*)%p wrapped[(ISteamGameServerStats *)%p]\n", result, result->internal);
   return (ISteamGameServerStats *)result;
 }
@@ -118,6 +158,11 @@ ISteamApps * ISteamClient_::GetISteamApps( HSteamUser hSteamUser, HSteamPipe hSt
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamUser, hSteamPipe, pchVersion);
   auto result = new ISteamApps_();
   result->internal = this->internal->GetISteamApps(hSteamUser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamApps_*)%p wrapped[(ISteamApps *)%p]\n", result, result->internal);
   return (ISteamApps *)result;
 }
@@ -126,6 +171,11 @@ ISteamNetworking * ISteamClient_::GetISteamNetworking( HSteamUser hSteamUser, HS
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamUser, hSteamPipe, pchVersion);
   auto result = new ISteamNetworking_();
   result->internal = this->internal->GetISteamNetworking(hSteamUser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamNetworking_*)%p wrapped[(ISteamNetworking *)%p]\n", result, result->internal);
   return (ISteamNetworking *)result;
 }
@@ -134,6 +184,11 @@ ISteamRemoteStorage * ISteamClient_::GetISteamRemoteStorage( HSteamUser hSteamus
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamuser, hSteamPipe, pchVersion);
   auto result = new ISteamRemoteStorage_();
   result->internal = this->internal->GetISteamRemoteStorage(hSteamuser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamRemoteStorage_*)%p wrapped[(ISteamRemoteStorage *)%p]\n", result, result->internal);
   return (ISteamRemoteStorage *)result;
 }
@@ -142,6 +197,11 @@ ISteamScreenshots * ISteamClient_::GetISteamScreenshots( HSteamUser hSteamuser, 
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamuser, hSteamPipe, pchVersion);
   auto result = new ISteamScreenshots_();
   result->internal = this->internal->GetISteamScreenshots(hSteamuser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamScreenshots_*)%p wrapped[(ISteamScreenshots *)%p]\n", result, result->internal);
   return (ISteamScreenshots *)result;
 }
@@ -173,6 +233,11 @@ ISteamHTTP * ISteamClient_::GetISteamHTTP( HSteamUser hSteamuser, HSteamPipe hSt
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamuser, hSteamPipe, pchVersion);
   auto result = new ISteamHTTP_();
   result->internal = this->internal->GetISteamHTTP(hSteamuser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamHTTP_*)%p wrapped[(ISteamHTTP *)%p]\n", result, result->internal);
   return (ISteamHTTP *)result;
 }
@@ -181,6 +246,11 @@ ISteamUnifiedMessages * ISteamClient_::GetISteamUnifiedMessages( HSteamUser hSte
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamuser, hSteamPipe, pchVersion);
   auto result = new ISteamUnifiedMessages_();
   result->internal = this->internal->GetISteamUnifiedMessages(hSteamuser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamUnifiedMessages_*)%p wrapped[(ISteamUnifiedMessages *)%p]\n", result, result->internal);
   return (ISteamUnifiedMessages *)result;
 }
@@ -189,6 +259,11 @@ ISteamController * ISteamClient_::GetISteamController( HSteamUser hSteamUser, HS
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamUser, hSteamPipe, pchVersion);
   auto result = new ISteamController_();
   result->internal = this->internal->GetISteamController(hSteamUser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamController_*)%p wrapped[(ISteamController *)%p]\n", result, result->internal);
   return (ISteamController *)result;
 }
@@ -197,6 +272,11 @@ ISteamUGC * ISteamClient_::GetISteamUGC( HSteamUser hSteamUser, HSteamPipe hStea
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamUser, hSteamPipe, pchVersion);
   auto result = new ISteamUGC_();
   result->internal = this->internal->GetISteamUGC(hSteamUser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamUGC_*)%p wrapped[(ISteamUGC *)%p]\n", result, result->internal);
   return (ISteamUGC *)result;
 }
@@ -205,6 +285,11 @@ ISteamAppList * ISteamClient_::GetISteamAppList( HSteamUser hSteamUser, HSteamPi
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamUser, hSteamPipe, pchVersion);
   auto result = new ISteamAppList_();
   result->internal = this->internal->GetISteamAppList(hSteamUser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamAppList_*)%p wrapped[(ISteamAppList *)%p]\n", result, result->internal);
   return (ISteamAppList *)result;
 }
@@ -213,6 +298,11 @@ ISteamMusic * ISteamClient_::GetISteamMusic( HSteamUser hSteamuser, HSteamPipe h
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamuser, hSteamPipe, pchVersion);
   auto result = new ISteamMusic_();
   result->internal = this->internal->GetISteamMusic(hSteamuser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamMusic_*)%p wrapped[(ISteamMusic *)%p]\n", result, result->internal);
   return (ISteamMusic *)result;
 }
@@ -221,6 +311,11 @@ ISteamMusicRemote * ISteamClient_::GetISteamMusicRemote(HSteamUser hSteamuser, H
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamuser, hSteamPipe, pchVersion);
   auto result = new ISteamMusicRemote_();
   result->internal = this->internal->GetISteamMusicRemote(hSteamuser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamMusicRemote_*)%p wrapped[(ISteamMusicRemote *)%p]\n", result, result->internal);
   return (ISteamMusicRemote *)result;
 }
@@ -229,6 +324,11 @@ ISteamHTMLSurface * ISteamClient_::GetISteamHTMLSurface(HSteamUser hSteamuser, H
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamuser, hSteamPipe, pchVersion);
   auto result = new ISteamHTMLSurface_();
   result->internal = this->internal->GetISteamHTMLSurface(hSteamuser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamHTMLSurface_*)%p wrapped[(ISteamHTMLSurface *)%p]\n", result, result->internal);
   return (ISteamHTMLSurface *)result;
 }
@@ -249,6 +349,11 @@ ISteamInventory * ISteamClient_::GetISteamInventory( HSteamUser hSteamuser, HSte
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamuser, hSteamPipe, pchVersion);
   auto result = new ISteamInventory_();
   result->internal = this->internal->GetISteamInventory(hSteamuser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamInventory_*)%p wrapped[(ISteamInventory *)%p]\n", result, result->internal);
   return (ISteamInventory *)result;
 }
@@ -257,6 +362,11 @@ ISteamVideo * ISteamClient_::GetISteamVideo( HSteamUser hSteamuser, HSteamPipe h
   TRACE("((this[ISteamClient])%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", this, hSteamuser, hSteamPipe, pchVersion);
   auto result = new ISteamVideo_();
   result->internal = this->internal->GetISteamVideo(hSteamuser, hSteamPipe, pchVersion);
+  if (!result->internal) {
+    delete result;
+    TRACE("() = nil\n");
+    return NULL;
+  }
   TRACE(" = (ISteamVideo_*)%p wrapped[(ISteamVideo *)%p]\n", result, result->internal);
   return (ISteamVideo *)result;
 }
