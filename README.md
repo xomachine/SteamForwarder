@@ -20,10 +20,6 @@ steam_api.dll implementation for wine. Your windows games now can interact with 
 
 ## Hard way
 1. Install the [Nim compiler](https://nim-lang.org/download.html) (probably, it can be found in your distro repo). PS: Yes, I know, that code generator could be implemented in some popular language like python, but I wanted to write it in Nim just because I like this language and want to make it popular =P
-2. Compile code generator executable using command `nim c makeclasses.nim`
-3. Put **steam_api.dll** from your game into repo root.
-4. Generate spec file using winedump: `winedump spec steam_api.dll`.
-5. Remove the content of the **autoclass** folder (except the folder itself).
-6. Generate new class wrappers using command `sh codegen.sh`.
-7. Clean old object files if they're present by `make clean`.
-8. Compile SteamForwarder using `make` command.
+2. Put **steam_api.dll** from your game or steam sdk into repo root.
+3. Regenerate code by `make generate-code`.
+4. Compile SteamForwarder using `make` command.
