@@ -6,16 +6,22 @@
 
 SRCDIR                = .
 SUBDIRS               =
-DLLS                  = steam_api.dll
 LIBS                  =
 EXES                  =
 
 
 
 ### Common settings
+ARCH                  ?= 32
+ifeq ($(ARCH), 64)
+  LIB_POSTFIX = 64
+else
+  LIB_POSTFIX =
+endif
+DLLS                  = steam_api$(LIB_POSTFIX).dll
 CEXTRA                = -mno-cygwin \
-			-m32
-CXXEXTRA              = -m32 -fpermissive
+			-m$(ARCH)
+CXXEXTRA              = -m$(ARCH) -fpermissive
 RCEXTRA               =
 DEFINES               =  \
 			-D__WINESRC__ \
@@ -26,19 +32,19 @@ INCLUDE_PATH          = -Isteam \
 DLL_PATH              =
 DLL_IMPORTS           =
 LIBRARY_PATH          = -L.
-LIBRARIES             = -lsteam_api
+LIBRARIES             = -lsteam_api$(LIB_POSTFIX)
 
 
 ### steam_api.dll sources and settings
 
-steam_api_dll_MODULE  = steam_api.dll
+steam_api_dll_MODULE  = steam_api$(LIB_POSTFIX).dll
 steam_api_dll_C_SRCS  =
 steam_api_dll_CXX_SRCS= steam_api.cpp callbacks.cpp
 steam_api_dll_RC_SRCS =
 steam_api_dll_LDFLAGS = -shared \
 			steam_api.auto.spec \
 			-mno-cygwin \
-			-m32
+			-m$(ARCH)
 steam_api_dll_ARFLAGS =
 steam_api_dll_DLL_PATH=
 steam_api_dll_DLLS    = odbc32 \
@@ -52,7 +58,6 @@ steam_api_dll_LIBRARIES= uuid
 steam_api_dll_OBJS    = $(steam_api_dll_C_SRCS:.c=.o) \
 			$(steam_api_dll_CXX_SRCS:.cpp=.o) \
 			$(steam_api_dll_RC_SRCS:.rc=.res)
-PROTOFILES = steam_api_dll.h steam_api_main.cpp
 WRAPPER_CPPS = $(wildcard autoclass/*.cpp)
 WRAPPERS = $(WRAPPER_CPPS:.cpp=.o)
 
@@ -73,6 +78,19 @@ AR = ar
 ### Generic targets
 
 all: $(SUBDIRS) $(WRAPPERS) $(DLLS:%=%.so) $(LIBS) $(EXES)
+
+clean-generated-code: clean
+	$(RM) -f $(WRAPPER_CPPS) $(WRAPPER_CPPS:.cpp=.h) steam_api.auto.spec steam_api.cpp
+
+generate-code: clean clean-generated-code build-codegen spec
+	./makeclasses --spec=$(DLLS:.dll=.spec) -s=steam -t=autoclass
+
+build-codegen:
+	nim c makeclasses.nim
+
+spec:
+	winedump spec $(DLLS)
+
 ### Build rules
 
 .PHONY: all clean dummy
@@ -85,11 +103,6 @@ $(SUBDIRS): dummy
 .SUFFIXES: .h.proto .cpp.proto .h .cpp .cxx .rc .res
 DEFINCL = $(INCLUDE_PATH) $(DEFINES) $(OPTIONS)
 
-#.h.proto.h:
-#	./fixit < $< > $@
-#
-#.cpp.proto.cpp:
-#	./fixit < $< > $@
 
 .c.o:
 	$(CC) -c $(CFLAGS) $(CEXTRA) $(DEFINCL) -o $@ $<
@@ -111,7 +124,7 @@ CLEAN_FILES     = y.tab.c y.tab.h lex.yy.c core *.orig *.rej \
 clean:: $(SUBDIRS:%=%/__clean__) $(EXTRASUBDIRS:%=%/__clean__)
 	$(RM) $(CLEAN_FILES) $(RC_SRCS:.rc=.res) $(C_SRCS:.c=.o) $(CXX_SRCS:.cpp=.o)
 	$(RM) $(DLLS:%=%.so) $(LIBS) $(EXES) $(EXES:%=%.so)
-#	$(RM) $(PROTOFILES)
+	$(RM) $(WRAPPERS)
 
 $(SUBDIRS:%=%/__clean__): dummy
 	cd `dirname $@` && $(MAKE) clean
