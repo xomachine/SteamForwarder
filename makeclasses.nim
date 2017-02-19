@@ -45,7 +45,7 @@ let sapire = re("""^(S_API|inline)\s+("""& tdesc &
               """[^{})]*;.*$""")
 
 let specre = re"^([0-9]+|@)\s+(\w+)\s+(\w+)(\([^)]*\))?\s*(\w+)?.*$"
-let strre = re"^\s*(\w+\s+)char\s*\*\s*$"
+let strre = re"^\s*(const\s+)?char\s*\*\s*$"
 let intre = re"^\s*(\w+\s+)?(u?int([136][246])?|long)\s*$"
 let floatre = re"^\s*(\w+\s+)?float([136][246])?\s*"
 
@@ -156,7 +156,7 @@ proc parseSpec(filename: string): SpecFile =
         if result.args.len <= num:
           result.args.setlen(num)
         result.args[num-1] =
-          matches[3].strip(true, true, {'(', ')'})
+          matches[3].strip(true, true, {'(', ')', ' '})
         matches[3] = nil
   result.newnames.setlen(result.names.len)
   result.args.setlen(result.names.len)
@@ -173,8 +173,8 @@ proc writeSpec(filename: string, spec: SpecFile) =
       if newname == "": "stub"
       else: spec.behaviours[i]
     let arg =
-      if newname == "": ""
-      else: spec.args[i]
+      if spec.args[i].isNil() or spec.args[i] == "": ""
+      else: " " & spec.args[i] & " "
     outs.writeLine "$1 $3 $2($5) $4" %
       [$(i+1), spec.names[i], behaviour, newname, arg]
   outs.close()
@@ -243,8 +243,8 @@ proc addCall(oss: File, call: CallInfo, spec: var SpecFile) =
     # it's callback handler we should not generate code 
     # for it becouse its already defined in callbacks.cpp.
     spec.args[posInSpec] =
-      if re"Unregister" in call.name: " ptr "
-      else: " ptr long "
+      if re"Unregister" in call.name: "ptr"
+      else: "ptr long"
     return
   let args =
     call.args.mapIt(it.thetype & " " & it.name).join(", ")
