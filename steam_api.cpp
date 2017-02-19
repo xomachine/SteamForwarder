@@ -39,294 +39,294 @@ ISteamClient_* saved_SteamClient;
 ISteamClient * SteamClient_()
 {
   TRACE("()\n");
-  if (!saved_SteamClient)  saved_SteamClient = new ISteamClient_();
-  saved_SteamClient->internal = SteamClient();
-  if (!saved_SteamClient->internal) {
-    delete saved_SteamClient;
-    TRACE("() = nil\n");
+  auto tmp = SteamClient();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamClient_*)%p wrapped[(ISteamClient *)%p]\n", saved_SteamClient, saved_SteamClient->internal);
+  if (!saved_SteamClient)  saved_SteamClient = new ISteamClient_();
+  saved_SteamClient->internal = tmp;
+  TRACE(" = (ISteamClient_*)%p wrapped[(ISteamClient *)%p]\n", saved_SteamClient, tmp);
   return (ISteamClient *)saved_SteamClient;
 }
 ISteamUser_* saved_SteamUser;
 ISteamUser * SteamUser_()
 {
   TRACE("()\n");
-  if (!saved_SteamUser)  saved_SteamUser = new ISteamUser_();
-  saved_SteamUser->internal = SteamUser();
-  if (!saved_SteamUser->internal) {
-    delete saved_SteamUser;
-    TRACE("() = nil\n");
+  auto tmp = SteamUser();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamUser_*)%p wrapped[(ISteamUser *)%p]\n", saved_SteamUser, saved_SteamUser->internal);
+  if (!saved_SteamUser)  saved_SteamUser = new ISteamUser_();
+  saved_SteamUser->internal = tmp;
+  TRACE(" = (ISteamUser_*)%p wrapped[(ISteamUser *)%p]\n", saved_SteamUser, tmp);
   return (ISteamUser *)saved_SteamUser;
 }
 ISteamFriends_* saved_SteamFriends;
 ISteamFriends * SteamFriends_()
 {
   TRACE("()\n");
-  if (!saved_SteamFriends)  saved_SteamFriends = new ISteamFriends_();
-  saved_SteamFriends->internal = SteamFriends();
-  if (!saved_SteamFriends->internal) {
-    delete saved_SteamFriends;
-    TRACE("() = nil\n");
+  auto tmp = SteamFriends();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamFriends_*)%p wrapped[(ISteamFriends *)%p]\n", saved_SteamFriends, saved_SteamFriends->internal);
+  if (!saved_SteamFriends)  saved_SteamFriends = new ISteamFriends_();
+  saved_SteamFriends->internal = tmp;
+  TRACE(" = (ISteamFriends_*)%p wrapped[(ISteamFriends *)%p]\n", saved_SteamFriends, tmp);
   return (ISteamFriends *)saved_SteamFriends;
 }
 ISteamUtils_* saved_SteamUtils;
 ISteamUtils * SteamUtils_()
 {
   TRACE("()\n");
-  if (!saved_SteamUtils)  saved_SteamUtils = new ISteamUtils_();
-  saved_SteamUtils->internal = SteamUtils();
-  if (!saved_SteamUtils->internal) {
-    delete saved_SteamUtils;
-    TRACE("() = nil\n");
+  auto tmp = SteamUtils();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamUtils_*)%p wrapped[(ISteamUtils *)%p]\n", saved_SteamUtils, saved_SteamUtils->internal);
+  if (!saved_SteamUtils)  saved_SteamUtils = new ISteamUtils_();
+  saved_SteamUtils->internal = tmp;
+  TRACE(" = (ISteamUtils_*)%p wrapped[(ISteamUtils *)%p]\n", saved_SteamUtils, tmp);
   return (ISteamUtils *)saved_SteamUtils;
 }
 ISteamMatchmaking_* saved_SteamMatchmaking;
 ISteamMatchmaking * SteamMatchmaking_()
 {
   TRACE("()\n");
-  if (!saved_SteamMatchmaking)  saved_SteamMatchmaking = new ISteamMatchmaking_();
-  saved_SteamMatchmaking->internal = SteamMatchmaking();
-  if (!saved_SteamMatchmaking->internal) {
-    delete saved_SteamMatchmaking;
-    TRACE("() = nil\n");
+  auto tmp = SteamMatchmaking();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamMatchmaking_*)%p wrapped[(ISteamMatchmaking *)%p]\n", saved_SteamMatchmaking, saved_SteamMatchmaking->internal);
+  if (!saved_SteamMatchmaking)  saved_SteamMatchmaking = new ISteamMatchmaking_();
+  saved_SteamMatchmaking->internal = tmp;
+  TRACE(" = (ISteamMatchmaking_*)%p wrapped[(ISteamMatchmaking *)%p]\n", saved_SteamMatchmaking, tmp);
   return (ISteamMatchmaking *)saved_SteamMatchmaking;
 }
 ISteamUserStats_* saved_SteamUserStats;
 ISteamUserStats * SteamUserStats_()
 {
   TRACE("()\n");
-  if (!saved_SteamUserStats)  saved_SteamUserStats = new ISteamUserStats_();
-  saved_SteamUserStats->internal = SteamUserStats();
-  if (!saved_SteamUserStats->internal) {
-    delete saved_SteamUserStats;
-    TRACE("() = nil\n");
+  auto tmp = SteamUserStats();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamUserStats_*)%p wrapped[(ISteamUserStats *)%p]\n", saved_SteamUserStats, saved_SteamUserStats->internal);
+  if (!saved_SteamUserStats)  saved_SteamUserStats = new ISteamUserStats_();
+  saved_SteamUserStats->internal = tmp;
+  TRACE(" = (ISteamUserStats_*)%p wrapped[(ISteamUserStats *)%p]\n", saved_SteamUserStats, tmp);
   return (ISteamUserStats *)saved_SteamUserStats;
 }
 ISteamApps_* saved_SteamApps;
 ISteamApps * SteamApps_()
 {
   TRACE("()\n");
-  if (!saved_SteamApps)  saved_SteamApps = new ISteamApps_();
-  saved_SteamApps->internal = SteamApps();
-  if (!saved_SteamApps->internal) {
-    delete saved_SteamApps;
-    TRACE("() = nil\n");
+  auto tmp = SteamApps();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamApps_*)%p wrapped[(ISteamApps *)%p]\n", saved_SteamApps, saved_SteamApps->internal);
+  if (!saved_SteamApps)  saved_SteamApps = new ISteamApps_();
+  saved_SteamApps->internal = tmp;
+  TRACE(" = (ISteamApps_*)%p wrapped[(ISteamApps *)%p]\n", saved_SteamApps, tmp);
   return (ISteamApps *)saved_SteamApps;
 }
 ISteamNetworking_* saved_SteamNetworking;
 ISteamNetworking * SteamNetworking_()
 {
   TRACE("()\n");
-  if (!saved_SteamNetworking)  saved_SteamNetworking = new ISteamNetworking_();
-  saved_SteamNetworking->internal = SteamNetworking();
-  if (!saved_SteamNetworking->internal) {
-    delete saved_SteamNetworking;
-    TRACE("() = nil\n");
+  auto tmp = SteamNetworking();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamNetworking_*)%p wrapped[(ISteamNetworking *)%p]\n", saved_SteamNetworking, saved_SteamNetworking->internal);
+  if (!saved_SteamNetworking)  saved_SteamNetworking = new ISteamNetworking_();
+  saved_SteamNetworking->internal = tmp;
+  TRACE(" = (ISteamNetworking_*)%p wrapped[(ISteamNetworking *)%p]\n", saved_SteamNetworking, tmp);
   return (ISteamNetworking *)saved_SteamNetworking;
 }
 ISteamMatchmakingServers_* saved_SteamMatchmakingServers;
 ISteamMatchmakingServers * SteamMatchmakingServers_()
 {
   TRACE("()\n");
-  if (!saved_SteamMatchmakingServers)  saved_SteamMatchmakingServers = new ISteamMatchmakingServers_();
-  saved_SteamMatchmakingServers->internal = SteamMatchmakingServers();
-  if (!saved_SteamMatchmakingServers->internal) {
-    delete saved_SteamMatchmakingServers;
-    TRACE("() = nil\n");
+  auto tmp = SteamMatchmakingServers();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamMatchmakingServers_*)%p wrapped[(ISteamMatchmakingServers *)%p]\n", saved_SteamMatchmakingServers, saved_SteamMatchmakingServers->internal);
+  if (!saved_SteamMatchmakingServers)  saved_SteamMatchmakingServers = new ISteamMatchmakingServers_();
+  saved_SteamMatchmakingServers->internal = tmp;
+  TRACE(" = (ISteamMatchmakingServers_*)%p wrapped[(ISteamMatchmakingServers *)%p]\n", saved_SteamMatchmakingServers, tmp);
   return (ISteamMatchmakingServers *)saved_SteamMatchmakingServers;
 }
 ISteamRemoteStorage_* saved_SteamRemoteStorage;
 ISteamRemoteStorage * SteamRemoteStorage_()
 {
   TRACE("()\n");
-  if (!saved_SteamRemoteStorage)  saved_SteamRemoteStorage = new ISteamRemoteStorage_();
-  saved_SteamRemoteStorage->internal = SteamRemoteStorage();
-  if (!saved_SteamRemoteStorage->internal) {
-    delete saved_SteamRemoteStorage;
-    TRACE("() = nil\n");
+  auto tmp = SteamRemoteStorage();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamRemoteStorage_*)%p wrapped[(ISteamRemoteStorage *)%p]\n", saved_SteamRemoteStorage, saved_SteamRemoteStorage->internal);
+  if (!saved_SteamRemoteStorage)  saved_SteamRemoteStorage = new ISteamRemoteStorage_();
+  saved_SteamRemoteStorage->internal = tmp;
+  TRACE(" = (ISteamRemoteStorage_*)%p wrapped[(ISteamRemoteStorage *)%p]\n", saved_SteamRemoteStorage, tmp);
   return (ISteamRemoteStorage *)saved_SteamRemoteStorage;
 }
 ISteamScreenshots_* saved_SteamScreenshots;
 ISteamScreenshots * SteamScreenshots_()
 {
   TRACE("()\n");
-  if (!saved_SteamScreenshots)  saved_SteamScreenshots = new ISteamScreenshots_();
-  saved_SteamScreenshots->internal = SteamScreenshots();
-  if (!saved_SteamScreenshots->internal) {
-    delete saved_SteamScreenshots;
-    TRACE("() = nil\n");
+  auto tmp = SteamScreenshots();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamScreenshots_*)%p wrapped[(ISteamScreenshots *)%p]\n", saved_SteamScreenshots, saved_SteamScreenshots->internal);
+  if (!saved_SteamScreenshots)  saved_SteamScreenshots = new ISteamScreenshots_();
+  saved_SteamScreenshots->internal = tmp;
+  TRACE(" = (ISteamScreenshots_*)%p wrapped[(ISteamScreenshots *)%p]\n", saved_SteamScreenshots, tmp);
   return (ISteamScreenshots *)saved_SteamScreenshots;
 }
 ISteamHTTP_* saved_SteamHTTP;
 ISteamHTTP * SteamHTTP_()
 {
   TRACE("()\n");
-  if (!saved_SteamHTTP)  saved_SteamHTTP = new ISteamHTTP_();
-  saved_SteamHTTP->internal = SteamHTTP();
-  if (!saved_SteamHTTP->internal) {
-    delete saved_SteamHTTP;
-    TRACE("() = nil\n");
+  auto tmp = SteamHTTP();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamHTTP_*)%p wrapped[(ISteamHTTP *)%p]\n", saved_SteamHTTP, saved_SteamHTTP->internal);
+  if (!saved_SteamHTTP)  saved_SteamHTTP = new ISteamHTTP_();
+  saved_SteamHTTP->internal = tmp;
+  TRACE(" = (ISteamHTTP_*)%p wrapped[(ISteamHTTP *)%p]\n", saved_SteamHTTP, tmp);
   return (ISteamHTTP *)saved_SteamHTTP;
 }
 ISteamUnifiedMessages_* saved_SteamUnifiedMessages;
 ISteamUnifiedMessages * SteamUnifiedMessages_()
 {
   TRACE("()\n");
-  if (!saved_SteamUnifiedMessages)  saved_SteamUnifiedMessages = new ISteamUnifiedMessages_();
-  saved_SteamUnifiedMessages->internal = SteamUnifiedMessages();
-  if (!saved_SteamUnifiedMessages->internal) {
-    delete saved_SteamUnifiedMessages;
-    TRACE("() = nil\n");
+  auto tmp = SteamUnifiedMessages();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamUnifiedMessages_*)%p wrapped[(ISteamUnifiedMessages *)%p]\n", saved_SteamUnifiedMessages, saved_SteamUnifiedMessages->internal);
+  if (!saved_SteamUnifiedMessages)  saved_SteamUnifiedMessages = new ISteamUnifiedMessages_();
+  saved_SteamUnifiedMessages->internal = tmp;
+  TRACE(" = (ISteamUnifiedMessages_*)%p wrapped[(ISteamUnifiedMessages *)%p]\n", saved_SteamUnifiedMessages, tmp);
   return (ISteamUnifiedMessages *)saved_SteamUnifiedMessages;
 }
 ISteamController_* saved_SteamController;
 ISteamController * SteamController_()
 {
   TRACE("()\n");
-  if (!saved_SteamController)  saved_SteamController = new ISteamController_();
-  saved_SteamController->internal = SteamController();
-  if (!saved_SteamController->internal) {
-    delete saved_SteamController;
-    TRACE("() = nil\n");
+  auto tmp = SteamController();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamController_*)%p wrapped[(ISteamController *)%p]\n", saved_SteamController, saved_SteamController->internal);
+  if (!saved_SteamController)  saved_SteamController = new ISteamController_();
+  saved_SteamController->internal = tmp;
+  TRACE(" = (ISteamController_*)%p wrapped[(ISteamController *)%p]\n", saved_SteamController, tmp);
   return (ISteamController *)saved_SteamController;
 }
 ISteamUGC_* saved_SteamUGC;
 ISteamUGC * SteamUGC_()
 {
   TRACE("()\n");
-  if (!saved_SteamUGC)  saved_SteamUGC = new ISteamUGC_();
-  saved_SteamUGC->internal = SteamUGC();
-  if (!saved_SteamUGC->internal) {
-    delete saved_SteamUGC;
-    TRACE("() = nil\n");
+  auto tmp = SteamUGC();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamUGC_*)%p wrapped[(ISteamUGC *)%p]\n", saved_SteamUGC, saved_SteamUGC->internal);
+  if (!saved_SteamUGC)  saved_SteamUGC = new ISteamUGC_();
+  saved_SteamUGC->internal = tmp;
+  TRACE(" = (ISteamUGC_*)%p wrapped[(ISteamUGC *)%p]\n", saved_SteamUGC, tmp);
   return (ISteamUGC *)saved_SteamUGC;
 }
 ISteamAppList_* saved_SteamAppList;
 ISteamAppList * SteamAppList_()
 {
   TRACE("()\n");
-  if (!saved_SteamAppList)  saved_SteamAppList = new ISteamAppList_();
-  saved_SteamAppList->internal = SteamAppList();
-  if (!saved_SteamAppList->internal) {
-    delete saved_SteamAppList;
-    TRACE("() = nil\n");
+  auto tmp = SteamAppList();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamAppList_*)%p wrapped[(ISteamAppList *)%p]\n", saved_SteamAppList, saved_SteamAppList->internal);
+  if (!saved_SteamAppList)  saved_SteamAppList = new ISteamAppList_();
+  saved_SteamAppList->internal = tmp;
+  TRACE(" = (ISteamAppList_*)%p wrapped[(ISteamAppList *)%p]\n", saved_SteamAppList, tmp);
   return (ISteamAppList *)saved_SteamAppList;
 }
 ISteamMusic_* saved_SteamMusic;
 ISteamMusic * SteamMusic_()
 {
   TRACE("()\n");
-  if (!saved_SteamMusic)  saved_SteamMusic = new ISteamMusic_();
-  saved_SteamMusic->internal = SteamMusic();
-  if (!saved_SteamMusic->internal) {
-    delete saved_SteamMusic;
-    TRACE("() = nil\n");
+  auto tmp = SteamMusic();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamMusic_*)%p wrapped[(ISteamMusic *)%p]\n", saved_SteamMusic, saved_SteamMusic->internal);
+  if (!saved_SteamMusic)  saved_SteamMusic = new ISteamMusic_();
+  saved_SteamMusic->internal = tmp;
+  TRACE(" = (ISteamMusic_*)%p wrapped[(ISteamMusic *)%p]\n", saved_SteamMusic, tmp);
   return (ISteamMusic *)saved_SteamMusic;
 }
 ISteamMusicRemote_* saved_SteamMusicRemote;
 ISteamMusicRemote * SteamMusicRemote_()
 {
   TRACE("()\n");
-  if (!saved_SteamMusicRemote)  saved_SteamMusicRemote = new ISteamMusicRemote_();
-  saved_SteamMusicRemote->internal = SteamMusicRemote();
-  if (!saved_SteamMusicRemote->internal) {
-    delete saved_SteamMusicRemote;
-    TRACE("() = nil\n");
+  auto tmp = SteamMusicRemote();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamMusicRemote_*)%p wrapped[(ISteamMusicRemote *)%p]\n", saved_SteamMusicRemote, saved_SteamMusicRemote->internal);
+  if (!saved_SteamMusicRemote)  saved_SteamMusicRemote = new ISteamMusicRemote_();
+  saved_SteamMusicRemote->internal = tmp;
+  TRACE(" = (ISteamMusicRemote_*)%p wrapped[(ISteamMusicRemote *)%p]\n", saved_SteamMusicRemote, tmp);
   return (ISteamMusicRemote *)saved_SteamMusicRemote;
 }
 ISteamHTMLSurface_* saved_SteamHTMLSurface;
 ISteamHTMLSurface * SteamHTMLSurface_()
 {
   TRACE("()\n");
-  if (!saved_SteamHTMLSurface)  saved_SteamHTMLSurface = new ISteamHTMLSurface_();
-  saved_SteamHTMLSurface->internal = SteamHTMLSurface();
-  if (!saved_SteamHTMLSurface->internal) {
-    delete saved_SteamHTMLSurface;
-    TRACE("() = nil\n");
+  auto tmp = SteamHTMLSurface();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamHTMLSurface_*)%p wrapped[(ISteamHTMLSurface *)%p]\n", saved_SteamHTMLSurface, saved_SteamHTMLSurface->internal);
+  if (!saved_SteamHTMLSurface)  saved_SteamHTMLSurface = new ISteamHTMLSurface_();
+  saved_SteamHTMLSurface->internal = tmp;
+  TRACE(" = (ISteamHTMLSurface_*)%p wrapped[(ISteamHTMLSurface *)%p]\n", saved_SteamHTMLSurface, tmp);
   return (ISteamHTMLSurface *)saved_SteamHTMLSurface;
 }
 ISteamInventory_* saved_SteamInventory;
 ISteamInventory * SteamInventory_()
 {
   TRACE("()\n");
-  if (!saved_SteamInventory)  saved_SteamInventory = new ISteamInventory_();
-  saved_SteamInventory->internal = SteamInventory();
-  if (!saved_SteamInventory->internal) {
-    delete saved_SteamInventory;
-    TRACE("() = nil\n");
+  auto tmp = SteamInventory();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamInventory_*)%p wrapped[(ISteamInventory *)%p]\n", saved_SteamInventory, saved_SteamInventory->internal);
+  if (!saved_SteamInventory)  saved_SteamInventory = new ISteamInventory_();
+  saved_SteamInventory->internal = tmp;
+  TRACE(" = (ISteamInventory_*)%p wrapped[(ISteamInventory *)%p]\n", saved_SteamInventory, tmp);
   return (ISteamInventory *)saved_SteamInventory;
 }
 ISteamVideo_* saved_SteamVideo;
 ISteamVideo * SteamVideo_()
 {
   TRACE("()\n");
-  if (!saved_SteamVideo)  saved_SteamVideo = new ISteamVideo_();
-  saved_SteamVideo->internal = SteamVideo();
-  if (!saved_SteamVideo->internal) {
-    delete saved_SteamVideo;
-    TRACE("() = nil\n");
+  auto tmp = SteamVideo();
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (ISteamVideo_*)%p wrapped[(ISteamVideo *)%p]\n", saved_SteamVideo, saved_SteamVideo->internal);
+  if (!saved_SteamVideo)  saved_SteamVideo = new ISteamVideo_();
+  saved_SteamVideo->internal = tmp;
+  TRACE(" = (ISteamVideo_*)%p wrapped[(ISteamVideo *)%p]\n", saved_SteamVideo, tmp);
   return (ISteamVideo *)saved_SteamVideo;
 }
 void SteamAPI_RunCallbacks_()
@@ -432,27 +432,27 @@ void SteamAPI_ISteamClient_ReleaseUser_(intptr_t instancePtr, HSteamPipe hSteamP
 class ISteamUser * SteamAPI_ISteamClient_GetISteamUser_(intptr_t instancePtr, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  auto result = new class ISteamUser_();
-  result->internal = SteamAPI_ISteamClient_GetISteamUser(instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamUser(instancePtr, hSteamUser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamUser_*)%p wrapped[(class ISteamUser *)%p]\n", result, result->internal);
+  auto result = new class ISteamUser_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamUser_*)%p wrapped[(class ISteamUser *)%p]\n", result, tmp);
   return (class ISteamUser *)result;
 }
 class ISteamGameServer * SteamAPI_ISteamClient_GetISteamGameServer_(intptr_t instancePtr, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  auto result = new class ISteamGameServer_();
-  result->internal = SteamAPI_ISteamClient_GetISteamGameServer(instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamGameServer(instancePtr, hSteamUser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamGameServer_*)%p wrapped[(class ISteamGameServer *)%p]\n", result, result->internal);
+  auto result = new class ISteamGameServer_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamGameServer_*)%p wrapped[(class ISteamGameServer *)%p]\n", result, tmp);
   return (class ISteamGameServer *)result;
 }
 void SteamAPI_ISteamClient_SetLocalIPBinding_(intptr_t instancePtr, uint32 unIP, uint16 usPort)
@@ -463,53 +463,53 @@ void SteamAPI_ISteamClient_SetLocalIPBinding_(intptr_t instancePtr, uint32 unIP,
 class ISteamFriends * SteamAPI_ISteamClient_GetISteamFriends_(intptr_t instancePtr, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  auto result = new class ISteamFriends_();
-  result->internal = SteamAPI_ISteamClient_GetISteamFriends(instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamFriends(instancePtr, hSteamUser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamFriends_*)%p wrapped[(class ISteamFriends *)%p]\n", result, result->internal);
+  auto result = new class ISteamFriends_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamFriends_*)%p wrapped[(class ISteamFriends *)%p]\n", result, tmp);
   return (class ISteamFriends *)result;
 }
 class ISteamUtils * SteamAPI_ISteamClient_GetISteamUtils_(intptr_t instancePtr, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamPipe, pchVersion);
-  auto result = new class ISteamUtils_();
-  result->internal = SteamAPI_ISteamClient_GetISteamUtils(instancePtr, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamUtils(instancePtr, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamUtils_*)%p wrapped[(class ISteamUtils *)%p]\n", result, result->internal);
+  auto result = new class ISteamUtils_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamUtils_*)%p wrapped[(class ISteamUtils *)%p]\n", result, tmp);
   return (class ISteamUtils *)result;
 }
 class ISteamMatchmaking * SteamAPI_ISteamClient_GetISteamMatchmaking_(intptr_t instancePtr, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  auto result = new class ISteamMatchmaking_();
-  result->internal = SteamAPI_ISteamClient_GetISteamMatchmaking(instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamMatchmaking(instancePtr, hSteamUser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamMatchmaking_*)%p wrapped[(class ISteamMatchmaking *)%p]\n", result, result->internal);
+  auto result = new class ISteamMatchmaking_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamMatchmaking_*)%p wrapped[(class ISteamMatchmaking *)%p]\n", result, tmp);
   return (class ISteamMatchmaking *)result;
 }
 class ISteamMatchmakingServers * SteamAPI_ISteamClient_GetISteamMatchmakingServers_(intptr_t instancePtr, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  auto result = new class ISteamMatchmakingServers_();
-  result->internal = SteamAPI_ISteamClient_GetISteamMatchmakingServers(instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamMatchmakingServers(instancePtr, hSteamUser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamMatchmakingServers_*)%p wrapped[(class ISteamMatchmakingServers *)%p]\n", result, result->internal);
+  auto result = new class ISteamMatchmakingServers_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamMatchmakingServers_*)%p wrapped[(class ISteamMatchmakingServers *)%p]\n", result, tmp);
   return (class ISteamMatchmakingServers *)result;
 }
 void * SteamAPI_ISteamClient_GetISteamGenericInterface_(intptr_t instancePtr, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
@@ -522,79 +522,79 @@ void * SteamAPI_ISteamClient_GetISteamGenericInterface_(intptr_t instancePtr, HS
 class ISteamUserStats * SteamAPI_ISteamClient_GetISteamUserStats_(intptr_t instancePtr, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  auto result = new class ISteamUserStats_();
-  result->internal = SteamAPI_ISteamClient_GetISteamUserStats(instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamUserStats(instancePtr, hSteamUser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamUserStats_*)%p wrapped[(class ISteamUserStats *)%p]\n", result, result->internal);
+  auto result = new class ISteamUserStats_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamUserStats_*)%p wrapped[(class ISteamUserStats *)%p]\n", result, tmp);
   return (class ISteamUserStats *)result;
 }
 class ISteamGameServerStats * SteamAPI_ISteamClient_GetISteamGameServerStats_(intptr_t instancePtr, HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  auto result = new class ISteamGameServerStats_();
-  result->internal = SteamAPI_ISteamClient_GetISteamGameServerStats(instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamGameServerStats(instancePtr, hSteamuser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamGameServerStats_*)%p wrapped[(class ISteamGameServerStats *)%p]\n", result, result->internal);
+  auto result = new class ISteamGameServerStats_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamGameServerStats_*)%p wrapped[(class ISteamGameServerStats *)%p]\n", result, tmp);
   return (class ISteamGameServerStats *)result;
 }
 class ISteamApps * SteamAPI_ISteamClient_GetISteamApps_(intptr_t instancePtr, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  auto result = new class ISteamApps_();
-  result->internal = SteamAPI_ISteamClient_GetISteamApps(instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamApps(instancePtr, hSteamUser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamApps_*)%p wrapped[(class ISteamApps *)%p]\n", result, result->internal);
+  auto result = new class ISteamApps_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamApps_*)%p wrapped[(class ISteamApps *)%p]\n", result, tmp);
   return (class ISteamApps *)result;
 }
 class ISteamNetworking * SteamAPI_ISteamClient_GetISteamNetworking_(intptr_t instancePtr, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  auto result = new class ISteamNetworking_();
-  result->internal = SteamAPI_ISteamClient_GetISteamNetworking(instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamNetworking(instancePtr, hSteamUser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamNetworking_*)%p wrapped[(class ISteamNetworking *)%p]\n", result, result->internal);
+  auto result = new class ISteamNetworking_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamNetworking_*)%p wrapped[(class ISteamNetworking *)%p]\n", result, tmp);
   return (class ISteamNetworking *)result;
 }
 class ISteamRemoteStorage * SteamAPI_ISteamClient_GetISteamRemoteStorage_(intptr_t instancePtr, HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  auto result = new class ISteamRemoteStorage_();
-  result->internal = SteamAPI_ISteamClient_GetISteamRemoteStorage(instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamRemoteStorage(instancePtr, hSteamuser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamRemoteStorage_*)%p wrapped[(class ISteamRemoteStorage *)%p]\n", result, result->internal);
+  auto result = new class ISteamRemoteStorage_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamRemoteStorage_*)%p wrapped[(class ISteamRemoteStorage *)%p]\n", result, tmp);
   return (class ISteamRemoteStorage *)result;
 }
 class ISteamScreenshots * SteamAPI_ISteamClient_GetISteamScreenshots_(intptr_t instancePtr, HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  auto result = new class ISteamScreenshots_();
-  result->internal = SteamAPI_ISteamClient_GetISteamScreenshots(instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamScreenshots(instancePtr, hSteamuser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamScreenshots_*)%p wrapped[(class ISteamScreenshots *)%p]\n", result, result->internal);
+  auto result = new class ISteamScreenshots_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamScreenshots_*)%p wrapped[(class ISteamScreenshots *)%p]\n", result, tmp);
   return (class ISteamScreenshots *)result;
 }
 uint32 SteamAPI_ISteamClient_GetIPCCallCount_(intptr_t instancePtr)
@@ -619,131 +619,131 @@ bool SteamAPI_ISteamClient_BShutdownIfAllPipesClosed_(intptr_t instancePtr)
 class ISteamHTTP * SteamAPI_ISteamClient_GetISteamHTTP_(intptr_t instancePtr, HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  auto result = new class ISteamHTTP_();
-  result->internal = SteamAPI_ISteamClient_GetISteamHTTP(instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamHTTP(instancePtr, hSteamuser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamHTTP_*)%p wrapped[(class ISteamHTTP *)%p]\n", result, result->internal);
+  auto result = new class ISteamHTTP_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamHTTP_*)%p wrapped[(class ISteamHTTP *)%p]\n", result, tmp);
   return (class ISteamHTTP *)result;
 }
 class ISteamUnifiedMessages * SteamAPI_ISteamClient_GetISteamUnifiedMessages_(intptr_t instancePtr, HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  auto result = new class ISteamUnifiedMessages_();
-  result->internal = SteamAPI_ISteamClient_GetISteamUnifiedMessages(instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamUnifiedMessages(instancePtr, hSteamuser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamUnifiedMessages_*)%p wrapped[(class ISteamUnifiedMessages *)%p]\n", result, result->internal);
+  auto result = new class ISteamUnifiedMessages_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamUnifiedMessages_*)%p wrapped[(class ISteamUnifiedMessages *)%p]\n", result, tmp);
   return (class ISteamUnifiedMessages *)result;
 }
 class ISteamController * SteamAPI_ISteamClient_GetISteamController_(intptr_t instancePtr, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  auto result = new class ISteamController_();
-  result->internal = SteamAPI_ISteamClient_GetISteamController(instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamController(instancePtr, hSteamUser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamController_*)%p wrapped[(class ISteamController *)%p]\n", result, result->internal);
+  auto result = new class ISteamController_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamController_*)%p wrapped[(class ISteamController *)%p]\n", result, tmp);
   return (class ISteamController *)result;
 }
 class ISteamUGC * SteamAPI_ISteamClient_GetISteamUGC_(intptr_t instancePtr, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  auto result = new class ISteamUGC_();
-  result->internal = SteamAPI_ISteamClient_GetISteamUGC(instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamUGC(instancePtr, hSteamUser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamUGC_*)%p wrapped[(class ISteamUGC *)%p]\n", result, result->internal);
+  auto result = new class ISteamUGC_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamUGC_*)%p wrapped[(class ISteamUGC *)%p]\n", result, tmp);
   return (class ISteamUGC *)result;
 }
 class ISteamAppList * SteamAPI_ISteamClient_GetISteamAppList_(intptr_t instancePtr, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  auto result = new class ISteamAppList_();
-  result->internal = SteamAPI_ISteamClient_GetISteamAppList(instancePtr, hSteamUser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamAppList(instancePtr, hSteamUser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamAppList_*)%p wrapped[(class ISteamAppList *)%p]\n", result, result->internal);
+  auto result = new class ISteamAppList_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamAppList_*)%p wrapped[(class ISteamAppList *)%p]\n", result, tmp);
   return (class ISteamAppList *)result;
 }
 class ISteamMusic * SteamAPI_ISteamClient_GetISteamMusic_(intptr_t instancePtr, HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  auto result = new class ISteamMusic_();
-  result->internal = SteamAPI_ISteamClient_GetISteamMusic(instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamMusic(instancePtr, hSteamuser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamMusic_*)%p wrapped[(class ISteamMusic *)%p]\n", result, result->internal);
+  auto result = new class ISteamMusic_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamMusic_*)%p wrapped[(class ISteamMusic *)%p]\n", result, tmp);
   return (class ISteamMusic *)result;
 }
 class ISteamMusicRemote * SteamAPI_ISteamClient_GetISteamMusicRemote_(intptr_t instancePtr, HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  auto result = new class ISteamMusicRemote_();
-  result->internal = SteamAPI_ISteamClient_GetISteamMusicRemote(instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamMusicRemote(instancePtr, hSteamuser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamMusicRemote_*)%p wrapped[(class ISteamMusicRemote *)%p]\n", result, result->internal);
+  auto result = new class ISteamMusicRemote_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamMusicRemote_*)%p wrapped[(class ISteamMusicRemote *)%p]\n", result, tmp);
   return (class ISteamMusicRemote *)result;
 }
 class ISteamHTMLSurface * SteamAPI_ISteamClient_GetISteamHTMLSurface_(intptr_t instancePtr, HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  auto result = new class ISteamHTMLSurface_();
-  result->internal = SteamAPI_ISteamClient_GetISteamHTMLSurface(instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamHTMLSurface(instancePtr, hSteamuser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamHTMLSurface_*)%p wrapped[(class ISteamHTMLSurface *)%p]\n", result, result->internal);
+  auto result = new class ISteamHTMLSurface_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamHTMLSurface_*)%p wrapped[(class ISteamHTMLSurface *)%p]\n", result, tmp);
   return (class ISteamHTMLSurface *)result;
 }
 class ISteamInventory * SteamAPI_ISteamClient_GetISteamInventory_(intptr_t instancePtr, HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  auto result = new class ISteamInventory_();
-  result->internal = SteamAPI_ISteamClient_GetISteamInventory(instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamInventory(instancePtr, hSteamuser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamInventory_*)%p wrapped[(class ISteamInventory *)%p]\n", result, result->internal);
+  auto result = new class ISteamInventory_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamInventory_*)%p wrapped[(class ISteamInventory *)%p]\n", result, tmp);
   return (class ISteamInventory *)result;
 }
 class ISteamVideo * SteamAPI_ISteamClient_GetISteamVideo_(intptr_t instancePtr, HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char * pchVersion)
 {
   TRACE("((intptr_t)%p, (HSteamUser)%p, (HSteamPipe)%p, (const char *)\"%s\")\n", instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  auto result = new class ISteamVideo_();
-  result->internal = SteamAPI_ISteamClient_GetISteamVideo(instancePtr, hSteamuser, hSteamPipe, pchVersion);
-  if (!result->internal) {
-    delete result;
-    TRACE("() = nil\n");
+  auto tmp = SteamAPI_ISteamClient_GetISteamVideo(instancePtr, hSteamuser, hSteamPipe, pchVersion);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
   }
-  TRACE(" = (class ISteamVideo_*)%p wrapped[(class ISteamVideo *)%p]\n", result, result->internal);
+  auto result = new class ISteamVideo_();
+  result->internal = tmp;
+  TRACE(" = (class ISteamVideo_*)%p wrapped[(class ISteamVideo *)%p]\n", result, tmp);
   return (class ISteamVideo *)result;
 }
 HSteamUser SteamAPI_ISteamUser_GetHSteamUser_(intptr_t instancePtr)

@@ -102,10 +102,10 @@ proc genBody(outs: File, cinfo: CallInfo,
       if cinfo.args.len > firstarg+1:
         cinfo.args[(firstarg+1)..^1].mapIt(n(it)).join(", ")
       else: ""
-    outs.writeLine(
-      """  *hidden = $3$1($2);""" %
-      [cinfo.name, namelistnohidden, cinfo.prefix])
-    outs.writeLine """  return hidden;"""
+    outs.write """
+  *hidden = $3$1($2);
+  return hidden;
+""" % [cinfo.name, namelistnohidden, cinfo.prefix]
   elif re"ISteam" in cinfo.rettype:
     let basereturntype = cinfo.rettype.replace(re"\s*\*")
     let (outval, cond) =
@@ -113,28 +113,25 @@ proc genBody(outs: File, cinfo: CallInfo,
         ("saved_" & cinfo.name,
          "if (!saved_$1) " % cinfo.name)
       else: ("result", "auto")
-    outs.writeLine """  $3 $2 = new $1_();""" %
-      [basereturntype, outval, cond] 
-    outs.writeLine "  $4->internal = $3$1($2);" %
-      [cinfo.name, namelist, cinfo.prefix, outval]
-    outs.writeLine """  if (!$1->internal) {
-    delete $1;
-    TRACE("() = nil\n");
+    outs.write("""
+  auto tmp = $1$2($3);
+  if (!tmp) {
+    TRACE("() = nil");
     return NULL;
-  }""" % outval
-    outs.writeLine("""  TRACE(" = $1 wrapped[$2]\n",""" %
-      [mapper(basereturntype & "_*"), mapper(cinfo.rettype)] &
-      """ $1, $1->internal);""" % outval)
-    outs.writeLine """  return ($1)$2;""" %
-      [cinfo.rettype, outval]
+  }
+  $4 $5 = new $6_();
+  $5->internal = tmp;
+  TRACE(" = $7 wrapped[$8]\n", $5, tmp);
+  return ($9)$5;
+""" % [cinfo.prefix, cinfo.name, namelist, cond, outval, basereturntype,
+       mapper(basereturntype & "_*"), mapper(cinfo.rettype), cinfo.rettype])
   else:
-    outs.writeLine(
-      """  $1 result = $4$2($3);""" %
-      [cinfo.rettype, cinfo.name, namelist,
-       cinfo.prefix])
-    outs.writeLine """  TRACE(" = $1\n", result);""" %
-      [mapper(cinfo.rettype)]
-    outs.writeLine """  return result;"""
+    outs.write("""
+  $1 result = $2$3($4);
+  TRACE(" = $5\n", result);
+  return result;
+""" % [cinfo.rettype, cinfo.prefix, cinfo.name, namelist,
+       mapper(cinfo.rettype)])
 
 proc parseSpec(filename: string): SpecFile =
   result.names = newSeq[string]()
