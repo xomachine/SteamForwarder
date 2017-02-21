@@ -98,10 +98,14 @@ spec:
 $(SUBDIRS): dummy
 	@cd $@ && $(MAKE)
 
-# Implicit rules
-
-.SUFFIXES: .h.proto .cpp.proto .h .cpp .cxx .rc .res
 DEFINCL = $(INCLUDE_PATH) $(DEFINES) $(OPTIONS)
+ifeq ($(MAKE_VERSION), 4.1)
+# EXPLICIT RULES SPECIAL FOR make 4.1
+%.o:
+	$(CXX) -c $(CXXFLAGS) $(CXXEXTRA) $(DEFINCL) -o $@ $(@:.o=.cpp)
+else
+# Implicit rules
+.SUFFIXES: .h.proto .cpp.proto .h .cpp .cxx .rc .res
 
 
 .c.o:
@@ -116,6 +120,7 @@ DEFINCL = $(INCLUDE_PATH) $(DEFINES) $(OPTIONS)
 .rc.res:
 	$(RC) $(RCFLAGS) $(RCEXTRA) $(DEFINCL) -fo$@ $<
 
+endif
 # Rules for cleaning
 
 CLEAN_FILES     = y.tab.c y.tab.h lex.yy.c core *.orig *.rej \
