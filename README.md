@@ -3,6 +3,16 @@ steam_api.dll implementation for wine. Your windows games now can interact with 
 
 # !DISCLAMER!
 **The author is not liable for any damage resulting from the use of this software. User might broke his games, steam, OS or even computer. User account might to be banned by Valve. EVERYTHING THAT YOU'RE DOING, YOU'RE DOING ON YOUR OWN RISK!**
+## Dependences
+General:
+* Wine headers with winegcc
+
+Fedora:
+* glibc-devel.i686
+* wine-devel.i686
+
+Arch:
+* wine
 
 ## Compilation
 1. Obtain [somewhere](https://partner.steamgames.com/home) latest steam api headers and put them into the **steam** folder. (They cannot be included to this repo due to licensing issues.)
@@ -19,7 +29,7 @@ steam_api.dll implementation for wine. Your windows games now can interact with 
 5. Run your windows game through the wine.
 
 ## Hard way
-1. Install the [Nim compiler](https://nim-lang.org/download.html) (probably, it can be found in your distro repo). PS: Yes, I know, that code generator could be implemented in some popular language like python, but I wanted to write it in Nim just because I like this language and want to make it popular =P
+1. Install the [Nim compiler](https://nim-lang.org/download.html) of version 0.15+ (probably, it can be found in your distro repo). PS: Yes, I know, that code generator could be implemented in some popular language like python, but I wanted to write it in Nim just because I like this language and want to make it popular =P
 2. Put **steam_api.dll** from your game or steam sdk into repo root.
 3. Regenerate code by `make generate-code`.
 4. Compile SteamForwarder using `make` command.
