@@ -63,6 +63,7 @@ export WINEPREFIX="{0}"
 export WINEDLLPATH+=":{4}"
 export LD_LIBRARY_PATH+=":{5}:{4}"
 export WINEDEBUG="trace+steam_api"
+export WINEDLLOVERRIDES="*steam_api=b"
 LD_PRELOAD="gameoverlayrenderer.so" wine {1}/common/{6}/{2} {3} &> $(dirname $0)/lastrun.log
 """.format(config['wineprefix'], config['steamapps'], appinfo['executable'],
            appinfo['arguments'], config['dllpath'], config['overlaypath'],
