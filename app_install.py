@@ -11,10 +11,10 @@ startinfore = re.compile("""<tr>[\n\s]*
                          <td>(?P<description>[^<>]*)</td>[\n\s]*
                          <td>(?P<executable>[^<>]*)</td>[\n\s]*
                          <td>(?P<arguments>[^<>]*)</td>[\n\s]*
-                         <td>(?P<type>[^<>]*)</td>[\n\s]*
+                         <td>(?P<type>.*?)</td>[\n\s]*
                          <td\ class="nowrap">[\n\s]*
-                         <i\ class="[^"]+"\ aria-label="Windows">[\n\s]*
-                         </i>[\n\s]*
+                         (?P<os><i\ class="[^"]+"\ aria-label="Windows">[\n\s]*
+                         </i>[\n\s]*)?
                          </td>[\n\s]*
                          <td>(?P<extra>[^<>]*)</td>[\n\s]*
                          </tr>""", re.X)
