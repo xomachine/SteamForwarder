@@ -12,7 +12,7 @@ steam_api.dll implementation for wine. Your windows games now can interact with 
 ## Usage
 This is common scenario of usage SteamForwarder for users.
 Some hints for experts can be found in section below.
-1. Download latest release of SteamForwarder from releases page
+1. Download redist.tar.bz2 from latest release of SteamForwarder from releases page
 2. Unpack it to the folder you want
 3. Open the terminal in the folder SteamForwarder was unpacked
 4. Type `python3 app_install.py --help` to learn command line options of installer tool.
