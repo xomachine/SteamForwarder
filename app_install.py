@@ -46,11 +46,12 @@ def generate_manifest(appinfo):
   manifest = """
 "AppState"
 {
-  "appid"        "%d"
-  "Universe"     "1"
-  "name"         "%s"
-  "StateFlags"   "4"
-  "installdir"   "%s"
+  "appid"               "%d"
+  "Universe"            "1"
+  "name"                "%s"
+  "StateFlags"          "4"
+  "installdir"          "%s"
+  "AutoUpdateBehavior"  "1"
 }
 """ % (appinfo["id"], appinfo["name"], appinfo["installdir"])
   return manifest
