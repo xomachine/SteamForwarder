@@ -53,7 +53,6 @@ def get_app_config(appid):
     if '<' in name or name == "":
       name = startinfos["name"]
     startinfos["infos"][name] = startinfo
-  print(startinfos)
   return startinfos
 
 def generate_manifest(appinfos):
@@ -80,9 +79,15 @@ export LD_LIBRARY_PATH+=":{5}:{4}"
 export WINEDEBUG="trace+steam_api"
 export WINEARCH="win32"
 export WINEDLLOVERRIDES="*steam_api=b"
+export SteamAppId="{6}"
+export SteamControllerAppId="{6}"
+export SteamGameId="{6}"
+export SteamUser="{7}"
+export SteamAppUser="{7}"
 LD_PRELOAD="gameoverlayrenderer.so" wine "{1}/common/{2}" {3} &> "$(dirname "$0")/lastrun.log"
 """.format(config['wineprefix'], config['steamapps'], appinfo.executable,
-           appinfo.arguments, config['dllpath'], config['overlaypath'])
+           appinfo.arguments, config['dllpath'], config['overlaypath'],
+           config['appid'], config['login'])
   return runscript
 
 aparser = argparse.ArgumentParser(description="Steam windows game installation script")
@@ -119,6 +124,7 @@ if config_args.store:
     dump(config, f, indent=2)
 config['password'] = config_args.password
 appid = config_args.appid
+config['appid'] = appid
   
 print("Obtaining app info...")
 appinfos = get_app_config(appid)
@@ -139,5 +145,8 @@ for name, appinfo in appinfos["infos"].items():
   runscript_location = (rs_location + name + '.sh')
   with open(runscript_location, "w") as f:
     f.write(runscript)
+print("Placing steam_appid.txt to the game location...")
+with open(rs_location + '/steam_appid.txt', "w") as f:
+  f.write(str(appid))
 print("Done! You may launch the game via scripts located at " + rs_location)
 
