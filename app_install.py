@@ -8,7 +8,7 @@ import os
 
 namere = re.compile("""<td itemprop="name">(?P<name>[^<>]+)</td>""")
 startinfore = re.compile("""<tr>[\n\s]*
-                         <td>(?P<description>[^<>]*)</td>[\n\s]*
+                         <td>(?P<description>.*?)</td>[\n\s]*
                          <td>(?P<executable>[^<>]*)</td>[\n\s]*
                          <td>(?P<arguments>[^<>]*)</td>[\n\s]*
                          <td>(?P<type>.*?)</td>[\n\s]*
@@ -25,9 +25,15 @@ installdirre = re.compile("""<tr>[\n\s]*
                           </tr>[\n\s]*
                           """, re.X)
 
-
-def showhelp():
-  print("""Usage: app_install.py <appid>""")
+class LaunchInfo:
+  def __init__(self, match, install_dir):
+    match_dict = match.groupdict()
+    self.executable = install_dir + '/' + re.sub(r'\\', r'/', match_dict['executable'])
+    self.arguments = match_dict["arguments"]
+    self.description = match_dict["description"]
+  def __repr__(self):
+    return "(LaunchInfo: {0} {1} # {2})".format(self.executable,
+                                                self.arguments, self.description)
 
 def get_app_config(appid):
   configurl = "http://steamdb.info/app/" + str(appid) + "/config/"
@@ -35,14 +41,22 @@ def get_app_config(appid):
   hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)'}
   req = Request(configurl, headers = hdr)
   content = urlopen(req).read().decode('utf-8')
-  startinfo = startinfore.search(content).groupdict()
-  startinfo["installdir"] = installdirre.search(content).groupdict()["installdir"]
-  startinfo["id"] = appid
-  startinfo["name"] = namere.search(content).groupdict()["name"]
-  startinfo["executable"] = re.sub(r'\\', r'/', startinfo['executable'])
-  return startinfo
+  startinfos = dict()
+  startinfos["id"] = appid
+  startinfos["infos"] = dict()
+  startinfos["name"] = namere.search(content).groupdict()["name"]
+  installdir = installdirre.search(content).groupdict()["installdir"]
+  startinfos["installdir"] = installdir
+  for startinfo_m in startinfore.finditer(content):
+    startinfo = LaunchInfo(startinfo_m, installdir)
+    name = startinfo.description
+    if '<' in name or name == "":
+      name = startinfos["name"]
+    startinfos["infos"][name] = startinfo
+  print(startinfos)
+  return startinfos
 
-def generate_manifest(appinfo):
+def generate_manifest(appinfos):
   manifest = """
 "AppState"
 {
@@ -53,11 +67,11 @@ def generate_manifest(appinfo):
   "installdir"          "%s"
   "AutoUpdateBehavior"  "1"
 }
-""" % (appinfo["id"], appinfo["name"], appinfo["installdir"])
+""" % (appinfos["id"], appinfos["name"], appinfos["installdir"])
   return manifest
 
-def generate_runscript(appinfo, config):
-  print(appinfo['executable'])
+def generate_runscript(appinfo: LaunchInfo, config):
+  print("...for " + appinfo.executable)
   runscript = """
 #!/bin/bash
 export WINEPREFIX="{0}"
@@ -66,10 +80,9 @@ export LD_LIBRARY_PATH+=":{5}:{4}"
 export WINEDEBUG="trace+steam_api"
 export WINEARCH="win32"
 export WINEDLLOVERRIDES="*steam_api=b"
-LD_PRELOAD="gameoverlayrenderer.so" wine "{1}/common/{6}/{2}" {3} &> "$(dirname "$0")/lastrun.log"
-""".format(config['wineprefix'], config['steamapps'], appinfo['executable'],
-           appinfo['arguments'], config['dllpath'], config['overlaypath'],
-           appinfo['installdir'])
+LD_PRELOAD="gameoverlayrenderer.so" wine "{1}/common/{2}" {3} &> "$(dirname "$0")/lastrun.log"
+""".format(config['wineprefix'], config['steamapps'], appinfo.executable,
+           appinfo.arguments, config['dllpath'], config['overlaypath'])
   return runscript
 
 aparser = argparse.ArgumentParser(description="Steam windows game installation script")
@@ -93,6 +106,7 @@ aparser.add_argument('-l', '--login', help='your login at steam', type=str, dest
 aparser.add_argument('-s', '--steamapps-dir', help='path to the steamapps dir', type=str, dest='steamapps', default=config["steamapps"])
 aparser.add_argument('-d', '--dll-dir', help='path to the steam_api.dll.so and libsteam_api.so', type=str, dest='dllpath', default=config["dllpath"])
 aparser.add_argument('-o', '--overlay-dir', help='path to the gameoverlayrenderer.so and other steam libs', type=str, dest='overlaypath', default=config["overlaypath"])
+aparser.add_argument('-p', '--password', help='password of your steam account (may be necessary for non-free apps). Note: password will not be saved anywhere including configuration file', type=str, dest='password', default="")
 aparser.add_argument('--store', help='save configuration for futher use as default', dest='store', default=False, action='store_true')
 config_args = aparser.parse_args()
 config['login'] = config_args.login
@@ -103,22 +117,27 @@ config['steamapps'] = config_args.steamapps
 if config_args.store:
   with open("steamforwarder.json", "w") as f:
     dump(config, f, indent=2)
-config['appid'] = config_args.appid
+config['password'] = config_args.password
+appid = config_args.appid
   
 print("Obtaining app info...")
-appinfo = get_app_config(config["appid"])
-manifest = generate_manifest(appinfo)
-manifest_location = config["steamapps"] + '/appmanifest_' + str(config['appid']) + '.acf'
+appinfos = get_app_config(appid)
+manifest = generate_manifest(appinfos)
+manifest_location = config["steamapps"] + '/appmanifest_' + str(appid) + '.acf'
 print("Generating manifest...")
 with open(manifest_location, "w") as f:
   f.write(manifest)
 
-print("Downloading " + appinfo["name"] + " via steamcmd...")
-os.spawnlp(os.P_WAIT, "steamcmd", "steamcmd",  "+login", config["login"], "+@sSteamCmdForcePlatformType", "windows", "+app_update", str(config["appid"]), "verify", "+quit")
-print("Generating runscript...")
-runscript = generate_runscript(appinfo, config)
-runscript_location = config["steamapps"] + '/common/' + appinfo["installdir"] + '/' + appinfo["installdir"] + '.sh'
-with open(runscript_location, "w") as f:
-  f.write(runscript)
-print("Done! You may launch the game via script located at " + runscript_location)
+print("Downloading " + appinfos["name"] + " via steamcmd...")
+os.spawnlp(os.P_WAIT, "steamcmd", "steamcmd",  "+login", config["login"],
+           config['password'], "+@sSteamCmdForcePlatformType", "windows",
+           "+app_update", str(appid), "validate", "+quit")
+print("Generating runscripts...")
+rs_location = config["steamapps"] + '/common/' + appinfos["installdir"] + '/'
+for name, appinfo in appinfos["infos"].items():
+  runscript = generate_runscript(appinfo, config)
+  runscript_location = (rs_location + name + '.sh')
+  with open(runscript_location, "w") as f:
+    f.write(runscript)
+print("Done! You may launch the game via scripts located at " + rs_location)
 
