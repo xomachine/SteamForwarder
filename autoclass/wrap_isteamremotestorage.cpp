@@ -4,6 +4,12 @@
 #include "windef.h"
 #include "wine/debug.h"
 #include "config.h"
+
+void ISteamRemoteStorage_::Dummy()
+{
+  TRACE("()");
+}
+
 bool ISteamRemoteStorage_::FileWrite( const char *pchFile, const void *pvData, int32 cubData )
 {
   TRACE("((this[ISteamRemoteStorage])%p, (const char *)\"%s\", (const void *)%p, (int32)%d)\n", this, pchFile, pvData, cubData);
@@ -76,7 +82,7 @@ UGCFileWriteStreamHandle_t ISteamRemoteStorage_::FileWriteStreamOpen( const char
 }
 bool ISteamRemoteStorage_::FileWriteStreamWriteChunk( UGCFileWriteStreamHandle_t writeHandle, const void *pvData, int32 cubData )
 {
-  TRACE("((this[ISteamRemoteStorage])%p, (UGCFileWriteStreamHandle_t)%p, (const void *)%p, (int32)%d)\n", this, writeHandle, pvData, cubData);
+  TRACE("((this[ISteamRemoteStorage])%p, (UGCFileWriteStreamHandle_t)%lld, (const void *)%p, (int32)%d)\n", this, writeHandle, pvData, cubData);
   bool result = this->internal->FileWriteStreamWriteChunk(writeHandle, pvData, cubData);
   TRACE(" = (bool)%d\n", result);
   return result;

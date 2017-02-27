@@ -3,6 +3,7 @@
 #include "steam_api.h"
 class ISteamRemoteStorage_ 
 {
+  virtual void Dummy(void) __attribute__((thiscall));
   virtual bool FileWrite( const char *pchFile, const void *pvData, int32 cubData ) __attribute__((thiscall));
   virtual int32 FileRead( const char *pchFile, void *pvData, int32 cubDataToRead ) __attribute__((thiscall));
   virtual SteamAPICall_t FileWriteAsync( const char *pchFile, const void *pvData, uint32 cubData ) __attribute__((thiscall));
