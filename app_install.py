@@ -102,10 +102,19 @@ except:
   print("Configuration file not found! Using default values... You may change them at steamforwarder.json")
   config['overlaypath'] = os.getenv("HOME") + "/.local/share/Steam/ubuntu12_32/"
   config['dllpath'] = os.getenv("PWD")
-  config['steamapps'] = os.getenv('HOME') + '/.local/share/Steam/steamapps'
+  steamfolder = os.getenv('HOME') + '/.local/share/Steam'
+  print(steamfolder)
+  if os.path.isdir(steamfolder):
+    print("is dir")
+    for d in os.listdir(steamfolder):
+      print(d)
+      if not re.match("[sS]team[aA]pps", d) is None:
+        config['steamapps'] = steamfolder + '/' + d
   config['login'] = 'anonymous'
   with open("steamforwarder.json", "w") as f:
     dump(config, f, indent=2)
+  if not 'steamapps' in config:
+    config['steamapps'] = ""
 
 aparser.add_argument('-l', '--login', help='your login at steam', type=str, dest='login', default=config['login'])
 aparser.add_argument('-s', '--steamapps-dir', help='path to the steamapps dir', type=str, dest='steamapps', default=config["steamapps"])
@@ -118,6 +127,9 @@ config['login'] = config_args.login
 config['wineprefix'] = config_args.wineprefix
 config['dllpath'] = config_args.dllpath
 config['overlaypath'] = config_args.overlaypath
+if config_args.steamapps == "":
+  print('Can not find steam location... Please specify it using -s key')
+  quit(1)
 config['steamapps'] = config_args.steamapps
 if config_args.store:
   with open("steamforwarder.json", "w") as f:
