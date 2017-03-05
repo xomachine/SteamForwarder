@@ -4,6 +4,18 @@ steam_api.dll implementation for wine. Your windows games now can interact with 
 # ! DISCLAMER !
 **The author is not liable for any damage resulting from the use of this software. User might broke his games, steam, OS or even computer. User account might to be banned by Valve. EVERYTHING THAT YOU'RE DOING, YOU'RE DOING ON YOUR OWN RISK!**
 
+## Restrictions
+There are a few known problems with this tool. Some of them will be solved in future, others are not solvable.
+
+SteamForwarder are NOT able to run by design:
+
+* DRM-protected games
+
+SteamForwarder are NOT able to download:
+
+* Everything that steamcmd are not able to download (mostly paid games with protection)
+
+
 ## Usage dependences
 * steamcmd
 * python3
