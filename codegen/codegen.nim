@@ -17,8 +17,9 @@ let includere = re"""^\#\s+([0-9]+)\s+"(.*?)"\s+([0-9])\s*$"""
 proc getFileContent(filename: string, includes: seq[string] = @[]): string =
   let basename = extractFilename(filename)
   let exceptions = includes & basename
-  let preprocessed = execProcess("gcc " &
-                                 "-DUSE_BREAKPAD_HANDLER -I$2 -E $1" %
+  let preprocessed = execProcess("gcc -DUSE_BREAKPAD_HANDLER " &
+                                 "-DVERSION_SAFE_STEAM_API_INTERFACES " &
+                                 "-I$2 -E $1" %
                                  [filename, filename.parentDir()])
   var matches = newSeq[string](3)
   var skipping = false
