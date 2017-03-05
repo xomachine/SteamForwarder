@@ -12,9 +12,10 @@ type
     methods: seq[CallInfo]
 
 let classre = re("""^(class\s+)(\w+)([^#;]*?){?$""", {reMultiline})
-let enumre = re"^\s*enum\s+(\w+).*?$"
+let enumre = re("""^\s*enum\s+(\w+).*?$""", {reMultiline})
 
 proc parseEnums(raw: string): seq[string] =
+  result = newSeq[string]()
   var i = 0
   var matches = newSeq[string](1)
   while (i = raw.find(enumre, matches, i); i>=0):
@@ -55,12 +56,12 @@ private:
 
 proc makeConDestructor(self: Class): string =
   """
-$1_($1 * towrap)
+$1_::$1_($1 * towrap)
 {
   this->internal = towrap;
 }
 
-~$1_()
+$1_::~$1_()
 {
   delete this->internal;
 }

@@ -1,5 +1,5 @@
 from strutils import rfind, `%`, splitLines, join
-from sequtils import map
+from sequtils import map, mapIt
 from parseopt import getopt, cmdShortOption, cmdArgument, cmdLongOption
 from os import walkFiles, extractFilename, changeFileExt, parentDir, `/`
 from osproc import execProcess
@@ -35,6 +35,7 @@ proc getFileContent(filename: string, includes: seq[string] = @[]): string =
         skipping = true
     elif not skipping:
       result &= line & "\n"
+  #("codegen_tmp" / basename).writeFile(result)
 
 var
   sourcedir = ""
@@ -75,34 +76,43 @@ let funcs = getFileContent(sourcedir / "steam_api.h", @["steam_api_internal.h"])
 echo "Found $1 functions in top level headers" % $funcs.len
 let filtered_funcs = thespec.filterSpec(funcs)
 echo "$1 functions left after comparsion with spec file" % $filtered_funcs.len
-let bodyMaker = if testtarget == "": makeBody else: makeBody
+let bodyMaker = if testtarget == "": makeBody else: makeTestBody
 let cpp_body = """
-#include <config.h>
 #include <steam_api_.h>
-
+#include <steam_api_flat.h>
+extern "C" {
 $1
+}
 """ % filtered_funcs.map(bodyMaker).join("\n")
 "steam_api.cpp".writeFile(cpp_body)
 let head = open(target / "steam_api_.h", fmWrite)
-#let forbidden_files = [
-#  "isteammasterserverupdater.h",
-#  "isteamappticket.h",
-#  "isteamgamecoordinator.h",
-#  "isteamps3overlayrenderer.h"
-#]
+let forbidden_files = [
+  "isteammasterserverupdater.h",
+  #"isteamappticket.h",
+  #"isteamgamecoordinator.h",
+  "isteamps3overlayrenderer.h"
+]
 head.writeLine """
+#ifndef STEAM_FORWARDER_HEADER
+#define STEAM_FORWARDER_HEADER
 #include <steam_api.h>
+#include <config.h>
 """
 
 for f in walkFiles(sourcedir / "isteam*.h"):
   let filename = f.extractFilename()
+  if filename in forbidden_files:
+    continue
   echo "Parsing $1..." % filename
   let wrapped_name = "wrap_" & filename
   let wrapped_cpp_name = wrapped_name.changeFileExt(".cpp")
   let classes = f.getFileContent().parseClasses()
   echo "Found $1 classes" % $classes.len
   let header_content = classes.map(toDeclaration).join("\n")
-  (target / wrapped_name).writeFile(headerHead & header_content)
+  let steam_header = """
+#include <$1>
+""" % filename
+  (target / wrapped_name).writeFile(headerHead & steam_header & header_content)
   head.writeLine """#include <$1>""" % wrapped_name
   let impl_generator =
     if testtarget == "": toImplementation
@@ -111,16 +121,26 @@ for f in walkFiles(sourcedir / "isteam*.h"):
   (target / wrapped_cpp_name).writeFile(implementation)
   if testtarget != "":
     let testbody = classes.map(makeTest).join("\n")
+    let testexcludes = classes.mapIt("$1 *$2();" % [it.name, it.name[1..^1]])
+                              .join("\n  ")
     let test = """
-#include <steam_api.h>
 #include <iostream>
 #include <cstdio>
+#include <isteamclient.h>
+#include <$2>
+
+extern "C" {
+  $3
+}
 
 int main() {
   $1
 }
-""" % testbody
+""" % [testbody, filename, testexcludes]
     (testtarget / "call_" & wrapped_cpp_name).writeFile(test)
+head.writeLine """
+#endif
+"""
 head.close()
 writeSpec(specfile.changeFileExt("auto.spec"), thespec)
 
