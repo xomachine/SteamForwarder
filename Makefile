@@ -13,22 +13,30 @@ EXES                  =
 
 ### Common settings
 ARCH                  ?= 32
+NOTUNE                ?= 0
 ifeq ($(ARCH), 64)
   LIB_POSTFIX = 64
 else
   LIB_POSTFIX =
 endif
+ifeq ($(NOTUNE), 1)
+  NOTUNEOPT = -march=i386 -mtune=i386
+else
+  NOTUNEOPT =
+endif
 DLLS                  = steam_api$(LIB_POSTFIX).dll
 CEXTRA                = -mno-cygwin \
 			-m$(ARCH)
-CXXEXTRA              = -m$(ARCH) -fpermissive
+CXXEXTRA              = -m$(ARCH) -fpermissive -Wno-attributes \
+                        $(NOTUNEOPT)
 RCEXTRA               =
 DEFINES               =  \
 			-D__WINESRC__ \
 			-DVERSION_SAFE_STEAM_API_INTERFACES \
 			-DUSE_BREAKPAD_HANDLER
 INCLUDE_PATH          = -Isteam \
-			-I.
+			-I. \
+			-Iautoclass
 DLL_PATH              =
 DLL_IMPORTS           =
 LIBRARY_PATH          = -L.
@@ -83,10 +91,12 @@ clean-generated-code: clean
 	$(RM) -f $(WRAPPER_CPPS) $(WRAPPER_CPPS:.cpp=.h) steam_api.auto.spec steam_api.cpp
 
 generate-code: clean clean-generated-code build-codegen spec
-	./makeclasses --spec=$(DLLS:.dll=.spec) -s=steam -t=autoclass
+	./codegenerator --spec=$(DLLS:.dll=.spec) -s=steam -t=autoclass
 
+generate-test-code: clean clean-generated-code build-codegen spec
+	./codegenerator --spec=$(DLLS:.dll=.spec) -s=steam -t=autoclass --testtarget=tests
 build-codegen:
-	nim c makeclasses.nim
+	nim c -o:codegenerator codegen/codegen.nim
 
 spec:
 	winedump spec $(DLLS)
