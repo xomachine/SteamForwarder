@@ -98,7 +98,7 @@ proc makeDeclaration*(self: CallInfo): string {.procvar.} =
 proc makeTraceArgs(self: CallInfo, firstarg: string = "this"): string =
   # RunCallbacks is being called to often and tracing it may cause
   # performance degradation
-  if unlikely(self.name == "RunCallbacks"): ""
+  if unlikely(self.name == "SteamAPI_RunCallbacks"): ""
   else:
     let args =
       if self.class.len > 0:
