@@ -1,7 +1,7 @@
 from strutils import `%`, join
 from sequtils import map, mapIt, foldl
 from streams import Stream
-from arg import Arg, TheType, toDeclaration, tdesc, parseArgs, parseType,
+from arg import Arg, TheType, toDeclaration, parseArgs, parseType,
                 to_format, isVoid, isException, isClass, toSpecArg
 from re import re, find, match, reMultiline, reDotAll
 
@@ -14,7 +14,7 @@ type
     inline: bool
 
 const hidden_ptr = (name: "hidden", thetype: (base: "CSteamID", reference: "*"))
-let methodre = re("""^(\s*.*?virtual\s+)(.*?)\s*(\w+)\((.*?)\)[^)]*;.*?$""", {reMultiline, reDotAll})
+let methodre = re("""^(\s*virtual\s+)([^{};]*?)\s*(\w+)\(([^{};]*?)\)[^)]*;.*?$""", {reMultiline, reDotAll})
 
 proc fixcall(self: CallInfo): CallInfo =
   result = self
@@ -25,15 +25,14 @@ proc fixcall(self: CallInfo): CallInfo =
       (hidden_ptr.thetype, hidden_ptr & self.args)
     else: (self.returntype, self.args)
 
-let funcre = re("""^(S_API|inline)(\s+"""& tdesc &
-                """)(S_CALLTYPE\s+)?(\w+)\(([^{}]*)\)""" &
+let funcre = re("""^(extern "C"|S_API|inline)([^{};]*?[&*\s])(\w+)\(([^{};]*)\)""" &
                 """([^{})]*;.*?)$""", {reMultiline, reDotAll})
 
 
 proc parseFuncs*(raw: string): seq[CallInfo] =
   result = newSeq[CallInfo]()
   var i = 0
-  var matches = newSeq[string](6)
+  var matches = newSeq[string](5)
   while (i = raw.find(funcre, matches, i); i >= 0):
     var function: CallInfo
     function.class = ""
@@ -42,8 +41,8 @@ proc parseFuncs*(raw: string): seq[CallInfo] =
     # added in a special way
     function.inline = matches[0] == "inline"
     function.returntype = matches[1].parseType()
-    function.name = matches[3]
-    function.args = matches[4].parseArgs()
+    function.name = matches[2]
+    function.args = matches[3].parseArgs()
     result.add(function)
     i += matches.mapIt(it.len).foldl(a + b)
 
@@ -104,14 +103,6 @@ proc makeTraceResult*(self: CallInfo): string =
   else:
     """TRACE("() = $1", result);""" % self.returntype.to_format()
 
-proc makeTestBody*(self: CallInfo): string {.procvar.} =
-  """
-$1
-{
-  $2
-}
-""" % [self.makeHead(), self.makeTraceArgs()]
-
 proc makeRealCall(self: CallInfo): string =
   let arglist = self.args.mapIt(it.name).join(", ")
   if self.class.len > 0:
@@ -119,22 +110,33 @@ proc makeRealCall(self: CallInfo): string =
   else:
     """$1($2)""" % [self.name, arglist]
 
-proc makeResult(self: CallInfo): string =
+proc makeResult(self: CallInfo, test: bool = false): string =
   if self.returntype.isVoid():
     """$1;""" % self.makeRealCall()
   elif self.returntype.isException():
     """hidden = $1;""" % self.makeRealCall()
   elif self.returntype.isClass():
-    if self.inline:
-      """if (saved_$1 == NULL) saved_$1 = ($1 *) new $1_($2);
-""" % [self.returntype.base, self.makeRealCall()]
+    let realcall = if test: "NULL" else: self.makeRealCall()
+    if self.inline and not test:
+      """if (saved_$1 == NULL) {
+    auto internal = $2;
+    if (internal == NULL) {
+      TRACE("() = NULL!");
+      return saved_$1;
+    }
+    saved_$1 = ($1 *) new $1_(internal);
+    TRACE("(): ($1 *)%p wrapped as ($1_ *)%p", internal, saved_$1);
+  }
+  TRACE("() = ($1_ *)%p", saved_$1);
+""" % [self.returntype.base, realcall]
     else:
       """auto result = new $1_($2);
-$3""" % [self.returntype.base, self.makeRealCall(),
+  $3
+""" % [self.returntype.base, realcall,
          self.makeTraceResult()]
   else:
     """auto result = $1;
-$2
+  $2
 """ % [self.makeRealCall(), self.makeTraceResult()]
 
 proc makeBody*(self: CallInfo): string {.procvar.} =
@@ -170,6 +172,20 @@ proc makeTest*(self: CallInfo): string {.procvar.} =
   $2_var->$3($4);
   std::cout << "DONE!" << std::endl;
 """ % [arg_declarations, self.class, self.name, arglist, tracer]
+
+proc makeTestBody*(self: CallInfo): string {.procvar.} =
+  let resultcall =
+    if self.class == "" and self.returntype.isClass():
+      self.makeResult(test = true) & "\n  return ($1)result;" %
+        self.returntype.toDeclaration()
+    else: ""
+  """
+$1
+{
+  $2
+  $3
+}
+""" % [self.makeHead(), self.makeTraceArgs(), resultcall]
 
 when isMainModule:
   const test = """

@@ -1,8 +1,8 @@
-from strutils import `%`, startsWith
-from sequtils import mapIt, foldl
-from streams import Stream
+from strutils import `%`, startsWith, strip, isNilOrEmpty, join
+from sequtils import mapIt, foldl, filterIt
+from streams import Stream, newStringStream, getPosition, setPosition, atEnd
 from parser import parseTill
-from re import re, find, match
+from re import re, find, match, reMultiline
 type
   TheType* = tuple
     base: string
@@ -10,11 +10,10 @@ type
   Arg* = tuple
     name: string
     thetype: TheType
+const modifiers = """(const|u?n?signed|long|short|class|struct|\s)*"""
+const tdesc = "^" & modifiers & """?([\w:]+)""" &
+              """\s*?""" & modifiers & """?\s*([&*]*)\s*$"""
 
-const tdesc* = """([constlausigedr\s]*[\w:]+""" &
-              """\s*[constlausigedr]*)\s*([&*]*)\s*"""
-
-let argre = re("""\s*$1\s*(\w+)\s*""" % tdesc)
 let typere = re(tdesc)
 
 proc isException*(self: TheType): bool =
@@ -49,30 +48,24 @@ proc toSpecArg*(self: TheType): string =
   else: "long"
 
 proc parseType*(raw: string, shift: int = 0): TheType =
-  var matches = newSeq[string](2)
-  assert raw.find(typere, matches, shift) >= 0
-  result.base = matches[0]
-  result.reference = matches[1]
+  var matches = newSeq[string](4)
+  assert(raw.find(typere, matches, shift) >= 0,
+         "Cannot find type in $1" % raw[shift..^1])
+  result.base = matches[0..2].filterIt(not it.isNilOrEmpty())
+                .mapIt(it.strip()).join(" ").strip()
+  result.reference = matches[^1]
 
+let argre = re("""\s*([^,)=]+[^\w=])\s*(\w+)\s*($|[,)=])""", {reMultiline})
 proc parseArgs*(raw: string): seq[Arg] =
   result = newSeq[Arg]()
-  var i = 0
   var matches = newSeq[string](3)
-  while (i = raw.find(argre, matches, i); i >= 0):
+  let rawstream = newStringStream(raw)
+  var ss = ""
+  while (ss = rawstream.parseTill({',', '}'}); ss.find(argre, matches) >= 0):
     var a: Arg
-    a.thetype.base = matches[0]
-    a.thetype.reference = matches[1]
-    a.name = matches[2]
+    a.thetype = matches[0].parseType()
+    a.name = matches[1]
     result.add(a)
-    i += matches.mapIt(it.len).foldl(a + b, 0)
-
-proc parseArg*(raw: Stream): Arg =
-  let arg = raw.parseTill({','})
-  var matches = newSeq[string](3)
-  assert arg.find(argre, matches) >= 0
-  result.thetype.base = matches[0]
-  result.thetype.reference = matches[1]
-  result.name = matches[2]
 
 
 proc toDeclaration*(self: Arg): string {.procvar.} =

@@ -2,7 +2,7 @@ from call import CallInfo, parseMethods, makeDeclaration, makeBody,
                  makeTest, makeTestBody
 from sequtils import mapIt, foldl, map
 from strutils import join, `%`
-from re import re, find
+from re import re, find, reMultiline
 from streams import Stream, newStringStream, getPosition, setPosition
 from parser import parseTill
 
@@ -11,7 +11,7 @@ type
     name: string
     methods: seq[CallInfo]
 
-let classre = re"^(class\s+)(\w+)([^#;]*?)\n"
+let classre = re("""^(class\s+)(\w+)([^#;]*?){?$""", {reMultiline})
 let enumre = re"^\s*enum\s+(\w+).*?$"
 
 proc parseEnums(raw: string): seq[string] =
@@ -73,7 +73,13 @@ proc toTestImplementation*(self: Class): string {.procvar.} =
   self.methods.map(makeTestBody).join("\n") & self.makeConDestructor()
 
 proc makeTest*(self: Class): string {.procvar.} =
-  self.methods.map(makeTest).join("\n")
+  let methods = self.methods.map(makeTest).join("\n")
+  """
+  {
+    auto $1_var = $2();
+$3
+  }
+""" % [self.name, self.name[1..^1], methods]
   
 when isMainModule:
   let test = """
@@ -81,7 +87,7 @@ class myclass
 //some comment {}
 {
   enum testnum{
-    lol
+    testing, testing, testing
   };
 
   virtual CSteamID testmethod(testnum a, CSteamID * b);

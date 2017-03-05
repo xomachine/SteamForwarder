@@ -60,28 +60,12 @@ proc writeSpec*(filename: string, spec: SpecFile) =
       [$(i+1), spec.names[i], behaviour, newname, arg]
   outs.close()
 
-proc find(self: SpecFile, name: string): int =
-  self.names.find(name)
-
-proc setname(self: var SpecFile, pos: int, newname: string) =
-  self.newnames[pos] = newname
-
-proc setname(self: var SpecFile, name: string, newname: string) =
-  let pos = find(self, name)
-  setname(self, pos, newname)
-
-proc setargs(self: var SpecFile, pos: int, args: seq[Arg]) =
-  self.args[pos] = args.mapIt(it.thetype.toSpecArg()).join(" ")
-
-proc setargs(self: var SpecFile, name: string, args: seq[Arg]) =
-  let pos = find(self, name)
-  setargs(self, pos, args)
-
 proc filterSpec*(self: var SpecFile, functions: seq[CallInfo]): seq[CallInfo] =
   result = newSeq[CallInfo]()
   for c in functions:
-    let pos = self.find(c.name)
+    let pos = self.names.find(c.name)
     if pos >= 0:
-      setname(self, pos, c.name & '_')
-      setargs(self, pos, c.args)
+      self.newnames[pos] = c.name & '_'
+      self.args[pos] = c.args.mapIt(it.thetype.toSpecArg()).join(" ")
+      self.behaviours[pos] = "cdecl"
       result.add(c)
