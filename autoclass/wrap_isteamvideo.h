@@ -1,11 +1,12 @@
-#ifndef WRAP_ISTEAMVIDEO_H
-#define WRAP_ISTEAMVIDEO_H
-#include "steam_api.h"
-class ISteamVideo_ 
+#include <steam_api_.h>
+#include <isteamvideo.h>
+class ISteamVideo_
 {
-  virtual void GetVideoURL( AppId_t unVideoAppID ) __attribute__((thiscall));
-  virtual bool IsBroadcasting( int *pnNumViewers ) __attribute__((thiscall));
-  public:
-    ISteamVideo *internal;
+public:
+  virtual void  GetVideoURL(AppId_t  unVideoAppID) __attribute__((thiscall));
+  virtual bool  IsBroadcasting(int * pnNumViewers) __attribute__((thiscall));
+  ISteamVideo_(ISteamVideo*to_wrap);
+  ~ISteamVideo_();
+private:
+  ISteamVideo * internal;
 };
-#endif

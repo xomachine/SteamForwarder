@@ -1,301 +1,439 @@
-#ifndef WRAP_ISTEAMUSERSTATS_CPP
-#define WRAP_ISTEAMUSERSTATS_CPP
-#include "autoclass/steam_api_.h" 
-#include "windef.h"
-#include "wine/debug.h"
-#include "config.h"
-bool ISteamUserStats_::RequestCurrentStats()
+#include <steam_api_.h>
+
+bool  ISteamUserStats_::RequestCurrentStats()
 {
-  TRACE("((this[ISteamUserStats])%p)\n", this);
-  bool result = this->internal->RequestCurrentStats();
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p)\n", this);
+  auto result = this->internal->RequestCurrentStats();
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::GetStat( const char *pchName, int32 *pData )
+
+
+bool  ISteamUserStats_::GetStat(char * pchName, int32 * pData)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (int32 *)%p)\n", this, pchName, pData);
-  bool result = this->internal->GetStat(pchName, pData);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (int32 *)%p)\n", this, pchName, pData);
+  auto result = this->internal->GetStat(pchName, pData);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::GetStat( const char *pchName, float *pData )
+
+
+bool  ISteamUserStats_::GetStat(char * pchName, float * pData)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (float *)%f)\n", this, pchName, pData);
-  bool result = this->internal->GetStat(pchName, pData);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (float *)%f)\n", this, pchName, pData);
+  auto result = this->internal->GetStat(pchName, pData);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::SetStat( const char *pchName, int32 nData )
+
+
+bool  ISteamUserStats_::SetStat(char * pchName, int32  nData)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (int32)%d)\n", this, pchName, nData);
-  bool result = this->internal->SetStat(pchName, nData);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (int32 )%p)\n", this, pchName, nData);
+  auto result = this->internal->SetStat(pchName, nData);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::SetStat( const char *pchName, float fData )
+
+
+bool  ISteamUserStats_::SetStat(char * pchName, float  fData)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (float)%f)\n", this, pchName, fData);
-  bool result = this->internal->SetStat(pchName, fData);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (float )%f)\n", this, pchName, fData);
+  auto result = this->internal->SetStat(pchName, fData);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::UpdateAvgRateStat( const char *pchName, float flCountThisSession, double dSessionLength )
+
+
+bool  ISteamUserStats_::UpdateAvgRateStat(char * pchName, float  flCountThisSession, double  dSessionLength)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (float)%f, (double)%p)\n", this, pchName, flCountThisSession, dSessionLength);
-  bool result = this->internal->UpdateAvgRateStat(pchName, flCountThisSession, dSessionLength);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (float )%f, (double )%f)\n", this, pchName, flCountThisSession, dSessionLength);
+  auto result = this->internal->UpdateAvgRateStat(pchName, flCountThisSession, dSessionLength);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::GetAchievement( const char *pchName, bool *pbAchieved )
+
+
+bool  ISteamUserStats_::GetAchievement(char * pchName, bool * pbAchieved)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (bool *)%p)\n", this, pchName, pbAchieved);
-  bool result = this->internal->GetAchievement(pchName, pbAchieved);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (bool *)%d)\n", this, pchName, pbAchieved);
+  auto result = this->internal->GetAchievement(pchName, pbAchieved);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::SetAchievement( const char *pchName )
+
+
+bool  ISteamUserStats_::SetAchievement(char * pchName)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\")\n", this, pchName);
-  bool result = this->internal->SetAchievement(pchName);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\")\n", this, pchName);
+  auto result = this->internal->SetAchievement(pchName);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::ClearAchievement( const char *pchName )
+
+
+bool  ISteamUserStats_::ClearAchievement(char * pchName)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\")\n", this, pchName);
-  bool result = this->internal->ClearAchievement(pchName);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\")\n", this, pchName);
+  auto result = this->internal->ClearAchievement(pchName);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::GetAchievementAndUnlockTime( const char *pchName, bool *pbAchieved, uint32 *punUnlockTime )
+
+
+bool  ISteamUserStats_::GetAchievementAndUnlockTime(char * pchName, bool * pbAchieved, uint32 * punUnlockTime)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (bool *)%p, (uint32 *)%p)\n", this, pchName, pbAchieved, punUnlockTime);
-  bool result = this->internal->GetAchievementAndUnlockTime(pchName, pbAchieved, punUnlockTime);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (bool *)%d, (uint32 *)%p)\n", this, pchName, pbAchieved, punUnlockTime);
+  auto result = this->internal->GetAchievementAndUnlockTime(pchName, pbAchieved, punUnlockTime);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::StoreStats()
+
+
+bool  ISteamUserStats_::StoreStats()
 {
-  TRACE("((this[ISteamUserStats])%p)\n", this);
-  bool result = this->internal->StoreStats();
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p)\n", this);
+  auto result = this->internal->StoreStats();
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-int ISteamUserStats_::GetAchievementIcon( const char *pchName )
+
+
+int  ISteamUserStats_::GetAchievementIcon(char * pchName)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\")\n", this, pchName);
-  int result = this->internal->GetAchievementIcon(pchName);
-  TRACE(" = (int)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\")\n", this, pchName);
+  auto result = this->internal->GetAchievementIcon(pchName);
+  TRACE("() = (int )%d\n", result);
+
   return result;
 }
-const char * ISteamUserStats_::GetAchievementDisplayAttribute( const char *pchName, const char *pchKey )
+
+
+char * ISteamUserStats_::GetAchievementDisplayAttribute(char * pchName, char * pchKey)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (const char *)\"%s\")\n", this, pchName, pchKey);
-  const char * result = this->internal->GetAchievementDisplayAttribute(pchName, pchKey);
-  TRACE(" = (const char *)\"%s\"\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (char *)\"%s\")\n", this, pchName, pchKey);
+  auto result = this->internal->GetAchievementDisplayAttribute(pchName, pchKey);
+  TRACE("() = (char *)\"%s\"\n", result);
+
   return result;
 }
-bool ISteamUserStats_::IndicateAchievementProgress( const char *pchName, uint32 nCurProgress, uint32 nMaxProgress )
+
+
+bool  ISteamUserStats_::IndicateAchievementProgress(char * pchName, uint32  nCurProgress, uint32  nMaxProgress)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (uint32)%d, (uint32)%d)\n", this, pchName, nCurProgress, nMaxProgress);
-  bool result = this->internal->IndicateAchievementProgress(pchName, nCurProgress, nMaxProgress);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (uint32 )%p, (uint32 )%p)\n", this, pchName, nCurProgress, nMaxProgress);
+  auto result = this->internal->IndicateAchievementProgress(pchName, nCurProgress, nMaxProgress);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-uint32 ISteamUserStats_::GetNumAchievements()
+
+
+uint32  ISteamUserStats_::GetNumAchievements()
 {
-  TRACE("((this[ISteamUserStats])%p)\n", this);
-  uint32 result = this->internal->GetNumAchievements();
-  TRACE(" = (uint32)%d\n", result);
+  TRACE("((ISteamUserStats *)%p)\n", this);
+  auto result = this->internal->GetNumAchievements();
+  TRACE("() = (uint32 )%p\n", result);
+
   return result;
 }
-const char * ISteamUserStats_::GetAchievementName( uint32 iAchievement )
+
+
+char * ISteamUserStats_::GetAchievementName(uint32  iAchievement)
 {
-  TRACE("((this[ISteamUserStats])%p, (uint32)%d)\n", this, iAchievement);
-  const char * result = this->internal->GetAchievementName(iAchievement);
-  TRACE(" = (const char *)\"%s\"\n", result);
+  TRACE("((ISteamUserStats *)%p, (uint32 )%p)\n", this, iAchievement);
+  auto result = this->internal->GetAchievementName(iAchievement);
+  TRACE("() = (char *)\"%s\"\n", result);
+
   return result;
 }
-SteamAPICall_t ISteamUserStats_::RequestUserStats( CSteamID steamIDUser )
+
+
+SteamAPICall_t  ISteamUserStats_::RequestUserStats(CSteamID  steamIDUser)
 {
-  TRACE("((this[ISteamUserStats])%p, (CSteamID)%p)\n", this, steamIDUser);
-  SteamAPICall_t result = this->internal->RequestUserStats(steamIDUser);
-  TRACE(" = (SteamAPICall_t)%p\n", result);
+  TRACE("((ISteamUserStats *)%p, (CSteamID )%p)\n", this, steamIDUser);
+  auto result = this->internal->RequestUserStats(steamIDUser);
+  TRACE("() = (SteamAPICall_t )%p\n", result);
+
   return result;
 }
-bool ISteamUserStats_::GetUserStat( CSteamID steamIDUser, const char *pchName, int32 *pData )
+
+
+bool  ISteamUserStats_::GetUserStat(CSteamID  steamIDUser, char * pchName, int32 * pData)
 {
-  TRACE("((this[ISteamUserStats])%p, (CSteamID)%p, (const char *)\"%s\", (int32 *)%p)\n", this, steamIDUser, pchName, pData);
-  bool result = this->internal->GetUserStat(steamIDUser, pchName, pData);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (CSteamID )%p, (char *)\"%s\", (int32 *)%p)\n", this, steamIDUser, pchName, pData);
+  auto result = this->internal->GetUserStat(steamIDUser, pchName, pData);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::GetUserStat( CSteamID steamIDUser, const char *pchName, float *pData )
+
+
+bool  ISteamUserStats_::GetUserStat(CSteamID  steamIDUser, char * pchName, float * pData)
 {
-  TRACE("((this[ISteamUserStats])%p, (CSteamID)%p, (const char *)\"%s\", (float *)%f)\n", this, steamIDUser, pchName, pData);
-  bool result = this->internal->GetUserStat(steamIDUser, pchName, pData);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (CSteamID )%p, (char *)\"%s\", (float *)%f)\n", this, steamIDUser, pchName, pData);
+  auto result = this->internal->GetUserStat(steamIDUser, pchName, pData);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::GetUserAchievement( CSteamID steamIDUser, const char *pchName, bool *pbAchieved )
+
+
+bool  ISteamUserStats_::GetUserAchievement(CSteamID  steamIDUser, char * pchName, bool * pbAchieved)
 {
-  TRACE("((this[ISteamUserStats])%p, (CSteamID)%p, (const char *)\"%s\", (bool *)%p)\n", this, steamIDUser, pchName, pbAchieved);
-  bool result = this->internal->GetUserAchievement(steamIDUser, pchName, pbAchieved);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (CSteamID )%p, (char *)\"%s\", (bool *)%d)\n", this, steamIDUser, pchName, pbAchieved);
+  auto result = this->internal->GetUserAchievement(steamIDUser, pchName, pbAchieved);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::GetUserAchievementAndUnlockTime( CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime )
+
+
+bool  ISteamUserStats_::GetUserAchievementAndUnlockTime(CSteamID  steamIDUser, char * pchName, bool * pbAchieved, uint32 * punUnlockTime)
 {
-  TRACE("((this[ISteamUserStats])%p, (CSteamID)%p, (const char *)\"%s\", (bool *)%p, (uint32 *)%p)\n", this, steamIDUser, pchName, pbAchieved, punUnlockTime);
-  bool result = this->internal->GetUserAchievementAndUnlockTime(steamIDUser, pchName, pbAchieved, punUnlockTime);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (CSteamID )%p, (char *)\"%s\", (bool *)%d, (uint32 *)%p)\n", this, steamIDUser, pchName, pbAchieved, punUnlockTime);
+  auto result = this->internal->GetUserAchievementAndUnlockTime(steamIDUser, pchName, pbAchieved, punUnlockTime);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::ResetAllStats( bool bAchievementsToo )
+
+
+bool  ISteamUserStats_::ResetAllStats(bool  bAchievementsToo)
 {
-  TRACE("((this[ISteamUserStats])%p, (bool)%d)\n", this, bAchievementsToo);
-  bool result = this->internal->ResetAllStats(bAchievementsToo);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (bool )%d)\n", this, bAchievementsToo);
+  auto result = this->internal->ResetAllStats(bAchievementsToo);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-SteamAPICall_t ISteamUserStats_::FindOrCreateLeaderboard( const char *pchLeaderboardName, ELeaderboardSortMethod eLeaderboardSortMethod, ELeaderboardDisplayType eLeaderboardDisplayType )
+
+
+SteamAPICall_t  ISteamUserStats_::FindOrCreateLeaderboard(char * pchLeaderboardName, ELeaderboardSortMethod  eLeaderboardSortMethod, ELeaderboardDisplayType  eLeaderboardDisplayType)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (ELeaderboardSortMethod)%p, (ELeaderboardDisplayType)%p)\n", this, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
-  SteamAPICall_t result = this->internal->FindOrCreateLeaderboard(pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
-  TRACE(" = (SteamAPICall_t)%p\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (ELeaderboardSortMethod )%p, (ELeaderboardDisplayType )%p)\n", this, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+  auto result = this->internal->FindOrCreateLeaderboard(pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+  TRACE("() = (SteamAPICall_t )%p\n", result);
+
   return result;
 }
-SteamAPICall_t ISteamUserStats_::FindLeaderboard( const char *pchLeaderboardName )
+
+
+SteamAPICall_t  ISteamUserStats_::FindLeaderboard(char * pchLeaderboardName)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\")\n", this, pchLeaderboardName);
-  SteamAPICall_t result = this->internal->FindLeaderboard(pchLeaderboardName);
-  TRACE(" = (SteamAPICall_t)%p\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\")\n", this, pchLeaderboardName);
+  auto result = this->internal->FindLeaderboard(pchLeaderboardName);
+  TRACE("() = (SteamAPICall_t )%p\n", result);
+
   return result;
 }
-const char * ISteamUserStats_::GetLeaderboardName( SteamLeaderboard_t hSteamLeaderboard )
+
+
+char * ISteamUserStats_::GetLeaderboardName(SteamLeaderboard_t  hSteamLeaderboard)
 {
-  TRACE("((this[ISteamUserStats])%p, (SteamLeaderboard_t)%p)\n", this, hSteamLeaderboard);
-  const char * result = this->internal->GetLeaderboardName(hSteamLeaderboard);
-  TRACE(" = (const char *)\"%s\"\n", result);
+  TRACE("((ISteamUserStats *)%p, (SteamLeaderboard_t )%p)\n", this, hSteamLeaderboard);
+  auto result = this->internal->GetLeaderboardName(hSteamLeaderboard);
+  TRACE("() = (char *)\"%s\"\n", result);
+
   return result;
 }
-int ISteamUserStats_::GetLeaderboardEntryCount( SteamLeaderboard_t hSteamLeaderboard )
+
+
+int  ISteamUserStats_::GetLeaderboardEntryCount(SteamLeaderboard_t  hSteamLeaderboard)
 {
-  TRACE("((this[ISteamUserStats])%p, (SteamLeaderboard_t)%p)\n", this, hSteamLeaderboard);
-  int result = this->internal->GetLeaderboardEntryCount(hSteamLeaderboard);
-  TRACE(" = (int)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (SteamLeaderboard_t )%p)\n", this, hSteamLeaderboard);
+  auto result = this->internal->GetLeaderboardEntryCount(hSteamLeaderboard);
+  TRACE("() = (int )%d\n", result);
+
   return result;
 }
-ELeaderboardSortMethod ISteamUserStats_::GetLeaderboardSortMethod( SteamLeaderboard_t hSteamLeaderboard )
+
+
+ELeaderboardSortMethod  ISteamUserStats_::GetLeaderboardSortMethod(SteamLeaderboard_t  hSteamLeaderboard)
 {
-  TRACE("((this[ISteamUserStats])%p, (SteamLeaderboard_t)%p)\n", this, hSteamLeaderboard);
-  ELeaderboardSortMethod result = this->internal->GetLeaderboardSortMethod(hSteamLeaderboard);
-  TRACE(" = (ELeaderboardSortMethod)%p\n", result);
+  TRACE("((ISteamUserStats *)%p, (SteamLeaderboard_t )%p)\n", this, hSteamLeaderboard);
+  auto result = this->internal->GetLeaderboardSortMethod(hSteamLeaderboard);
+  TRACE("() = (ELeaderboardSortMethod )%p\n", result);
+
   return result;
 }
-ELeaderboardDisplayType ISteamUserStats_::GetLeaderboardDisplayType( SteamLeaderboard_t hSteamLeaderboard )
+
+
+ELeaderboardDisplayType  ISteamUserStats_::GetLeaderboardDisplayType(SteamLeaderboard_t  hSteamLeaderboard)
 {
-  TRACE("((this[ISteamUserStats])%p, (SteamLeaderboard_t)%p)\n", this, hSteamLeaderboard);
-  ELeaderboardDisplayType result = this->internal->GetLeaderboardDisplayType(hSteamLeaderboard);
-  TRACE(" = (ELeaderboardDisplayType)%p\n", result);
+  TRACE("((ISteamUserStats *)%p, (SteamLeaderboard_t )%p)\n", this, hSteamLeaderboard);
+  auto result = this->internal->GetLeaderboardDisplayType(hSteamLeaderboard);
+  TRACE("() = (ELeaderboardDisplayType )%p\n", result);
+
   return result;
 }
-SteamAPICall_t ISteamUserStats_::DownloadLeaderboardEntries( SteamLeaderboard_t hSteamLeaderboard, ELeaderboardDataRequest eLeaderboardDataRequest, int nRangeStart, int nRangeEnd )
+
+
+SteamAPICall_t  ISteamUserStats_::DownloadLeaderboardEntries(SteamLeaderboard_t  hSteamLeaderboard, ELeaderboardDataRequest  eLeaderboardDataRequest, int  nRangeStart, int  nRangeEnd)
 {
-  TRACE("((this[ISteamUserStats])%p, (SteamLeaderboard_t)%p, (ELeaderboardDataRequest)%p, (int)%d, (int)%d)\n", this, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
-  SteamAPICall_t result = this->internal->DownloadLeaderboardEntries(hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
-  TRACE(" = (SteamAPICall_t)%p\n", result);
+  TRACE("((ISteamUserStats *)%p, (SteamLeaderboard_t )%p, (ELeaderboardDataRequest )%p, (int )%d, (int )%d)\n", this, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+  auto result = this->internal->DownloadLeaderboardEntries(hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+  TRACE("() = (SteamAPICall_t )%p\n", result);
+
   return result;
 }
-bool ISteamUserStats_::GetDownloadedLeaderboardEntry( SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, LeaderboardEntry_t *pLeaderboardEntry, int32 *pDetails, int cDetailsMax )
+
+
+SteamAPICall_t  ISteamUserStats_::DownloadLeaderboardEntriesForUsers(SteamLeaderboard_t  hSteamLeaderboard, CSteamID * prgUsers, int  cUsers)
 {
-  TRACE("((this[ISteamUserStats])%p, (SteamLeaderboardEntries_t)%p, (int)%d, (LeaderboardEntry_t *)%p, (int32 *)%p, (int)%d)\n", this, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
-  bool result = this->internal->GetDownloadedLeaderboardEntry(hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (SteamLeaderboard_t )%p, (CSteamID *)%p, (int )%d)\n", this, hSteamLeaderboard, prgUsers, cUsers);
+  auto result = this->internal->DownloadLeaderboardEntriesForUsers(hSteamLeaderboard, prgUsers, cUsers);
+  TRACE("() = (SteamAPICall_t )%p\n", result);
+
   return result;
 }
-SteamAPICall_t ISteamUserStats_::UploadLeaderboardScore( SteamLeaderboard_t hSteamLeaderboard, ELeaderboardUploadScoreMethod eLeaderboardUploadScoreMethod, int32 nScore, const int32 *pScoreDetails, int cScoreDetailsCount )
+
+
+bool  ISteamUserStats_::GetDownloadedLeaderboardEntry(SteamLeaderboardEntries_t  hSteamLeaderboardEntries, int  index, LeaderboardEntry_t * pLeaderboardEntry, int32 * pDetails, int  cDetailsMax)
 {
-  TRACE("((this[ISteamUserStats])%p, (SteamLeaderboard_t)%p, (ELeaderboardUploadScoreMethod)%p, (int32)%d, (const int32 *)%p, (int)%d)\n", this, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
-  SteamAPICall_t result = this->internal->UploadLeaderboardScore(hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
-  TRACE(" = (SteamAPICall_t)%p\n", result);
+  TRACE("((ISteamUserStats *)%p, (SteamLeaderboardEntries_t )%p, (int )%d, (LeaderboardEntry_t *)%p, (int32 *)%p, (int )%d)\n", this, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+  auto result = this->internal->GetDownloadedLeaderboardEntry(hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-SteamAPICall_t ISteamUserStats_::AttachLeaderboardUGC( SteamLeaderboard_t hSteamLeaderboard, UGCHandle_t hUGC )
+
+
+SteamAPICall_t  ISteamUserStats_::UploadLeaderboardScore(SteamLeaderboard_t  hSteamLeaderboard, ELeaderboardUploadScoreMethod  eLeaderboardUploadScoreMethod, int32  nScore, int32 * pScoreDetails, int  cScoreDetailsCount)
 {
-  TRACE("((this[ISteamUserStats])%p, (SteamLeaderboard_t)%p, (UGCHandle_t)%p)\n", this, hSteamLeaderboard, hUGC);
-  SteamAPICall_t result = this->internal->AttachLeaderboardUGC(hSteamLeaderboard, hUGC);
-  TRACE(" = (SteamAPICall_t)%p\n", result);
+  TRACE("((ISteamUserStats *)%p, (SteamLeaderboard_t )%p, (ELeaderboardUploadScoreMethod )%p, (int32 )%p, (int32 *)%p, (int )%d)\n", this, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+  auto result = this->internal->UploadLeaderboardScore(hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+  TRACE("() = (SteamAPICall_t )%p\n", result);
+
   return result;
 }
-SteamAPICall_t ISteamUserStats_::GetNumberOfCurrentPlayers()
+
+
+SteamAPICall_t  ISteamUserStats_::AttachLeaderboardUGC(SteamLeaderboard_t  hSteamLeaderboard, UGCHandle_t  hUGC)
 {
-  TRACE("((this[ISteamUserStats])%p)\n", this);
-  SteamAPICall_t result = this->internal->GetNumberOfCurrentPlayers();
-  TRACE(" = (SteamAPICall_t)%p\n", result);
+  TRACE("((ISteamUserStats *)%p, (SteamLeaderboard_t )%p, (UGCHandle_t )%p)\n", this, hSteamLeaderboard, hUGC);
+  auto result = this->internal->AttachLeaderboardUGC(hSteamLeaderboard, hUGC);
+  TRACE("() = (SteamAPICall_t )%p\n", result);
+
   return result;
 }
-SteamAPICall_t ISteamUserStats_::RequestGlobalAchievementPercentages()
+
+
+SteamAPICall_t  ISteamUserStats_::GetNumberOfCurrentPlayers()
 {
-  TRACE("((this[ISteamUserStats])%p)\n", this);
-  SteamAPICall_t result = this->internal->RequestGlobalAchievementPercentages();
-  TRACE(" = (SteamAPICall_t)%p\n", result);
+  TRACE("((ISteamUserStats *)%p)\n", this);
+  auto result = this->internal->GetNumberOfCurrentPlayers();
+  TRACE("() = (SteamAPICall_t )%p\n", result);
+
   return result;
 }
-int ISteamUserStats_::GetMostAchievedAchievementInfo( char *pchName, uint32 unNameBufLen, float *pflPercent, bool *pbAchieved )
+
+
+SteamAPICall_t  ISteamUserStats_::RequestGlobalAchievementPercentages()
 {
-  TRACE("((this[ISteamUserStats])%p, (char *)%p, (uint32)%d, (float *)%f, (bool *)%p)\n", this, pchName, unNameBufLen, pflPercent, pbAchieved);
-  int result = this->internal->GetMostAchievedAchievementInfo(pchName, unNameBufLen, pflPercent, pbAchieved);
-  TRACE(" = (int)%d\n", result);
+  TRACE("((ISteamUserStats *)%p)\n", this);
+  auto result = this->internal->RequestGlobalAchievementPercentages();
+  TRACE("() = (SteamAPICall_t )%p\n", result);
+
   return result;
 }
-int ISteamUserStats_::GetNextMostAchievedAchievementInfo( int iIteratorPrevious, char *pchName, uint32 unNameBufLen, float *pflPercent, bool *pbAchieved )
+
+
+int  ISteamUserStats_::GetMostAchievedAchievementInfo(char * pchName, uint32  unNameBufLen, float * pflPercent, bool * pbAchieved)
 {
-  TRACE("((this[ISteamUserStats])%p, (int)%d, (char *)%p, (uint32)%d, (float *)%f, (bool *)%p)\n", this, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
-  int result = this->internal->GetNextMostAchievedAchievementInfo(iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
-  TRACE(" = (int)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (uint32 )%p, (float *)%f, (bool *)%d)\n", this, pchName, unNameBufLen, pflPercent, pbAchieved);
+  auto result = this->internal->GetMostAchievedAchievementInfo(pchName, unNameBufLen, pflPercent, pbAchieved);
+  TRACE("() = (int )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::GetAchievementAchievedPercent( const char *pchName, float *pflPercent )
+
+
+int  ISteamUserStats_::GetNextMostAchievedAchievementInfo(int  iIteratorPrevious, char * pchName, uint32  unNameBufLen, float * pflPercent, bool * pbAchieved)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (float *)%f)\n", this, pchName, pflPercent);
-  bool result = this->internal->GetAchievementAchievedPercent(pchName, pflPercent);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (int )%d, (char *)\"%s\", (uint32 )%p, (float *)%f, (bool *)%d)\n", this, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
+  auto result = this->internal->GetNextMostAchievedAchievementInfo(iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
+  TRACE("() = (int )%d\n", result);
+
   return result;
 }
-SteamAPICall_t ISteamUserStats_::RequestGlobalStats( int nHistoryDays )
+
+
+bool  ISteamUserStats_::GetAchievementAchievedPercent(char * pchName, float * pflPercent)
 {
-  TRACE("((this[ISteamUserStats])%p, (int)%d)\n", this, nHistoryDays);
-  SteamAPICall_t result = this->internal->RequestGlobalStats(nHistoryDays);
-  TRACE(" = (SteamAPICall_t)%p\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (float *)%f)\n", this, pchName, pflPercent);
+  auto result = this->internal->GetAchievementAchievedPercent(pchName, pflPercent);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-bool ISteamUserStats_::GetGlobalStat( const char *pchStatName, int64 *pData )
+
+
+SteamAPICall_t  ISteamUserStats_::RequestGlobalStats(int  nHistoryDays)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (int64 *)%p)\n", this, pchStatName, pData);
-  bool result = this->internal->GetGlobalStat(pchStatName, pData);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (int )%d)\n", this, nHistoryDays);
+  auto result = this->internal->RequestGlobalStats(nHistoryDays);
+  TRACE("() = (SteamAPICall_t )%p\n", result);
+
   return result;
 }
-bool ISteamUserStats_::GetGlobalStat( const char *pchStatName, double *pData )
+
+
+bool  ISteamUserStats_::GetGlobalStat(char * pchStatName, int64 * pData)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (double *)%p)\n", this, pchStatName, pData);
-  bool result = this->internal->GetGlobalStat(pchStatName, pData);
-  TRACE(" = (bool)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (int64 *)%p)\n", this, pchStatName, pData);
+  auto result = this->internal->GetGlobalStat(pchStatName, pData);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-int32 ISteamUserStats_::GetGlobalStatHistory( const char *pchStatName, ARRAY_COUNT(cubData) int64 *pData, uint32 cubData )
+
+
+bool  ISteamUserStats_::GetGlobalStat(char * pchStatName, double * pData)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (int64 *)%p, (uint32)%d)\n", this, pchStatName, pData, cubData);
-  int32 result = this->internal->GetGlobalStatHistory(pchStatName, pData, cubData);
-  TRACE(" = (int32)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (double *)%f)\n", this, pchStatName, pData);
+  auto result = this->internal->GetGlobalStat(pchStatName, pData);
+  TRACE("() = (bool )%d\n", result);
+
   return result;
 }
-int32 ISteamUserStats_::GetGlobalStatHistory( const char *pchStatName, ARRAY_COUNT(cubData) double *pData, uint32 cubData )
+
+
+int32  ISteamUserStats_::GetGlobalStatHistory(char * pchStatName, int64 * pData, uint32  cubData)
 {
-  TRACE("((this[ISteamUserStats])%p, (const char *)\"%s\", (double *)%p, (uint32)%d)\n", this, pchStatName, pData, cubData);
-  int32 result = this->internal->GetGlobalStatHistory(pchStatName, pData, cubData);
-  TRACE(" = (int32)%d\n", result);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (int64 *)%p, (uint32 )%p)\n", this, pchStatName, pData, cubData);
+  auto result = this->internal->GetGlobalStatHistory(pchStatName, pData, cubData);
+  TRACE("() = (int32 )%p\n", result);
+
   return result;
 }
-#endif
+
+
+int32  ISteamUserStats_::GetGlobalStatHistory(char * pchStatName, double * pData, uint32  cubData)
+{
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (double *)%f, (uint32 )%p)\n", this, pchStatName, pData, cubData);
+  auto result = this->internal->GetGlobalStatHistory(pchStatName, pData, cubData);
+  TRACE("() = (int32 )%p\n", result);
+
+  return result;
+}
+ISteamUserStats_::ISteamUserStats_(ISteamUserStats * towrap)
+{
+  this->internal = towrap;
+}
+
+ISteamUserStats_::~ISteamUserStats_()
+{
+  delete this->internal;
+}

@@ -439,7 +439,7 @@
 439 cdecl SteamAPI_ISteamRemoteStorage_GetPublishedItemVoteDetails( long long ) SteamAPI_ISteamRemoteStorage_GetPublishedItemVoteDetails_
 440 cdecl SteamAPI_ISteamRemoteStorage_GetQuota( long ptr ptr ) SteamAPI_ISteamRemoteStorage_GetQuota_
 441 cdecl SteamAPI_ISteamRemoteStorage_GetSyncPlatforms( long str ) SteamAPI_ISteamRemoteStorage_GetSyncPlatforms_
-442 cdecl SteamAPI_ISteamRemoteStorage_GetUGCDetails( long long ptr ptr ptr ptr ) SteamAPI_ISteamRemoteStorage_GetUGCDetails_
+442 cdecl SteamAPI_ISteamRemoteStorage_GetUGCDetails( long long ptr str ptr ptr ) SteamAPI_ISteamRemoteStorage_GetUGCDetails_
 443 cdecl SteamAPI_ISteamRemoteStorage_GetUGCDownloadProgress( long long ptr ptr ) SteamAPI_ISteamRemoteStorage_GetUGCDownloadProgress_
 444 cdecl SteamAPI_ISteamRemoteStorage_GetUserPublishedItemVoteDetails( long long ) SteamAPI_ISteamRemoteStorage_GetUserPublishedItemVoteDetails_
 445 cdecl SteamAPI_ISteamRemoteStorage_IsCloudEnabledForAccount( long ) SteamAPI_ISteamRemoteStorage_IsCloudEnabledForAccount_
@@ -626,7 +626,7 @@
 626 cdecl SteamAPI_SetMiniDumpComment( str ) SteamAPI_SetMiniDumpComment_
 627 cdecl SteamAPI_SetTryCatchCallbacks( long ) SteamAPI_SetTryCatchCallbacks_
 628 cdecl SteamAPI_Shutdown() SteamAPI_Shutdown_
-629 cdecl SteamAPI_UnregisterCallResult( ptr ) SteamAPI_UnregisterCallResult_
+629 cdecl SteamAPI_UnregisterCallResult( ptr long ) SteamAPI_UnregisterCallResult_
 630 cdecl SteamAPI_UnregisterCallback( ptr ) SteamAPI_UnregisterCallback_
 631 cdecl SteamAPI_UseBreakpadCrashHandler( ptr ptr ptr long ptr long ) SteamAPI_UseBreakpadCrashHandler_
 632 cdecl SteamAPI_WriteMiniDump( long ptr long ) SteamAPI_WriteMiniDump_
