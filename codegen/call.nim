@@ -12,9 +12,9 @@ type
     returntype: TheType
     class: string
     inline: bool
+    private: bool
 
 const hidden_ptr = (name: "hidden", thetype: (base: "CSteamID", reference: "*"))
-let methodre = re("""^(\s*\w*:?\s*virtual\s+)([^{};]*?)\s*(\w+)\(([^{};]*?)\)[^)]*;.*?$""", {reMultiline, reDotAll})
 
 proc fixcall(self: CallInfo): CallInfo =
   result = self
@@ -28,45 +28,46 @@ proc fixcall(self: CallInfo): CallInfo =
 let funcre = re("""^(extern "C"|S_API|inline)([^{};]*?[&*\s])(\w+)\(([^{};]*)\)""" &
                 """([^{})]*;.*?)$""", {reMultiline, reDotAll})
 
-let callbackre = re"""^SteamAPI_(Un)?[Rr]egisterCall(back|Result)$"""
 proc parseFuncs*(raw: string): seq[CallInfo] =
   result = newSeq[CallInfo]()
   var i = 0
   var matches = newSeq[string](5)
   while (i = raw.find(funcre, matches, i); i >= 0):
-    # Callbacks are handled in callbacks.cpp in special way
-    if likely(not matches[2].match(callbackre)):
-      var function: CallInfo
-      function.class = ""
-      # inline functions is not a part of latest steam ABI, but they are
-      # exist in previous versions of steam_api.dll, so they must be
-      # added in a special way
-      function.inline = matches[0] == "inline"
-      function.returntype = matches[1].parseType()
-      function.name = matches[2]
-      function.args = matches[3].parseArgs()
-      result.add(function)
+    var function: CallInfo
+    function.class = ""
+    function.private = false
+    # inline functions is not a part of latest steam ABI, but they are
+    # exist in previous versions of steam_api.dll, so they must be
+    # added in a special way
+    function.inline = matches[0] == "inline"
+    function.returntype = matches[1].parseType()
+    function.name = matches[2]
+    function.args = matches[3].parseArgs()
+    result.add(function)
     i += matches.mapIt(it.len).foldl(a + b)
 
+let methodre = re("""^\s*(\w*)(:?\s*virtual\s+)([^{};]*?)\s*(\w+)\(([^{};]*?)\)[^)]*;.*?$""", {reMultiline, reDotAll})
 proc parseMethods*(raw: string, class: string, enums: seq[string] = @[]): seq[CallInfo] =
   result = newSeq[CallInfo]()
   var i = 0
-  var matches = newSeq[string](4)
+  var matches = newSeq[string](5)
   while (i = raw.find(methodre, matches, i); i >= 0):
     var themethod: CallInfo
+    themethod.private = matches[0] in ["private", "protected"]
     themethod.class = class
     themethod.inline = false
-    themethod.returntype = matches[1].parseType()
-    themethod.name = matches[2]
-    themethod.args = matches[3].parseArgs()
+    themethod.returntype = matches[2].parseType()
+    themethod.name = matches[3]
+    themethod.args = matches[4].parseArgs()
     if enums.len > 0:
       proc enumfix(source: Arg): Arg =
         result = source
         if result.thetype.base in enums:
+          # For enums declared inside a class
           result.thetype.base = "$1::$2" % [class, result.thetype.base]
       themethod.args = themethod.args.map(enumfix)
     result.add(themethod)
-    i += matches[0].len
+    i += matches.mapIt(it.len).foldl(a + b)
 
 proc toDeclaration(args: seq[Arg]): string =
   args.map(toDeclaration).join(", ")
@@ -88,21 +89,27 @@ proc makeDeclaration*(self: CallInfo): string {.procvar.} =
   let convention =
     if self.class == "": "__cdecl"
     else: "__attribute__((thiscall))"
-  let virtual = if self.class.len > 0: "virtual" else: ""
+  let virtual =
+    if self.class.len > 0: "virtual"
+    else: ""
   "$1 $2 $3($4) $5;" % [virtual, fixed.returntype.to_declaration(), self.name,
                         fixed.args.to_declaration(), convention]
 
 proc makeTraceArgs(self: CallInfo, firstarg: string = "this"): string =
-  if unlikely(self.name == "RunCallbacks"): return ""
-  let args =
-    if self.class.len > 0:
-      (name: firstarg, thetype: (base: self.class, reference: "*")) & self.args
-    else: self.args
-  let trace_args = args.mapIt(it.name).join(", ")
-  let final_trace_args = if trace_args.len > 0: ", " & trace_args else: ""
-  let format_args = args.mapIt(it.thetype).map(to_format).join(", ")
-  let tracer = if firstarg == "this": "TRACE(\"" else: ""
-  """$3($1)\n"$2);""" % [format_args, final_trace_args, tracer]
+  # RunCallbacks is being called to often and tracing it may cause
+  # performance degradation
+  if unlikely(self.name == "RunCallbacks"): ""
+  else:
+    let args =
+      if self.class.len > 0:
+        (name: firstarg, thetype: (base: self.class, reference: "*")) &
+          self.args
+      else: self.args
+    let trace_args = args.mapIt(it.name).join(", ")
+    let final_trace_args = if trace_args.len > 0: ", " & trace_args else: ""
+    let format_args = args.mapIt(it.thetype).map(to_format).join(", ")
+    let tracer = if firstarg == "this": "TRACE(\"" else: ""
+    """$3($1)\n"$2);""" % [format_args, final_trace_args, tracer]
 
 proc makeTraceResult*(self: CallInfo): string =
   case self.returntype.base
@@ -118,7 +125,9 @@ proc makeRealCall(self: CallInfo): string =
     """$1($2)""" % [self.name, arglist]
 
 proc makeResult(self: CallInfo, test: bool = false): string =
-  if self.returntype.isVoid():
+  if self.private:
+    ""
+  elif self.returntype.isVoid():
     """$1;""" % self.makeRealCall()
   elif self.returntype.isException():
     """*hidden = $1;""" % self.makeRealCall()
@@ -150,17 +159,22 @@ proc makeResult(self: CallInfo, test: bool = false): string =
   $2
 """ % [self.makeRealCall(), self.makeTraceResult()]
 
+let callbackre = re"""^SteamAPI_(Un)?[Rr]egisterCall(back|Result)$"""
 proc makeBody*(self: CallInfo): string {.procvar.} =
-  let returnstmt =
-    if self.returntype.isVoid(): ""
-    elif self.returntype.isException(): "return hidden;"
-    elif self.returntype.isClass():
-      if self.inline:
-        """return saved_$1;""" % self.returntype.base
-      else:
-        """return ($1)result;""" % self.returntype.to_declaration()
-    else: "return result;"
-  """
+  if unlikely(self.name.match(callbackre)):
+    # Callbacks are handled in callbacks.cpp in a special way
+    ""
+  else:
+    let returnstmt =
+      if self.returntype.isVoid(): ""
+      elif self.returntype.isException(): "return hidden;"
+      elif self.returntype.isClass():
+        if self.inline:
+          """return saved_$1;""" % self.returntype.base
+        else:
+          """return ($1)result;""" % self.returntype.to_declaration()
+      else: "return result;"
+    """
 $1
 {
   $2
