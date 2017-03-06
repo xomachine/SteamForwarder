@@ -12,7 +12,7 @@ SteamAPICall_t  ISteamGameServerStats_::RequestUserStats(CSteamID  steamIDUser)
 
 bool  ISteamGameServerStats_::GetUserStat(CSteamID  steamIDUser, char * pchName, int32 * pData)
 {
-  TRACE("((ISteamGameServerStats *)%p, (CSteamID )%p, (char *)\"%s\", (int32 *)%p)\n", this, steamIDUser, pchName, pData);
+  TRACE("((ISteamGameServerStats *)%p, (CSteamID )%p, (char *)\"%s\", (int32 *)%d)\n", this, steamIDUser, pchName, pData);
   auto result = this->internal->GetUserStat(steamIDUser, pchName, pData);
   TRACE("() = (bool )%d\n", result);
 
@@ -42,7 +42,7 @@ bool  ISteamGameServerStats_::GetUserAchievement(CSteamID  steamIDUser, char * p
 
 bool  ISteamGameServerStats_::SetUserStat(CSteamID  steamIDUser, char * pchName, int32  nData)
 {
-  TRACE("((ISteamGameServerStats *)%p, (CSteamID )%p, (char *)\"%s\", (int32 )%p)\n", this, steamIDUser, pchName, nData);
+  TRACE("((ISteamGameServerStats *)%p, (CSteamID )%p, (char *)\"%s\", (int32 )%d)\n", this, steamIDUser, pchName, nData);
   auto result = this->internal->SetUserStat(steamIDUser, pchName, nData);
   TRACE("() = (bool )%d\n", result);
 

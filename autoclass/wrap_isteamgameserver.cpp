@@ -2,7 +2,7 @@
 
 bool  ISteamGameServer_::InitGameServer(uint32  unIP, uint16  usGamePort, uint16  usQueryPort, uint32  unFlags, AppId_t  nGameAppId, char * pchVersionString)
 {
-  TRACE("((ISteamGameServer *)%p, (uint32 )%p, (uint16 )%p, (uint16 )%p, (uint32 )%p, (AppId_t )%p, (char *)\"%s\")\n", this, unIP, usGamePort, usQueryPort, unFlags, nGameAppId, pchVersionString);
+  TRACE("((ISteamGameServer *)%p, (uint32 )%d, (uint16 )%d, (uint16 )%d, (uint32 )%d, (AppId_t )%p, (char *)\"%s\")\n", this, unIP, usGamePort, usQueryPort, unFlags, nGameAppId, pchVersionString);
   auto result = this->internal->InitGameServer(unIP, usGamePort, usQueryPort, unFlags, nGameAppId, pchVersionString);
   TRACE("() = (bool )%d\n", result);
 
@@ -146,7 +146,7 @@ void  ISteamGameServer_::SetPasswordProtected(bool  bPasswordProtected)
 
 void  ISteamGameServer_::SetSpectatorPort(uint16  unSpectatorPort)
 {
-  TRACE("((ISteamGameServer *)%p, (uint16 )%p)\n", this, unSpectatorPort);
+  TRACE("((ISteamGameServer *)%p, (uint16 )%d)\n", this, unSpectatorPort);
   this->internal->SetSpectatorPort(unSpectatorPort);
   
 }
@@ -202,7 +202,7 @@ void  ISteamGameServer_::SetRegion(char * pszRegion)
 
 bool  ISteamGameServer_::SendUserConnectAndAuthenticate(uint32  unIPClient, void * pvAuthBlob, uint32  cubAuthBlobSize, CSteamID * pSteamIDUser)
 {
-  TRACE("((ISteamGameServer *)%p, (uint32 )%p, (void *)%p, (uint32 )%p, (CSteamID *)%p)\n", this, unIPClient, pvAuthBlob, cubAuthBlobSize, pSteamIDUser);
+  TRACE("((ISteamGameServer *)%p, (uint32 )%d, (void *)%p, (uint32 )%d, (CSteamID *)%p)\n", this, unIPClient, pvAuthBlob, cubAuthBlobSize, pSteamIDUser);
   auto result = this->internal->SendUserConnectAndAuthenticate(unIPClient, pvAuthBlob, cubAuthBlobSize, pSteamIDUser);
   TRACE("() = (bool )%d\n", result);
 
@@ -228,7 +228,7 @@ void  ISteamGameServer_::SendUserDisconnect(CSteamID  steamIDUser)
 
 bool  ISteamGameServer_::BUpdateUserData(CSteamID  steamIDUser, char * pchPlayerName, uint32  uScore)
 {
-  TRACE("((ISteamGameServer *)%p, (CSteamID )%p, (char *)\"%s\", (uint32 )%p)\n", this, steamIDUser, pchPlayerName, uScore);
+  TRACE("((ISteamGameServer *)%p, (CSteamID )%p, (char *)\"%s\", (uint32 )%d)\n", this, steamIDUser, pchPlayerName, uScore);
   auto result = this->internal->BUpdateUserData(steamIDUser, pchPlayerName, uScore);
   TRACE("() = (bool )%d\n", result);
 
@@ -238,7 +238,7 @@ bool  ISteamGameServer_::BUpdateUserData(CSteamID  steamIDUser, char * pchPlayer
 
 HAuthTicket  ISteamGameServer_::GetAuthSessionTicket(void * pTicket, int  cbMaxTicket, uint32 * pcbTicket)
 {
-  TRACE("((ISteamGameServer *)%p, (void *)%p, (int )%d, (uint32 *)%p)\n", this, pTicket, cbMaxTicket, pcbTicket);
+  TRACE("((ISteamGameServer *)%p, (void *)%p, (int )%d, (uint32 *)%d)\n", this, pTicket, cbMaxTicket, pcbTicket);
   auto result = this->internal->GetAuthSessionTicket(pTicket, cbMaxTicket, pcbTicket);
   TRACE("() = (HAuthTicket )%p\n", result);
 
@@ -314,7 +314,7 @@ uint32  ISteamGameServer_::GetPublicIP()
 {
   TRACE("((ISteamGameServer *)%p)\n", this);
   auto result = this->internal->GetPublicIP();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -322,7 +322,7 @@ uint32  ISteamGameServer_::GetPublicIP()
 
 bool  ISteamGameServer_::HandleIncomingPacket(void * pData, int  cbData, uint32  srcIP, uint16  srcPort)
 {
-  TRACE("((ISteamGameServer *)%p, (void *)%p, (int )%d, (uint32 )%p, (uint16 )%p)\n", this, pData, cbData, srcIP, srcPort);
+  TRACE("((ISteamGameServer *)%p, (void *)%p, (int )%d, (uint32 )%d, (uint16 )%d)\n", this, pData, cbData, srcIP, srcPort);
   auto result = this->internal->HandleIncomingPacket(pData, cbData, srcIP, srcPort);
   TRACE("() = (bool )%d\n", result);
 
@@ -332,7 +332,7 @@ bool  ISteamGameServer_::HandleIncomingPacket(void * pData, int  cbData, uint32 
 
 int  ISteamGameServer_::GetNextOutgoingPacket(void * pOut, int  cbMaxOut, uint32 * pNetAdr, uint16 * pPort)
 {
-  TRACE("((ISteamGameServer *)%p, (void *)%p, (int )%d, (uint32 *)%p, (uint16 *)%p)\n", this, pOut, cbMaxOut, pNetAdr, pPort);
+  TRACE("((ISteamGameServer *)%p, (void *)%p, (int )%d, (uint32 *)%d, (uint16 *)%d)\n", this, pOut, cbMaxOut, pNetAdr, pPort);
   auto result = this->internal->GetNextOutgoingPacket(pOut, cbMaxOut, pNetAdr, pPort);
   TRACE("() = (int )%d\n", result);
 

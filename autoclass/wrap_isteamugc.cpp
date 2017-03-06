@@ -2,7 +2,7 @@
 
 UGCQueryHandle_t  ISteamUGC_::CreateQueryUserUGCRequest(AccountID_t  unAccountID, EUserUGCList  eListType, EUGCMatchingUGCType  eMatchingUGCType, EUserUGCListSortOrder  eSortOrder, AppId_t  nCreatorAppID, AppId_t  nConsumerAppID, uint32  unPage)
 {
-  TRACE("((ISteamUGC *)%p, (AccountID_t )%p, (EUserUGCList )%p, (EUGCMatchingUGCType )%p, (EUserUGCListSortOrder )%p, (AppId_t )%p, (AppId_t )%p, (uint32 )%p)\n", this, unAccountID, eListType, eMatchingUGCType, eSortOrder, nCreatorAppID, nConsumerAppID, unPage);
+  TRACE("((ISteamUGC *)%p, (AccountID_t )%p, (EUserUGCList )%p, (EUGCMatchingUGCType )%p, (EUserUGCListSortOrder )%p, (AppId_t )%p, (AppId_t )%p, (uint32 )%d)\n", this, unAccountID, eListType, eMatchingUGCType, eSortOrder, nCreatorAppID, nConsumerAppID, unPage);
   auto result = this->internal->CreateQueryUserUGCRequest(unAccountID, eListType, eMatchingUGCType, eSortOrder, nCreatorAppID, nConsumerAppID, unPage);
   TRACE("() = (UGCQueryHandle_t )%p\n", result);
 
@@ -12,7 +12,7 @@ UGCQueryHandle_t  ISteamUGC_::CreateQueryUserUGCRequest(AccountID_t  unAccountID
 
 UGCQueryHandle_t  ISteamUGC_::CreateQueryAllUGCRequest(EUGCQuery  eQueryType, EUGCMatchingUGCType  eMatchingeMatchingUGCTypeFileType, AppId_t  nCreatorAppID, AppId_t  nConsumerAppID, uint32  unPage)
 {
-  TRACE("((ISteamUGC *)%p, (EUGCQuery )%p, (EUGCMatchingUGCType )%p, (AppId_t )%p, (AppId_t )%p, (uint32 )%p)\n", this, eQueryType, eMatchingeMatchingUGCTypeFileType, nCreatorAppID, nConsumerAppID, unPage);
+  TRACE("((ISteamUGC *)%p, (EUGCQuery )%p, (EUGCMatchingUGCType )%p, (AppId_t )%p, (AppId_t )%p, (uint32 )%d)\n", this, eQueryType, eMatchingeMatchingUGCTypeFileType, nCreatorAppID, nConsumerAppID, unPage);
   auto result = this->internal->CreateQueryAllUGCRequest(eQueryType, eMatchingeMatchingUGCTypeFileType, nCreatorAppID, nConsumerAppID, unPage);
   TRACE("() = (UGCQueryHandle_t )%p\n", result);
 
@@ -22,7 +22,7 @@ UGCQueryHandle_t  ISteamUGC_::CreateQueryAllUGCRequest(EUGCQuery  eQueryType, EU
 
 UGCQueryHandle_t  ISteamUGC_::CreateQueryUGCDetailsRequest(PublishedFileId_t * pvecPublishedFileID, uint32  unNumPublishedFileIDs)
 {
-  TRACE("((ISteamUGC *)%p, (PublishedFileId_t *)%p, (uint32 )%p)\n", this, pvecPublishedFileID, unNumPublishedFileIDs);
+  TRACE("((ISteamUGC *)%p, (PublishedFileId_t *)%p, (uint32 )%d)\n", this, pvecPublishedFileID, unNumPublishedFileIDs);
   auto result = this->internal->CreateQueryUGCDetailsRequest(pvecPublishedFileID, unNumPublishedFileIDs);
   TRACE("() = (UGCQueryHandle_t )%p\n", result);
 
@@ -42,7 +42,7 @@ SteamAPICall_t  ISteamUGC_::SendQueryUGCRequest(UGCQueryHandle_t  handle)
 
 bool  ISteamUGC_::GetQueryUGCResult(UGCQueryHandle_t  handle, uint32  index, SteamUGCDetails_t * pDetails)
 {
-  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%p, (SteamUGCDetails_t *)%p)\n", this, handle, index, pDetails);
+  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%d, (SteamUGCDetails_t *)%p)\n", this, handle, index, pDetails);
   auto result = this->internal->GetQueryUGCResult(handle, index, pDetails);
   TRACE("() = (bool )%d\n", result);
 
@@ -52,7 +52,7 @@ bool  ISteamUGC_::GetQueryUGCResult(UGCQueryHandle_t  handle, uint32  index, Ste
 
 bool  ISteamUGC_::GetQueryUGCPreviewURL(UGCQueryHandle_t  handle, uint32  index, char * pchURL, uint32  cchURLSize)
 {
-  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%p, (char *)\"%s\", (uint32 )%p)\n", this, handle, index, pchURL, cchURLSize);
+  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%d, (char *)\"%s\", (uint32 )%d)\n", this, handle, index, pchURL, cchURLSize);
   auto result = this->internal->GetQueryUGCPreviewURL(handle, index, pchURL, cchURLSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -62,7 +62,7 @@ bool  ISteamUGC_::GetQueryUGCPreviewURL(UGCQueryHandle_t  handle, uint32  index,
 
 bool  ISteamUGC_::GetQueryUGCMetadata(UGCQueryHandle_t  handle, uint32  index, char * pchMetadata, uint32  cchMetadatasize)
 {
-  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%p, (char *)\"%s\", (uint32 )%p)\n", this, handle, index, pchMetadata, cchMetadatasize);
+  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%d, (char *)\"%s\", (uint32 )%d)\n", this, handle, index, pchMetadata, cchMetadatasize);
   auto result = this->internal->GetQueryUGCMetadata(handle, index, pchMetadata, cchMetadatasize);
   TRACE("() = (bool )%d\n", result);
 
@@ -72,7 +72,7 @@ bool  ISteamUGC_::GetQueryUGCMetadata(UGCQueryHandle_t  handle, uint32  index, c
 
 bool  ISteamUGC_::GetQueryUGCChildren(UGCQueryHandle_t  handle, uint32  index, PublishedFileId_t * pvecPublishedFileID, uint32  cMaxEntries)
 {
-  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%p, (PublishedFileId_t *)%p, (uint32 )%p)\n", this, handle, index, pvecPublishedFileID, cMaxEntries);
+  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%d, (PublishedFileId_t *)%p, (uint32 )%d)\n", this, handle, index, pvecPublishedFileID, cMaxEntries);
   auto result = this->internal->GetQueryUGCChildren(handle, index, pvecPublishedFileID, cMaxEntries);
   TRACE("() = (bool )%d\n", result);
 
@@ -82,7 +82,7 @@ bool  ISteamUGC_::GetQueryUGCChildren(UGCQueryHandle_t  handle, uint32  index, P
 
 bool  ISteamUGC_::GetQueryUGCStatistic(UGCQueryHandle_t  handle, uint32  index, EItemStatistic  eStatType, uint64 * pStatValue)
 {
-  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%p, (EItemStatistic )%p, (uint64 *)%p)\n", this, handle, index, eStatType, pStatValue);
+  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%d, (EItemStatistic )%p, (uint64 *)%d)\n", this, handle, index, eStatType, pStatValue);
   auto result = this->internal->GetQueryUGCStatistic(handle, index, eStatType, pStatValue);
   TRACE("() = (bool )%d\n", result);
 
@@ -92,9 +92,9 @@ bool  ISteamUGC_::GetQueryUGCStatistic(UGCQueryHandle_t  handle, uint32  index, 
 
 uint32  ISteamUGC_::GetQueryUGCNumAdditionalPreviews(UGCQueryHandle_t  handle, uint32  index)
 {
-  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%p)\n", this, handle, index);
+  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%d)\n", this, handle, index);
   auto result = this->internal->GetQueryUGCNumAdditionalPreviews(handle, index);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -102,7 +102,7 @@ uint32  ISteamUGC_::GetQueryUGCNumAdditionalPreviews(UGCQueryHandle_t  handle, u
 
 bool  ISteamUGC_::GetQueryUGCAdditionalPreview(UGCQueryHandle_t  handle, uint32  index, uint32  previewIndex, char * pchURLOrVideoID, uint32  cchURLSize, char * pchOriginalFileName, uint32  cchOriginalFileNameSize, EItemPreviewType * pPreviewType)
 {
-  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%p, (uint32 )%p, (char *)\"%s\", (uint32 )%p, (char *)\"%s\", (uint32 )%p, (EItemPreviewType *)%p)\n", this, handle, index, previewIndex, pchURLOrVideoID, cchURLSize, pchOriginalFileName, cchOriginalFileNameSize, pPreviewType);
+  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%d, (uint32 )%d, (char *)\"%s\", (uint32 )%d, (char *)\"%s\", (uint32 )%d, (EItemPreviewType *)%p)\n", this, handle, index, previewIndex, pchURLOrVideoID, cchURLSize, pchOriginalFileName, cchOriginalFileNameSize, pPreviewType);
   auto result = this->internal->GetQueryUGCAdditionalPreview(handle, index, previewIndex, pchURLOrVideoID, cchURLSize, pchOriginalFileName, cchOriginalFileNameSize, pPreviewType);
   TRACE("() = (bool )%d\n", result);
 
@@ -112,9 +112,9 @@ bool  ISteamUGC_::GetQueryUGCAdditionalPreview(UGCQueryHandle_t  handle, uint32 
 
 uint32  ISteamUGC_::GetQueryUGCNumKeyValueTags(UGCQueryHandle_t  handle, uint32  index)
 {
-  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%p)\n", this, handle, index);
+  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%d)\n", this, handle, index);
   auto result = this->internal->GetQueryUGCNumKeyValueTags(handle, index);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -122,7 +122,7 @@ uint32  ISteamUGC_::GetQueryUGCNumKeyValueTags(UGCQueryHandle_t  handle, uint32 
 
 bool  ISteamUGC_::GetQueryUGCKeyValueTag(UGCQueryHandle_t  handle, uint32  index, uint32  keyValueTagIndex, char * pchKey, uint32  cchKeySize, char * pchValue, uint32  cchValueSize)
 {
-  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%p, (uint32 )%p, (char *)\"%s\", (uint32 )%p, (char *)\"%s\", (uint32 )%p)\n", this, handle, index, keyValueTagIndex, pchKey, cchKeySize, pchValue, cchValueSize);
+  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%d, (uint32 )%d, (char *)\"%s\", (uint32 )%d, (char *)\"%s\", (uint32 )%d)\n", this, handle, index, keyValueTagIndex, pchKey, cchKeySize, pchValue, cchValueSize);
   auto result = this->internal->GetQueryUGCKeyValueTag(handle, index, keyValueTagIndex, pchKey, cchKeySize, pchValue, cchValueSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -242,7 +242,7 @@ bool  ISteamUGC_::SetLanguage(UGCQueryHandle_t  handle, char * pchLanguage)
 
 bool  ISteamUGC_::SetAllowCachedResponse(UGCQueryHandle_t  handle, uint32  unMaxAgeSeconds)
 {
-  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%p)\n", this, handle, unMaxAgeSeconds);
+  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%d)\n", this, handle, unMaxAgeSeconds);
   auto result = this->internal->SetAllowCachedResponse(handle, unMaxAgeSeconds);
   TRACE("() = (bool )%d\n", result);
 
@@ -282,7 +282,7 @@ bool  ISteamUGC_::SetSearchText(UGCQueryHandle_t  handle, char * pSearchText)
 
 bool  ISteamUGC_::SetRankedByTrendDays(UGCQueryHandle_t  handle, uint32  unDays)
 {
-  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%p)\n", this, handle, unDays);
+  TRACE("((ISteamUGC *)%p, (UGCQueryHandle_t )%p, (uint32 )%d)\n", this, handle, unDays);
   auto result = this->internal->SetRankedByTrendDays(handle, unDays);
   TRACE("() = (bool )%d\n", result);
 
@@ -302,7 +302,7 @@ bool  ISteamUGC_::AddRequiredKeyValueTag(UGCQueryHandle_t  handle, char * pKey, 
 
 SteamAPICall_t  ISteamUGC_::RequestUGCDetails(PublishedFileId_t  nPublishedFileID, uint32  unMaxAgeSeconds)
 {
-  TRACE("((ISteamUGC *)%p, (PublishedFileId_t )%p, (uint32 )%p)\n", this, nPublishedFileID, unMaxAgeSeconds);
+  TRACE("((ISteamUGC *)%p, (PublishedFileId_t )%p, (uint32 )%d)\n", this, nPublishedFileID, unMaxAgeSeconds);
   auto result = this->internal->RequestUGCDetails(nPublishedFileID, unMaxAgeSeconds);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -452,7 +452,7 @@ bool  ISteamUGC_::AddItemPreviewVideo(UGCUpdateHandle_t  handle, char * pszVideo
 
 bool  ISteamUGC_::UpdateItemPreviewFile(UGCUpdateHandle_t  handle, uint32  index, char * pszPreviewFile)
 {
-  TRACE("((ISteamUGC *)%p, (UGCUpdateHandle_t )%p, (uint32 )%p, (char *)\"%s\")\n", this, handle, index, pszPreviewFile);
+  TRACE("((ISteamUGC *)%p, (UGCUpdateHandle_t )%p, (uint32 )%d, (char *)\"%s\")\n", this, handle, index, pszPreviewFile);
   auto result = this->internal->UpdateItemPreviewFile(handle, index, pszPreviewFile);
   TRACE("() = (bool )%d\n", result);
 
@@ -462,7 +462,7 @@ bool  ISteamUGC_::UpdateItemPreviewFile(UGCUpdateHandle_t  handle, uint32  index
 
 bool  ISteamUGC_::UpdateItemPreviewVideo(UGCUpdateHandle_t  handle, uint32  index, char * pszVideoID)
 {
-  TRACE("((ISteamUGC *)%p, (UGCUpdateHandle_t )%p, (uint32 )%p, (char *)\"%s\")\n", this, handle, index, pszVideoID);
+  TRACE("((ISteamUGC *)%p, (UGCUpdateHandle_t )%p, (uint32 )%d, (char *)\"%s\")\n", this, handle, index, pszVideoID);
   auto result = this->internal->UpdateItemPreviewVideo(handle, index, pszVideoID);
   TRACE("() = (bool )%d\n", result);
 
@@ -472,7 +472,7 @@ bool  ISteamUGC_::UpdateItemPreviewVideo(UGCUpdateHandle_t  handle, uint32  inde
 
 bool  ISteamUGC_::RemoveItemPreview(UGCUpdateHandle_t  handle, uint32  index)
 {
-  TRACE("((ISteamUGC *)%p, (UGCUpdateHandle_t )%p, (uint32 )%p)\n", this, handle, index);
+  TRACE("((ISteamUGC *)%p, (UGCUpdateHandle_t )%p, (uint32 )%d)\n", this, handle, index);
   auto result = this->internal->RemoveItemPreview(handle, index);
   TRACE("() = (bool )%d\n", result);
 
@@ -492,7 +492,7 @@ SteamAPICall_t  ISteamUGC_::SubmitItemUpdate(UGCUpdateHandle_t  handle, char * p
 
 EItemUpdateStatus  ISteamUGC_::GetItemUpdateProgress(UGCUpdateHandle_t  handle, uint64 * punBytesProcessed, uint64 * punBytesTotal)
 {
-  TRACE("((ISteamUGC *)%p, (UGCUpdateHandle_t )%p, (uint64 *)%p, (uint64 *)%p)\n", this, handle, punBytesProcessed, punBytesTotal);
+  TRACE("((ISteamUGC *)%p, (UGCUpdateHandle_t )%p, (uint64 *)%d, (uint64 *)%d)\n", this, handle, punBytesProcessed, punBytesTotal);
   auto result = this->internal->GetItemUpdateProgress(handle, punBytesProcessed, punBytesTotal);
   TRACE("() = (EItemUpdateStatus )%p\n", result);
 
@@ -564,7 +564,7 @@ uint32  ISteamUGC_::GetNumSubscribedItems()
 {
   TRACE("((ISteamUGC *)%p)\n", this);
   auto result = this->internal->GetNumSubscribedItems();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -572,9 +572,9 @@ uint32  ISteamUGC_::GetNumSubscribedItems()
 
 uint32  ISteamUGC_::GetSubscribedItems(PublishedFileId_t * pvecPublishedFileID, uint32  cMaxEntries)
 {
-  TRACE("((ISteamUGC *)%p, (PublishedFileId_t *)%p, (uint32 )%p)\n", this, pvecPublishedFileID, cMaxEntries);
+  TRACE("((ISteamUGC *)%p, (PublishedFileId_t *)%p, (uint32 )%d)\n", this, pvecPublishedFileID, cMaxEntries);
   auto result = this->internal->GetSubscribedItems(pvecPublishedFileID, cMaxEntries);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -584,7 +584,7 @@ uint32  ISteamUGC_::GetItemState(PublishedFileId_t  nPublishedFileID)
 {
   TRACE("((ISteamUGC *)%p, (PublishedFileId_t )%p)\n", this, nPublishedFileID);
   auto result = this->internal->GetItemState(nPublishedFileID);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -592,7 +592,7 @@ uint32  ISteamUGC_::GetItemState(PublishedFileId_t  nPublishedFileID)
 
 bool  ISteamUGC_::GetItemInstallInfo(PublishedFileId_t  nPublishedFileID, uint64 * punSizeOnDisk, char * pchFolder, uint32  cchFolderSize, uint32 * punTimeStamp)
 {
-  TRACE("((ISteamUGC *)%p, (PublishedFileId_t )%p, (uint64 *)%p, (char *)\"%s\", (uint32 )%p, (uint32 *)%p)\n", this, nPublishedFileID, punSizeOnDisk, pchFolder, cchFolderSize, punTimeStamp);
+  TRACE("((ISteamUGC *)%p, (PublishedFileId_t )%p, (uint64 *)%d, (char *)\"%s\", (uint32 )%d, (uint32 *)%d)\n", this, nPublishedFileID, punSizeOnDisk, pchFolder, cchFolderSize, punTimeStamp);
   auto result = this->internal->GetItemInstallInfo(nPublishedFileID, punSizeOnDisk, pchFolder, cchFolderSize, punTimeStamp);
   TRACE("() = (bool )%d\n", result);
 
@@ -602,7 +602,7 @@ bool  ISteamUGC_::GetItemInstallInfo(PublishedFileId_t  nPublishedFileID, uint64
 
 bool  ISteamUGC_::GetItemDownloadInfo(PublishedFileId_t  nPublishedFileID, uint64 * punBytesDownloaded, uint64 * punBytesTotal)
 {
-  TRACE("((ISteamUGC *)%p, (PublishedFileId_t )%p, (uint64 *)%p, (uint64 *)%p)\n", this, nPublishedFileID, punBytesDownloaded, punBytesTotal);
+  TRACE("((ISteamUGC *)%p, (PublishedFileId_t )%p, (uint64 *)%d, (uint64 *)%d)\n", this, nPublishedFileID, punBytesDownloaded, punBytesTotal);
   auto result = this->internal->GetItemDownloadInfo(nPublishedFileID, punBytesDownloaded, punBytesTotal);
   TRACE("() = (bool )%d\n", result);
 
@@ -640,7 +640,7 @@ void  ISteamUGC_::SuspendDownloads(bool  bSuspend)
 
 SteamAPICall_t  ISteamUGC_::StartPlaytimeTracking(PublishedFileId_t * pvecPublishedFileID, uint32  unNumPublishedFileIDs)
 {
-  TRACE("((ISteamUGC *)%p, (PublishedFileId_t *)%p, (uint32 )%p)\n", this, pvecPublishedFileID, unNumPublishedFileIDs);
+  TRACE("((ISteamUGC *)%p, (PublishedFileId_t *)%p, (uint32 )%d)\n", this, pvecPublishedFileID, unNumPublishedFileIDs);
   auto result = this->internal->StartPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -650,7 +650,7 @@ SteamAPICall_t  ISteamUGC_::StartPlaytimeTracking(PublishedFileId_t * pvecPublis
 
 SteamAPICall_t  ISteamUGC_::StopPlaytimeTracking(PublishedFileId_t * pvecPublishedFileID, uint32  unNumPublishedFileIDs)
 {
-  TRACE("((ISteamUGC *)%p, (PublishedFileId_t *)%p, (uint32 )%p)\n", this, pvecPublishedFileID, unNumPublishedFileIDs);
+  TRACE("((ISteamUGC *)%p, (PublishedFileId_t *)%p, (uint32 )%d)\n", this, pvecPublishedFileID, unNumPublishedFileIDs);
   auto result = this->internal->StopPlaytimeTracking(pvecPublishedFileID, unNumPublishedFileIDs);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 

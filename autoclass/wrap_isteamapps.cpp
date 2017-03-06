@@ -84,7 +84,7 @@ uint32  ISteamApps_::GetEarliestPurchaseUnixTime(AppId_t  nAppID)
 {
   TRACE("((ISteamApps *)%p, (AppId_t )%p)\n", this, nAppID);
   auto result = this->internal->GetEarliestPurchaseUnixTime(nAppID);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -166,9 +166,9 @@ bool  ISteamApps_::MarkContentCorrupt(bool  bMissingFilesOnly)
 
 uint32  ISteamApps_::GetInstalledDepots(AppId_t  appID, DepotId_t * pvecDepots, uint32  cMaxDepots)
 {
-  TRACE("((ISteamApps *)%p, (AppId_t )%p, (DepotId_t *)%p, (uint32 )%p)\n", this, appID, pvecDepots, cMaxDepots);
+  TRACE("((ISteamApps *)%p, (AppId_t )%p, (DepotId_t *)%p, (uint32 )%d)\n", this, appID, pvecDepots, cMaxDepots);
   auto result = this->internal->GetInstalledDepots(appID, pvecDepots, cMaxDepots);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -176,9 +176,9 @@ uint32  ISteamApps_::GetInstalledDepots(AppId_t  appID, DepotId_t * pvecDepots, 
 
 uint32  ISteamApps_::GetAppInstallDir(AppId_t  appID, char * pchFolder, uint32  cchFolderBufferSize)
 {
-  TRACE("((ISteamApps *)%p, (AppId_t )%p, (char *)\"%s\", (uint32 )%p)\n", this, appID, pchFolder, cchFolderBufferSize);
+  TRACE("((ISteamApps *)%p, (AppId_t )%p, (char *)\"%s\", (uint32 )%d)\n", this, appID, pchFolder, cchFolderBufferSize);
   auto result = this->internal->GetAppInstallDir(appID, pchFolder, cchFolderBufferSize);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -214,7 +214,7 @@ char * ISteamApps_::GetLaunchQueryParam(char * pchKey)
 
 bool  ISteamApps_::GetDlcDownloadProgress(AppId_t  nAppID, uint64 * punBytesDownloaded, uint64 * punBytesTotal)
 {
-  TRACE("((ISteamApps *)%p, (AppId_t )%p, (uint64 *)%p, (uint64 *)%p)\n", this, nAppID, punBytesDownloaded, punBytesTotal);
+  TRACE("((ISteamApps *)%p, (AppId_t )%p, (uint64 *)%d, (uint64 *)%d)\n", this, nAppID, punBytesDownloaded, punBytesTotal);
   auto result = this->internal->GetDlcDownloadProgress(nAppID, punBytesDownloaded, punBytesTotal);
   TRACE("() = (bool )%d\n", result);
 

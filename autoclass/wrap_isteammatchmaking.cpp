@@ -12,7 +12,7 @@ int  ISteamMatchmaking_::GetFavoriteGameCount()
 
 bool  ISteamMatchmaking_::GetFavoriteGame(int  iGame, AppId_t * pnAppID, uint32 * pnIP, uint16 * pnConnPort, uint16 * pnQueryPort, uint32 * punFlags, uint32 * pRTime32LastPlayedOnServer)
 {
-  TRACE("((ISteamMatchmaking *)%p, (int )%d, (AppId_t *)%p, (uint32 *)%p, (uint16 *)%p, (uint16 *)%p, (uint32 *)%p, (uint32 *)%p)\n", this, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
+  TRACE("((ISteamMatchmaking *)%p, (int )%d, (AppId_t *)%p, (uint32 *)%d, (uint16 *)%d, (uint16 *)%d, (uint32 *)%d, (uint32 *)%d)\n", this, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
   auto result = this->internal->GetFavoriteGame(iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
   TRACE("() = (bool )%d\n", result);
 
@@ -22,7 +22,7 @@ bool  ISteamMatchmaking_::GetFavoriteGame(int  iGame, AppId_t * pnAppID, uint32 
 
 int  ISteamMatchmaking_::AddFavoriteGame(AppId_t  nAppID, uint32  nIP, uint16  nConnPort, uint16  nQueryPort, uint32  unFlags, uint32  rTime32LastPlayedOnServer)
 {
-  TRACE("((ISteamMatchmaking *)%p, (AppId_t )%p, (uint32 )%p, (uint16 )%p, (uint16 )%p, (uint32 )%p, (uint32 )%p)\n", this, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
+  TRACE("((ISteamMatchmaking *)%p, (AppId_t )%p, (uint32 )%d, (uint16 )%d, (uint16 )%d, (uint32 )%d, (uint32 )%d)\n", this, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
   auto result = this->internal->AddFavoriteGame(nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
   TRACE("() = (int )%d\n", result);
 
@@ -32,7 +32,7 @@ int  ISteamMatchmaking_::AddFavoriteGame(AppId_t  nAppID, uint32  nIP, uint16  n
 
 bool  ISteamMatchmaking_::RemoveFavoriteGame(AppId_t  nAppID, uint32  nIP, uint16  nConnPort, uint16  nQueryPort, uint32  unFlags)
 {
-  TRACE("((ISteamMatchmaking *)%p, (AppId_t )%p, (uint32 )%p, (uint16 )%p, (uint16 )%p, (uint32 )%p)\n", this, nAppID, nIP, nConnPort, nQueryPort, unFlags);
+  TRACE("((ISteamMatchmaking *)%p, (AppId_t )%p, (uint32 )%d, (uint16 )%d, (uint16 )%d, (uint32 )%d)\n", this, nAppID, nIP, nConnPort, nQueryPort, unFlags);
   auto result = this->internal->RemoveFavoriteGame(nAppID, nIP, nConnPort, nQueryPort, unFlags);
   TRACE("() = (bool )%d\n", result);
 
@@ -270,7 +270,7 @@ bool  ISteamMatchmaking_::RequestLobbyData(CSteamID  steamIDLobby)
 
 void  ISteamMatchmaking_::SetLobbyGameServer(CSteamID  steamIDLobby, uint32  unGameServerIP, uint16  unGameServerPort, CSteamID  steamIDGameServer)
 {
-  TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (uint32 )%p, (uint16 )%p, (CSteamID )%p)\n", this, steamIDLobby, unGameServerIP, unGameServerPort, steamIDGameServer);
+  TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (uint32 )%d, (uint16 )%d, (CSteamID )%p)\n", this, steamIDLobby, unGameServerIP, unGameServerPort, steamIDGameServer);
   this->internal->SetLobbyGameServer(steamIDLobby, unGameServerIP, unGameServerPort, steamIDGameServer);
   
 }
@@ -278,7 +278,7 @@ void  ISteamMatchmaking_::SetLobbyGameServer(CSteamID  steamIDLobby, uint32  unG
 
 bool  ISteamMatchmaking_::GetLobbyGameServer(CSteamID  steamIDLobby, uint32 * punGameServerIP, uint16 * punGameServerPort, CSteamID * psteamIDGameServer)
 {
-  TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (uint32 *)%p, (uint16 *)%p, (CSteamID *)%p)\n", this, steamIDLobby, punGameServerIP, punGameServerPort, psteamIDGameServer);
+  TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (uint32 *)%d, (uint16 *)%d, (CSteamID *)%p)\n", this, steamIDLobby, punGameServerIP, punGameServerPort, psteamIDGameServer);
   auto result = this->internal->GetLobbyGameServer(steamIDLobby, punGameServerIP, punGameServerPort, psteamIDGameServer);
   TRACE("() = (bool )%d\n", result);
 
@@ -494,7 +494,7 @@ ISteamMatchmakingRulesResponse_::~ISteamMatchmakingRulesResponse_()
 
 HServerListRequest  ISteamMatchmakingServers_::RequestInternetServerList(AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-  TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%p, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
+  TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
   auto result = this->internal->RequestInternetServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
@@ -514,7 +514,7 @@ HServerListRequest  ISteamMatchmakingServers_::RequestLANServerList(AppId_t  iAp
 
 HServerListRequest  ISteamMatchmakingServers_::RequestFriendsServerList(AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-  TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%p, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
+  TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
   auto result = this->internal->RequestFriendsServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
@@ -524,7 +524,7 @@ HServerListRequest  ISteamMatchmakingServers_::RequestFriendsServerList(AppId_t 
 
 HServerListRequest  ISteamMatchmakingServers_::RequestFavoritesServerList(AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-  TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%p, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
+  TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
   auto result = this->internal->RequestFavoritesServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
@@ -534,7 +534,7 @@ HServerListRequest  ISteamMatchmakingServers_::RequestFavoritesServerList(AppId_
 
 HServerListRequest  ISteamMatchmakingServers_::RequestHistoryServerList(AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-  TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%p, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
+  TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
   auto result = this->internal->RequestHistoryServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
@@ -544,7 +544,7 @@ HServerListRequest  ISteamMatchmakingServers_::RequestHistoryServerList(AppId_t 
 
 HServerListRequest  ISteamMatchmakingServers_::RequestSpectatorServerList(AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-  TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%p, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
+  TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
   auto result = this->internal->RequestSpectatorServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
@@ -616,7 +616,7 @@ void  ISteamMatchmakingServers_::RefreshServer(HServerListRequest  hRequest, int
 
 HServerQuery  ISteamMatchmakingServers_::PingServer(uint32  unIP, uint16  usPort, ISteamMatchmakingPingResponse * pRequestServersResponse)
 {
-  TRACE("((ISteamMatchmakingServers *)%p, (uint32 )%p, (uint16 )%p, (ISteamMatchmakingPingResponse *)%p)\n", this, unIP, usPort, pRequestServersResponse);
+  TRACE("((ISteamMatchmakingServers *)%p, (uint32 )%d, (uint16 )%d, (ISteamMatchmakingPingResponse *)%p)\n", this, unIP, usPort, pRequestServersResponse);
   auto result = this->internal->PingServer(unIP, usPort, pRequestServersResponse);
   TRACE("() = (HServerQuery )%p\n", result);
 
@@ -626,7 +626,7 @@ HServerQuery  ISteamMatchmakingServers_::PingServer(uint32  unIP, uint16  usPort
 
 HServerQuery  ISteamMatchmakingServers_::PlayerDetails(uint32  unIP, uint16  usPort, ISteamMatchmakingPlayersResponse * pRequestServersResponse)
 {
-  TRACE("((ISteamMatchmakingServers *)%p, (uint32 )%p, (uint16 )%p, (ISteamMatchmakingPlayersResponse *)%p)\n", this, unIP, usPort, pRequestServersResponse);
+  TRACE("((ISteamMatchmakingServers *)%p, (uint32 )%d, (uint16 )%d, (ISteamMatchmakingPlayersResponse *)%p)\n", this, unIP, usPort, pRequestServersResponse);
   auto result = this->internal->PlayerDetails(unIP, usPort, pRequestServersResponse);
   TRACE("() = (HServerQuery )%p\n", result);
 
@@ -636,7 +636,7 @@ HServerQuery  ISteamMatchmakingServers_::PlayerDetails(uint32  unIP, uint16  usP
 
 HServerQuery  ISteamMatchmakingServers_::ServerRules(uint32  unIP, uint16  usPort, ISteamMatchmakingRulesResponse * pRequestServersResponse)
 {
-  TRACE("((ISteamMatchmakingServers *)%p, (uint32 )%p, (uint16 )%p, (ISteamMatchmakingRulesResponse *)%p)\n", this, unIP, usPort, pRequestServersResponse);
+  TRACE("((ISteamMatchmakingServers *)%p, (uint32 )%d, (uint16 )%d, (ISteamMatchmakingRulesResponse *)%p)\n", this, unIP, usPort, pRequestServersResponse);
   auto result = this->internal->ServerRules(unIP, usPort, pRequestServersResponse);
   TRACE("() = (HServerQuery )%p\n", result);
 

@@ -70,7 +70,7 @@ ISteamGameServer * ISteamClient_::GetISteamGameServer(HSteamUser  hSteamUser, HS
 
 void  ISteamClient_::SetLocalIPBinding(uint32  unIP, uint16  usPort)
 {
-  TRACE("((ISteamClient *)%p, (uint32 )%p, (uint16 )%p)\n", this, unIP, usPort);
+  TRACE("((ISteamClient *)%p, (uint32 )%d, (uint16 )%d)\n", this, unIP, usPort);
   this->internal->SetLocalIPBinding(unIP, usPort);
   
 }
@@ -198,7 +198,7 @@ uint32  ISteamClient_::GetIPCCallCount()
 {
   TRACE("((ISteamClient *)%p)\n", this);
   auto result = this->internal->GetIPCCallCount();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }

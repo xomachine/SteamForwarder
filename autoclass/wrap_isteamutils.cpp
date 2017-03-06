@@ -4,7 +4,7 @@ uint32  ISteamUtils_::GetSecondsSinceAppActive()
 {
   TRACE("((ISteamUtils *)%p)\n", this);
   auto result = this->internal->GetSecondsSinceAppActive();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -14,7 +14,7 @@ uint32  ISteamUtils_::GetSecondsSinceComputerActive()
 {
   TRACE("((ISteamUtils *)%p)\n", this);
   auto result = this->internal->GetSecondsSinceComputerActive();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -34,7 +34,7 @@ uint32  ISteamUtils_::GetServerRealTime()
 {
   TRACE("((ISteamUtils *)%p)\n", this);
   auto result = this->internal->GetServerRealTime();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -52,7 +52,7 @@ char * ISteamUtils_::GetIPCountry()
 
 bool  ISteamUtils_::GetImageSize(int  iImage, uint32 * pnWidth, uint32 * pnHeight)
 {
-  TRACE("((ISteamUtils *)%p, (int )%d, (uint32 *)%p, (uint32 *)%p)\n", this, iImage, pnWidth, pnHeight);
+  TRACE("((ISteamUtils *)%p, (int )%d, (uint32 *)%d, (uint32 *)%d)\n", this, iImage, pnWidth, pnHeight);
   auto result = this->internal->GetImageSize(iImage, pnWidth, pnHeight);
   TRACE("() = (bool )%d\n", result);
 
@@ -72,7 +72,7 @@ bool  ISteamUtils_::GetImageRGBA(int  iImage, uint8 * pubDest, int  nDestBufferS
 
 bool  ISteamUtils_::GetCSERIPPort(uint32 * unIP, uint16 * usPort)
 {
-  TRACE("((ISteamUtils *)%p, (uint32 *)%p, (uint16 *)%p)\n", this, unIP, usPort);
+  TRACE("((ISteamUtils *)%p, (uint32 *)%d, (uint16 *)%d)\n", this, unIP, usPort);
   auto result = this->internal->GetCSERIPPort(unIP, usPort);
   TRACE("() = (bool )%d\n", result);
 
@@ -94,7 +94,7 @@ uint32  ISteamUtils_::GetAppID()
 {
   TRACE("((ISteamUtils *)%p)\n", this);
   auto result = this->internal->GetAppID();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -150,7 +150,7 @@ uint32  ISteamUtils_::GetIPCCallCount()
 {
   TRACE("((ISteamUtils *)%p)\n", this);
   auto result = this->internal->GetIPCCallCount();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -196,7 +196,7 @@ SteamAPICall_t  ISteamUtils_::CheckFileSignature(char * szFileName)
 
 bool  ISteamUtils_::ShowGamepadTextInput(EGamepadTextInputMode  eInputMode, EGamepadTextInputLineMode  eLineInputMode, char * pchDescription, uint32  unCharMax, char * pchExistingText)
 {
-  TRACE("((ISteamUtils *)%p, (EGamepadTextInputMode )%p, (EGamepadTextInputLineMode )%p, (char *)\"%s\", (uint32 )%p, (char *)\"%s\")\n", this, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
+  TRACE("((ISteamUtils *)%p, (EGamepadTextInputMode )%p, (EGamepadTextInputLineMode )%p, (char *)\"%s\", (uint32 )%d, (char *)\"%s\")\n", this, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
   auto result = this->internal->ShowGamepadTextInput(eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
   TRACE("() = (bool )%d\n", result);
 
@@ -208,7 +208,7 @@ uint32  ISteamUtils_::GetEnteredGamepadTextLength()
 {
   TRACE("((ISteamUtils *)%p)\n", this);
   auto result = this->internal->GetEnteredGamepadTextLength();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -216,7 +216,7 @@ uint32  ISteamUtils_::GetEnteredGamepadTextLength()
 
 bool  ISteamUtils_::GetEnteredGamepadTextInput(char * pchText, uint32  cchText)
 {
-  TRACE("((ISteamUtils *)%p, (char *)\"%s\", (uint32 )%p)\n", this, pchText, cchText);
+  TRACE("((ISteamUtils *)%p, (char *)\"%s\", (uint32 )%d)\n", this, pchText, cchText);
   auto result = this->internal->GetEnteredGamepadTextInput(pchText, cchText);
   TRACE("() = (bool )%d\n", result);
 

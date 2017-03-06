@@ -12,7 +12,7 @@ bool  ISteamUserStats_::RequestCurrentStats()
 
 bool  ISteamUserStats_::GetStat(char * pchName, int32 * pData)
 {
-  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (int32 *)%p)\n", this, pchName, pData);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (int32 *)%d)\n", this, pchName, pData);
   auto result = this->internal->GetStat(pchName, pData);
   TRACE("() = (bool )%d\n", result);
 
@@ -32,7 +32,7 @@ bool  ISteamUserStats_::GetStat(char * pchName, float * pData)
 
 bool  ISteamUserStats_::SetStat(char * pchName, int32  nData)
 {
-  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (int32 )%p)\n", this, pchName, nData);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (int32 )%d)\n", this, pchName, nData);
   auto result = this->internal->SetStat(pchName, nData);
   TRACE("() = (bool )%d\n", result);
 
@@ -92,7 +92,7 @@ bool  ISteamUserStats_::ClearAchievement(char * pchName)
 
 bool  ISteamUserStats_::GetAchievementAndUnlockTime(char * pchName, bool * pbAchieved, uint32 * punUnlockTime)
 {
-  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (bool *)%d, (uint32 *)%p)\n", this, pchName, pbAchieved, punUnlockTime);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (bool *)%d, (uint32 *)%d)\n", this, pchName, pbAchieved, punUnlockTime);
   auto result = this->internal->GetAchievementAndUnlockTime(pchName, pbAchieved, punUnlockTime);
   TRACE("() = (bool )%d\n", result);
 
@@ -132,7 +132,7 @@ char * ISteamUserStats_::GetAchievementDisplayAttribute(char * pchName, char * p
 
 bool  ISteamUserStats_::IndicateAchievementProgress(char * pchName, uint32  nCurProgress, uint32  nMaxProgress)
 {
-  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (uint32 )%p, (uint32 )%p)\n", this, pchName, nCurProgress, nMaxProgress);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (uint32 )%d, (uint32 )%d)\n", this, pchName, nCurProgress, nMaxProgress);
   auto result = this->internal->IndicateAchievementProgress(pchName, nCurProgress, nMaxProgress);
   TRACE("() = (bool )%d\n", result);
 
@@ -144,7 +144,7 @@ uint32  ISteamUserStats_::GetNumAchievements()
 {
   TRACE("((ISteamUserStats *)%p)\n", this);
   auto result = this->internal->GetNumAchievements();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -152,7 +152,7 @@ uint32  ISteamUserStats_::GetNumAchievements()
 
 char * ISteamUserStats_::GetAchievementName(uint32  iAchievement)
 {
-  TRACE("((ISteamUserStats *)%p, (uint32 )%p)\n", this, iAchievement);
+  TRACE("((ISteamUserStats *)%p, (uint32 )%d)\n", this, iAchievement);
   auto result = this->internal->GetAchievementName(iAchievement);
   TRACE("() = (char *)\"%s\"\n", result);
 
@@ -172,7 +172,7 @@ SteamAPICall_t  ISteamUserStats_::RequestUserStats(CSteamID  steamIDUser)
 
 bool  ISteamUserStats_::GetUserStat(CSteamID  steamIDUser, char * pchName, int32 * pData)
 {
-  TRACE("((ISteamUserStats *)%p, (CSteamID )%p, (char *)\"%s\", (int32 *)%p)\n", this, steamIDUser, pchName, pData);
+  TRACE("((ISteamUserStats *)%p, (CSteamID )%p, (char *)\"%s\", (int32 *)%d)\n", this, steamIDUser, pchName, pData);
   auto result = this->internal->GetUserStat(steamIDUser, pchName, pData);
   TRACE("() = (bool )%d\n", result);
 
@@ -202,7 +202,7 @@ bool  ISteamUserStats_::GetUserAchievement(CSteamID  steamIDUser, char * pchName
 
 bool  ISteamUserStats_::GetUserAchievementAndUnlockTime(CSteamID  steamIDUser, char * pchName, bool * pbAchieved, uint32 * punUnlockTime)
 {
-  TRACE("((ISteamUserStats *)%p, (CSteamID )%p, (char *)\"%s\", (bool *)%d, (uint32 *)%p)\n", this, steamIDUser, pchName, pbAchieved, punUnlockTime);
+  TRACE("((ISteamUserStats *)%p, (CSteamID )%p, (char *)\"%s\", (bool *)%d, (uint32 *)%d)\n", this, steamIDUser, pchName, pbAchieved, punUnlockTime);
   auto result = this->internal->GetUserAchievementAndUnlockTime(steamIDUser, pchName, pbAchieved, punUnlockTime);
   TRACE("() = (bool )%d\n", result);
 
@@ -302,7 +302,7 @@ SteamAPICall_t  ISteamUserStats_::DownloadLeaderboardEntriesForUsers(SteamLeader
 
 bool  ISteamUserStats_::GetDownloadedLeaderboardEntry(SteamLeaderboardEntries_t  hSteamLeaderboardEntries, int  index, LeaderboardEntry_t * pLeaderboardEntry, int32 * pDetails, int  cDetailsMax)
 {
-  TRACE("((ISteamUserStats *)%p, (SteamLeaderboardEntries_t )%p, (int )%d, (LeaderboardEntry_t *)%p, (int32 *)%p, (int )%d)\n", this, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+  TRACE("((ISteamUserStats *)%p, (SteamLeaderboardEntries_t )%p, (int )%d, (LeaderboardEntry_t *)%p, (int32 *)%d, (int )%d)\n", this, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
   auto result = this->internal->GetDownloadedLeaderboardEntry(hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
   TRACE("() = (bool )%d\n", result);
 
@@ -312,7 +312,7 @@ bool  ISteamUserStats_::GetDownloadedLeaderboardEntry(SteamLeaderboardEntries_t 
 
 SteamAPICall_t  ISteamUserStats_::UploadLeaderboardScore(SteamLeaderboard_t  hSteamLeaderboard, ELeaderboardUploadScoreMethod  eLeaderboardUploadScoreMethod, int32  nScore, int32 * pScoreDetails, int  cScoreDetailsCount)
 {
-  TRACE("((ISteamUserStats *)%p, (SteamLeaderboard_t )%p, (ELeaderboardUploadScoreMethod )%p, (int32 )%p, (int32 *)%p, (int )%d)\n", this, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+  TRACE("((ISteamUserStats *)%p, (SteamLeaderboard_t )%p, (ELeaderboardUploadScoreMethod )%p, (int32 )%d, (int32 *)%d, (int )%d)\n", this, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
   auto result = this->internal->UploadLeaderboardScore(hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -352,7 +352,7 @@ SteamAPICall_t  ISteamUserStats_::RequestGlobalAchievementPercentages()
 
 int  ISteamUserStats_::GetMostAchievedAchievementInfo(char * pchName, uint32  unNameBufLen, float * pflPercent, bool * pbAchieved)
 {
-  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (uint32 )%p, (float *)%f, (bool *)%d)\n", this, pchName, unNameBufLen, pflPercent, pbAchieved);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (uint32 )%d, (float *)%f, (bool *)%d)\n", this, pchName, unNameBufLen, pflPercent, pbAchieved);
   auto result = this->internal->GetMostAchievedAchievementInfo(pchName, unNameBufLen, pflPercent, pbAchieved);
   TRACE("() = (int )%d\n", result);
 
@@ -362,7 +362,7 @@ int  ISteamUserStats_::GetMostAchievedAchievementInfo(char * pchName, uint32  un
 
 int  ISteamUserStats_::GetNextMostAchievedAchievementInfo(int  iIteratorPrevious, char * pchName, uint32  unNameBufLen, float * pflPercent, bool * pbAchieved)
 {
-  TRACE("((ISteamUserStats *)%p, (int )%d, (char *)\"%s\", (uint32 )%p, (float *)%f, (bool *)%d)\n", this, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
+  TRACE("((ISteamUserStats *)%p, (int )%d, (char *)\"%s\", (uint32 )%d, (float *)%f, (bool *)%d)\n", this, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
   auto result = this->internal->GetNextMostAchievedAchievementInfo(iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
   TRACE("() = (int )%d\n", result);
 
@@ -392,7 +392,7 @@ SteamAPICall_t  ISteamUserStats_::RequestGlobalStats(int  nHistoryDays)
 
 bool  ISteamUserStats_::GetGlobalStat(char * pchStatName, int64 * pData)
 {
-  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (int64 *)%p)\n", this, pchStatName, pData);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (int64 *)%d)\n", this, pchStatName, pData);
   auto result = this->internal->GetGlobalStat(pchStatName, pData);
   TRACE("() = (bool )%d\n", result);
 
@@ -412,9 +412,9 @@ bool  ISteamUserStats_::GetGlobalStat(char * pchStatName, double * pData)
 
 int32  ISteamUserStats_::GetGlobalStatHistory(char * pchStatName, int64 * pData, uint32  cubData)
 {
-  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (int64 *)%p, (uint32 )%p)\n", this, pchStatName, pData, cubData);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (int64 *)%d, (uint32 )%d)\n", this, pchStatName, pData, cubData);
   auto result = this->internal->GetGlobalStatHistory(pchStatName, pData, cubData);
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -422,9 +422,9 @@ int32  ISteamUserStats_::GetGlobalStatHistory(char * pchStatName, int64 * pData,
 
 int32  ISteamUserStats_::GetGlobalStatHistory(char * pchStatName, double * pData, uint32  cubData)
 {
-  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (double *)%f, (uint32 )%p)\n", this, pchStatName, pData, cubData);
+  TRACE("((ISteamUserStats *)%p, (char *)\"%s\", (double *)%f, (uint32 )%d)\n", this, pchStatName, pData, cubData);
   auto result = this->internal->GetGlobalStatHistory(pchStatName, pData, cubData);
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }

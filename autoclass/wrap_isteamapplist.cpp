@@ -4,7 +4,7 @@ uint32  ISteamAppList_::GetNumInstalledApps()
 {
   TRACE("((ISteamAppList *)%p)\n", this);
   auto result = this->internal->GetNumInstalledApps();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -12,9 +12,9 @@ uint32  ISteamAppList_::GetNumInstalledApps()
 
 uint32  ISteamAppList_::GetInstalledApps(AppId_t * pvecAppID, uint32  unMaxAppIDs)
 {
-  TRACE("((ISteamAppList *)%p, (AppId_t *)%p, (uint32 )%p)\n", this, pvecAppID, unMaxAppIDs);
+  TRACE("((ISteamAppList *)%p, (AppId_t *)%p, (uint32 )%d)\n", this, pvecAppID, unMaxAppIDs);
   auto result = this->internal->GetInstalledApps(pvecAppID, unMaxAppIDs);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }

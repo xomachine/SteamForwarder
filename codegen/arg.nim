@@ -30,7 +30,7 @@ proc toDeclaration*(self: TheType): string {.procvar.} =
   "$1 $2" % [self.base, self.reference]
 
 let floatre = re"""^.*(float|double)\s*$"""
-let intre = re"""^.*u?(int|long)\s*$"""
+let intre = re"""^.*u?(int|long)(16|32|64)?\s*$"""
 let charre = re"""^.*u?char\s*$"""
 proc to_format*(self: TheType): string {.procvar.} =
   let ftype =

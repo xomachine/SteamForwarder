@@ -2,7 +2,7 @@
 
 bool  ISteamRemoteStorage_::FileWrite(char * pchFile, void * pvData, int32  cubData)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (char *)\"%s\", (void *)%p, (int32 )%p)\n", this, pchFile, pvData, cubData);
+  TRACE("((ISteamRemoteStorage *)%p, (char *)\"%s\", (void *)%p, (int32 )%d)\n", this, pchFile, pvData, cubData);
   auto result = this->internal->FileWrite(pchFile, pvData, cubData);
   TRACE("() = (bool )%d\n", result);
 
@@ -12,9 +12,9 @@ bool  ISteamRemoteStorage_::FileWrite(char * pchFile, void * pvData, int32  cubD
 
 int32  ISteamRemoteStorage_::FileRead(char * pchFile, void * pvData, int32  cubDataToRead)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (char *)\"%s\", (void *)%p, (int32 )%p)\n", this, pchFile, pvData, cubDataToRead);
+  TRACE("((ISteamRemoteStorage *)%p, (char *)\"%s\", (void *)%p, (int32 )%d)\n", this, pchFile, pvData, cubDataToRead);
   auto result = this->internal->FileRead(pchFile, pvData, cubDataToRead);
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -22,7 +22,7 @@ int32  ISteamRemoteStorage_::FileRead(char * pchFile, void * pvData, int32  cubD
 
 SteamAPICall_t  ISteamRemoteStorage_::FileWriteAsync(char * pchFile, void * pvData, uint32  cubData)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (char *)\"%s\", (void *)%p, (uint32 )%p)\n", this, pchFile, pvData, cubData);
+  TRACE("((ISteamRemoteStorage *)%p, (char *)\"%s\", (void *)%p, (uint32 )%d)\n", this, pchFile, pvData, cubData);
   auto result = this->internal->FileWriteAsync(pchFile, pvData, cubData);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -32,7 +32,7 @@ SteamAPICall_t  ISteamRemoteStorage_::FileWriteAsync(char * pchFile, void * pvDa
 
 SteamAPICall_t  ISteamRemoteStorage_::FileReadAsync(char * pchFile, uint32  nOffset, uint32  cubToRead)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (char *)\"%s\", (uint32 )%p, (uint32 )%p)\n", this, pchFile, nOffset, cubToRead);
+  TRACE("((ISteamRemoteStorage *)%p, (char *)\"%s\", (uint32 )%d, (uint32 )%d)\n", this, pchFile, nOffset, cubToRead);
   auto result = this->internal->FileReadAsync(pchFile, nOffset, cubToRead);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -42,7 +42,7 @@ SteamAPICall_t  ISteamRemoteStorage_::FileReadAsync(char * pchFile, uint32  nOff
 
 bool  ISteamRemoteStorage_::FileReadAsyncComplete(SteamAPICall_t  hReadCall, void * pvBuffer, uint32  cubToRead)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (SteamAPICall_t )%p, (void *)%p, (uint32 )%p)\n", this, hReadCall, pvBuffer, cubToRead);
+  TRACE("((ISteamRemoteStorage *)%p, (SteamAPICall_t )%p, (void *)%p, (uint32 )%d)\n", this, hReadCall, pvBuffer, cubToRead);
   auto result = this->internal->FileReadAsyncComplete(hReadCall, pvBuffer, cubToRead);
   TRACE("() = (bool )%d\n", result);
 
@@ -102,7 +102,7 @@ UGCFileWriteStreamHandle_t  ISteamRemoteStorage_::FileWriteStreamOpen(char * pch
 
 bool  ISteamRemoteStorage_::FileWriteStreamWriteChunk(UGCFileWriteStreamHandle_t  writeHandle, void * pvData, int32  cubData)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (UGCFileWriteStreamHandle_t )%p, (void *)%p, (int32 )%p)\n", this, writeHandle, pvData, cubData);
+  TRACE("((ISteamRemoteStorage *)%p, (UGCFileWriteStreamHandle_t )%p, (void *)%p, (int32 )%d)\n", this, writeHandle, pvData, cubData);
   auto result = this->internal->FileWriteStreamWriteChunk(writeHandle, pvData, cubData);
   TRACE("() = (bool )%d\n", result);
 
@@ -154,7 +154,7 @@ int32  ISteamRemoteStorage_::GetFileSize(char * pchFile)
 {
   TRACE("((ISteamRemoteStorage *)%p, (char *)\"%s\")\n", this, pchFile);
   auto result = this->internal->GetFileSize(pchFile);
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -164,7 +164,7 @@ int64  ISteamRemoteStorage_::GetFileTimestamp(char * pchFile)
 {
   TRACE("((ISteamRemoteStorage *)%p, (char *)\"%s\")\n", this, pchFile);
   auto result = this->internal->GetFileTimestamp(pchFile);
-  TRACE("() = (int64 )%p\n", result);
+  TRACE("() = (int64 )%d\n", result);
 
   return result;
 }
@@ -184,7 +184,7 @@ int32  ISteamRemoteStorage_::GetFileCount()
 {
   TRACE("((ISteamRemoteStorage *)%p)\n", this);
   auto result = this->internal->GetFileCount();
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -192,7 +192,7 @@ int32  ISteamRemoteStorage_::GetFileCount()
 
 char * ISteamRemoteStorage_::GetFileNameAndSize(int  iFile, int32 * pnFileSizeInBytes)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (int )%d, (int32 *)%p)\n", this, iFile, pnFileSizeInBytes);
+  TRACE("((ISteamRemoteStorage *)%p, (int )%d, (int32 *)%d)\n", this, iFile, pnFileSizeInBytes);
   auto result = this->internal->GetFileNameAndSize(iFile, pnFileSizeInBytes);
   TRACE("() = (char *)\"%s\"\n", result);
 
@@ -202,7 +202,7 @@ char * ISteamRemoteStorage_::GetFileNameAndSize(int  iFile, int32 * pnFileSizeIn
 
 bool  ISteamRemoteStorage_::GetQuota(uint64 * pnTotalBytes, uint64 * puAvailableBytes)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (uint64 *)%p, (uint64 *)%p)\n", this, pnTotalBytes, puAvailableBytes);
+  TRACE("((ISteamRemoteStorage *)%p, (uint64 *)%d, (uint64 *)%d)\n", this, pnTotalBytes, puAvailableBytes);
   auto result = this->internal->GetQuota(pnTotalBytes, puAvailableBytes);
   TRACE("() = (bool )%d\n", result);
 
@@ -240,7 +240,7 @@ void  ISteamRemoteStorage_::SetCloudEnabledForApp(bool  bEnabled)
 
 SteamAPICall_t  ISteamRemoteStorage_::UGCDownload(UGCHandle_t  hContent, uint32  unPriority)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (UGCHandle_t )%p, (uint32 )%p)\n", this, hContent, unPriority);
+  TRACE("((ISteamRemoteStorage *)%p, (UGCHandle_t )%p, (uint32 )%d)\n", this, hContent, unPriority);
   auto result = this->internal->UGCDownload(hContent, unPriority);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -250,7 +250,7 @@ SteamAPICall_t  ISteamRemoteStorage_::UGCDownload(UGCHandle_t  hContent, uint32 
 
 bool  ISteamRemoteStorage_::GetUGCDownloadProgress(UGCHandle_t  hContent, int32 * pnBytesDownloaded, int32 * pnBytesExpected)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (UGCHandle_t )%p, (int32 *)%p, (int32 *)%p)\n", this, hContent, pnBytesDownloaded, pnBytesExpected);
+  TRACE("((ISteamRemoteStorage *)%p, (UGCHandle_t )%p, (int32 *)%d, (int32 *)%d)\n", this, hContent, pnBytesDownloaded, pnBytesExpected);
   auto result = this->internal->GetUGCDownloadProgress(hContent, pnBytesDownloaded, pnBytesExpected);
   TRACE("() = (bool )%d\n", result);
 
@@ -260,7 +260,7 @@ bool  ISteamRemoteStorage_::GetUGCDownloadProgress(UGCHandle_t  hContent, int32 
 
 bool  ISteamRemoteStorage_::GetUGCDetails(UGCHandle_t  hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (UGCHandle_t )%p, (AppId_t *)%p, (char **)\"%s\", (int32 *)%p, (CSteamID *)%p)\n", this, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
+  TRACE("((ISteamRemoteStorage *)%p, (UGCHandle_t )%p, (AppId_t *)%p, (char **)\"%s\", (int32 *)%d, (CSteamID *)%p)\n", this, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
   auto result = this->internal->GetUGCDetails(hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
   TRACE("() = (bool )%d\n", result);
 
@@ -270,9 +270,9 @@ bool  ISteamRemoteStorage_::GetUGCDetails(UGCHandle_t  hContent, AppId_t * pnApp
 
 int32  ISteamRemoteStorage_::UGCRead(UGCHandle_t  hContent, void * pvData, int32  cubDataToRead, uint32  cOffset, EUGCReadAction  eAction)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (UGCHandle_t )%p, (void *)%p, (int32 )%p, (uint32 )%p, (EUGCReadAction )%p)\n", this, hContent, pvData, cubDataToRead, cOffset, eAction);
+  TRACE("((ISteamRemoteStorage *)%p, (UGCHandle_t )%p, (void *)%p, (int32 )%d, (uint32 )%d, (EUGCReadAction )%p)\n", this, hContent, pvData, cubDataToRead, cOffset, eAction);
   auto result = this->internal->UGCRead(hContent, pvData, cubDataToRead, cOffset, eAction);
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -282,7 +282,7 @@ int32  ISteamRemoteStorage_::GetCachedUGCCount()
 {
   TRACE("((ISteamRemoteStorage *)%p)\n", this);
   auto result = this->internal->GetCachedUGCCount();
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -290,7 +290,7 @@ int32  ISteamRemoteStorage_::GetCachedUGCCount()
 
 UGCHandle_t  ISteamRemoteStorage_::GetCachedUGCHandle(int32  iCachedContent)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (int32 )%p)\n", this, iCachedContent);
+  TRACE("((ISteamRemoteStorage *)%p, (int32 )%d)\n", this, iCachedContent);
   auto result = this->internal->GetCachedUGCHandle(iCachedContent);
   TRACE("() = (UGCHandle_t )%p\n", result);
 
@@ -390,7 +390,7 @@ SteamAPICall_t  ISteamRemoteStorage_::CommitPublishedFileUpdate(PublishedFileUpd
 
 SteamAPICall_t  ISteamRemoteStorage_::GetPublishedFileDetails(PublishedFileId_t  unPublishedFileId, uint32  unMaxSecondsOld)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (PublishedFileId_t )%p, (uint32 )%p)\n", this, unPublishedFileId, unMaxSecondsOld);
+  TRACE("((ISteamRemoteStorage *)%p, (PublishedFileId_t )%p, (uint32 )%d)\n", this, unPublishedFileId, unMaxSecondsOld);
   auto result = this->internal->GetPublishedFileDetails(unPublishedFileId, unMaxSecondsOld);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -410,7 +410,7 @@ SteamAPICall_t  ISteamRemoteStorage_::DeletePublishedFile(PublishedFileId_t  unP
 
 SteamAPICall_t  ISteamRemoteStorage_::EnumerateUserPublishedFiles(uint32  unStartIndex)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (uint32 )%p)\n", this, unStartIndex);
+  TRACE("((ISteamRemoteStorage *)%p, (uint32 )%d)\n", this, unStartIndex);
   auto result = this->internal->EnumerateUserPublishedFiles(unStartIndex);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -430,7 +430,7 @@ SteamAPICall_t  ISteamRemoteStorage_::SubscribePublishedFile(PublishedFileId_t  
 
 SteamAPICall_t  ISteamRemoteStorage_::EnumerateUserSubscribedFiles(uint32  unStartIndex)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (uint32 )%p)\n", this, unStartIndex);
+  TRACE("((ISteamRemoteStorage *)%p, (uint32 )%d)\n", this, unStartIndex);
   auto result = this->internal->EnumerateUserSubscribedFiles(unStartIndex);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -490,7 +490,7 @@ SteamAPICall_t  ISteamRemoteStorage_::GetUserPublishedItemVoteDetails(PublishedF
 
 SteamAPICall_t  ISteamRemoteStorage_::EnumerateUserSharedWorkshopFiles(CSteamID  steamId, uint32  unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (CSteamID )%p, (uint32 )%p, (SteamParamStringArray_t *)%p, (SteamParamStringArray_t *)%p)\n", this, steamId, unStartIndex, pRequiredTags, pExcludedTags);
+  TRACE("((ISteamRemoteStorage *)%p, (CSteamID )%p, (uint32 )%d, (SteamParamStringArray_t *)%p, (SteamParamStringArray_t *)%p)\n", this, steamId, unStartIndex, pRequiredTags, pExcludedTags);
   auto result = this->internal->EnumerateUserSharedWorkshopFiles(steamId, unStartIndex, pRequiredTags, pExcludedTags);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -520,7 +520,7 @@ SteamAPICall_t  ISteamRemoteStorage_::SetUserPublishedFileAction(PublishedFileId
 
 SteamAPICall_t  ISteamRemoteStorage_::EnumeratePublishedFilesByUserAction(EWorkshopFileAction  eAction, uint32  unStartIndex)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (EWorkshopFileAction )%p, (uint32 )%p)\n", this, eAction, unStartIndex);
+  TRACE("((ISteamRemoteStorage *)%p, (EWorkshopFileAction )%p, (uint32 )%d)\n", this, eAction, unStartIndex);
   auto result = this->internal->EnumeratePublishedFilesByUserAction(eAction, unStartIndex);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -530,7 +530,7 @@ SteamAPICall_t  ISteamRemoteStorage_::EnumeratePublishedFilesByUserAction(EWorks
 
 SteamAPICall_t  ISteamRemoteStorage_::EnumeratePublishedWorkshopFiles(EWorkshopEnumerationType  eEnumerationType, uint32  unStartIndex, uint32  unCount, uint32  unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (EWorkshopEnumerationType )%p, (uint32 )%p, (uint32 )%p, (uint32 )%p, (SteamParamStringArray_t *)%p, (SteamParamStringArray_t *)%p)\n", this, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
+  TRACE("((ISteamRemoteStorage *)%p, (EWorkshopEnumerationType )%p, (uint32 )%d, (uint32 )%d, (uint32 )%d, (SteamParamStringArray_t *)%p, (SteamParamStringArray_t *)%p)\n", this, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
   auto result = this->internal->EnumeratePublishedWorkshopFiles(eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -540,7 +540,7 @@ SteamAPICall_t  ISteamRemoteStorage_::EnumeratePublishedWorkshopFiles(EWorkshopE
 
 SteamAPICall_t  ISteamRemoteStorage_::UGCDownloadToLocation(UGCHandle_t  hContent, char * pchLocation, uint32  unPriority)
 {
-  TRACE("((ISteamRemoteStorage *)%p, (UGCHandle_t )%p, (char *)\"%s\", (uint32 )%p)\n", this, hContent, pchLocation, unPriority);
+  TRACE("((ISteamRemoteStorage *)%p, (UGCHandle_t )%p, (char *)\"%s\", (uint32 )%d)\n", this, hContent, pchLocation, unPriority);
   auto result = this->internal->UGCDownloadToLocation(hContent, pchLocation, unPriority);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 

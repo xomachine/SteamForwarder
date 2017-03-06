@@ -2,7 +2,7 @@
 
 ScreenshotHandle  ISteamScreenshots_::WriteScreenshot(void * pubRGB, uint32  cubRGB, int  nWidth, int  nHeight)
 {
-  TRACE("((ISteamScreenshots *)%p, (void *)%p, (uint32 )%p, (int )%d, (int )%d)\n", this, pubRGB, cubRGB, nWidth, nHeight);
+  TRACE("((ISteamScreenshots *)%p, (void *)%p, (uint32 )%d, (int )%d, (int )%d)\n", this, pubRGB, cubRGB, nWidth, nHeight);
   auto result = this->internal->WriteScreenshot(pubRGB, cubRGB, nWidth, nHeight);
   TRACE("() = (ScreenshotHandle )%p\n", result);
 

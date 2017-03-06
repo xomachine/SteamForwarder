@@ -12,7 +12,7 @@ HTTPRequestHandle  ISteamHTTP_::CreateHTTPRequest(EHTTPMethod  eHTTPRequestMetho
 
 bool  ISteamHTTP_::SetHTTPRequestContextValue(HTTPRequestHandle  hRequest, uint64  ulContextValue)
 {
-  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (uint64 )%p)\n", this, hRequest, ulContextValue);
+  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (uint64 )%d)\n", this, hRequest, ulContextValue);
   auto result = this->internal->SetHTTPRequestContextValue(hRequest, ulContextValue);
   TRACE("() = (bool )%d\n", result);
 
@@ -22,7 +22,7 @@ bool  ISteamHTTP_::SetHTTPRequestContextValue(HTTPRequestHandle  hRequest, uint6
 
 bool  ISteamHTTP_::SetHTTPRequestNetworkActivityTimeout(HTTPRequestHandle  hRequest, uint32  unTimeoutSeconds)
 {
-  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (uint32 )%p)\n", this, hRequest, unTimeoutSeconds);
+  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (uint32 )%d)\n", this, hRequest, unTimeoutSeconds);
   auto result = this->internal->SetHTTPRequestNetworkActivityTimeout(hRequest, unTimeoutSeconds);
   TRACE("() = (bool )%d\n", result);
 
@@ -92,7 +92,7 @@ bool  ISteamHTTP_::PrioritizeHTTPRequest(HTTPRequestHandle  hRequest)
 
 bool  ISteamHTTP_::GetHTTPResponseHeaderSize(HTTPRequestHandle  hRequest, char * pchHeaderName, uint32 * unResponseHeaderSize)
 {
-  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (char *)\"%s\", (uint32 *)%p)\n", this, hRequest, pchHeaderName, unResponseHeaderSize);
+  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (char *)\"%s\", (uint32 *)%d)\n", this, hRequest, pchHeaderName, unResponseHeaderSize);
   auto result = this->internal->GetHTTPResponseHeaderSize(hRequest, pchHeaderName, unResponseHeaderSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -102,7 +102,7 @@ bool  ISteamHTTP_::GetHTTPResponseHeaderSize(HTTPRequestHandle  hRequest, char *
 
 bool  ISteamHTTP_::GetHTTPResponseHeaderValue(HTTPRequestHandle  hRequest, char * pchHeaderName, uint8 * pHeaderValueBuffer, uint32  unBufferSize)
 {
-  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (char *)\"%s\", (uint8 *)%p, (uint32 )%p)\n", this, hRequest, pchHeaderName, pHeaderValueBuffer, unBufferSize);
+  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (char *)\"%s\", (uint8 *)%p, (uint32 )%d)\n", this, hRequest, pchHeaderName, pHeaderValueBuffer, unBufferSize);
   auto result = this->internal->GetHTTPResponseHeaderValue(hRequest, pchHeaderName, pHeaderValueBuffer, unBufferSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -112,7 +112,7 @@ bool  ISteamHTTP_::GetHTTPResponseHeaderValue(HTTPRequestHandle  hRequest, char 
 
 bool  ISteamHTTP_::GetHTTPResponseBodySize(HTTPRequestHandle  hRequest, uint32 * unBodySize)
 {
-  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (uint32 *)%p)\n", this, hRequest, unBodySize);
+  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (uint32 *)%d)\n", this, hRequest, unBodySize);
   auto result = this->internal->GetHTTPResponseBodySize(hRequest, unBodySize);
   TRACE("() = (bool )%d\n", result);
 
@@ -122,7 +122,7 @@ bool  ISteamHTTP_::GetHTTPResponseBodySize(HTTPRequestHandle  hRequest, uint32 *
 
 bool  ISteamHTTP_::GetHTTPResponseBodyData(HTTPRequestHandle  hRequest, uint8 * pBodyDataBuffer, uint32  unBufferSize)
 {
-  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (uint8 *)%p, (uint32 )%p)\n", this, hRequest, pBodyDataBuffer, unBufferSize);
+  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (uint8 *)%p, (uint32 )%d)\n", this, hRequest, pBodyDataBuffer, unBufferSize);
   auto result = this->internal->GetHTTPResponseBodyData(hRequest, pBodyDataBuffer, unBufferSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -132,7 +132,7 @@ bool  ISteamHTTP_::GetHTTPResponseBodyData(HTTPRequestHandle  hRequest, uint8 * 
 
 bool  ISteamHTTP_::GetHTTPStreamingResponseBodyData(HTTPRequestHandle  hRequest, uint32  cOffset, uint8 * pBodyDataBuffer, uint32  unBufferSize)
 {
-  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (uint32 )%p, (uint8 *)%p, (uint32 )%p)\n", this, hRequest, cOffset, pBodyDataBuffer, unBufferSize);
+  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (uint32 )%d, (uint8 *)%p, (uint32 )%d)\n", this, hRequest, cOffset, pBodyDataBuffer, unBufferSize);
   auto result = this->internal->GetHTTPStreamingResponseBodyData(hRequest, cOffset, pBodyDataBuffer, unBufferSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -162,7 +162,7 @@ bool  ISteamHTTP_::GetHTTPDownloadProgressPct(HTTPRequestHandle  hRequest, float
 
 bool  ISteamHTTP_::SetHTTPRequestRawPostBody(HTTPRequestHandle  hRequest, char * pchContentType, uint8 * pubBody, uint32  unBodyLen)
 {
-  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (char *)\"%s\", (uint8 *)%p, (uint32 )%p)\n", this, hRequest, pchContentType, pubBody, unBodyLen);
+  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (char *)\"%s\", (uint8 *)%p, (uint32 )%d)\n", this, hRequest, pchContentType, pubBody, unBodyLen);
   auto result = this->internal->SetHTTPRequestRawPostBody(hRequest, pchContentType, pubBody, unBodyLen);
   TRACE("() = (bool )%d\n", result);
 
@@ -232,7 +232,7 @@ bool  ISteamHTTP_::SetHTTPRequestRequiresVerifiedCertificate(HTTPRequestHandle  
 
 bool  ISteamHTTP_::SetHTTPRequestAbsoluteTimeoutMS(HTTPRequestHandle  hRequest, uint32  unMilliseconds)
 {
-  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (uint32 )%p)\n", this, hRequest, unMilliseconds);
+  TRACE("((ISteamHTTP *)%p, (HTTPRequestHandle )%p, (uint32 )%d)\n", this, hRequest, unMilliseconds);
   auto result = this->internal->SetHTTPRequestAbsoluteTimeoutMS(hRequest, unMilliseconds);
   TRACE("() = (bool )%d\n", result);
 

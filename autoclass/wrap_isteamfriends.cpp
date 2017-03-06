@@ -398,7 +398,7 @@ uint32  ISteamFriends_::GetUserRestrictions()
 {
   TRACE("((ISteamFriends *)%p)\n", this);
   auto result = this->internal->GetUserRestrictions();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -658,7 +658,7 @@ SteamAPICall_t  ISteamFriends_::IsFollowing(CSteamID  steamID)
 
 SteamAPICall_t  ISteamFriends_::EnumerateFollowingList(uint32  unStartIndex)
 {
-  TRACE("((ISteamFriends *)%p, (uint32 )%p)\n", this, unStartIndex);
+  TRACE("((ISteamFriends *)%p, (uint32 )%d)\n", this, unStartIndex);
   auto result = this->internal->EnumerateFollowingList(unStartIndex);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 

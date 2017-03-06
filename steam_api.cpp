@@ -22,7 +22,7 @@ void  SteamAPI_Shutdown_()
 
 bool  SteamAPI_RestartAppIfNecessary_(uint32  unOwnAppID)
 {
-  TRACE("((uint32 )%p)\n", unOwnAppID);
+  TRACE("((uint32 )%d)\n", unOwnAppID);
   auto result = SteamAPI_RestartAppIfNecessary(unOwnAppID);
   TRACE("() = (bool )%d\n", result);
 
@@ -32,7 +32,7 @@ bool  SteamAPI_RestartAppIfNecessary_(uint32  unOwnAppID)
 
 void  SteamAPI_WriteMiniDump_(uint32  uStructuredExceptionCode, void * pvExceptionInfo, uint32  uBuildID)
 {
-  TRACE("((uint32 )%p, (void *)%p, (uint32 )%p)\n", uStructuredExceptionCode, pvExceptionInfo, uBuildID);
+  TRACE("((uint32 )%d, (void *)%p, (uint32 )%d)\n", uStructuredExceptionCode, pvExceptionInfo, uBuildID);
   SteamAPI_WriteMiniDump(uStructuredExceptionCode, pvExceptionInfo, uBuildID);
   
 }
@@ -550,7 +550,7 @@ void  SteamAPI_UseBreakpadCrashHandler_(char const * pchVersion, char const * pc
 
 void  SteamAPI_SetBreakpadAppID_(uint32  unAppID)
 {
-  TRACE("((uint32 )%p)\n", unAppID);
+  TRACE("((uint32 )%d)\n", unAppID);
   SteamAPI_SetBreakpadAppID(unAppID);
   
 }
@@ -626,7 +626,7 @@ ISteamGameServer * SteamAPI_ISteamClient_GetISteamGameServer_(intptr_t  instance
 
 void  SteamAPI_ISteamClient_SetLocalIPBinding_(intptr_t  instancePtr, uint32  unIP, uint16  usPort)
 {
-  TRACE("((intptr_t )%p, (uint32 )%p, (uint16 )%p)\n", instancePtr, unIP, usPort);
+  TRACE("((intptr_t )%p, (uint32 )%d, (uint16 )%d)\n", instancePtr, unIP, usPort);
   SteamAPI_ISteamClient_SetLocalIPBinding(instancePtr, unIP, usPort);
   
 }
@@ -746,7 +746,7 @@ uint32  SteamAPI_ISteamClient_GetIPCCallCount_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamClient_GetIPCCallCount(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -894,7 +894,7 @@ uint64  SteamAPI_ISteamUser_GetSteamID_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamUser_GetSteamID(instancePtr);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -902,7 +902,7 @@ uint64  SteamAPI_ISteamUser_GetSteamID_(intptr_t  instancePtr)
 
 int  SteamAPI_ISteamUser_InitiateGameConnection_(intptr_t  instancePtr, void * pAuthBlob, int  cbMaxAuthBlob, CSteamID  steamIDGameServer, uint32  unIPServer, uint16  usPortServer, bool  bSecure)
 {
-  TRACE("((intptr_t )%p, (void *)%p, (int )%d, (CSteamID )%p, (uint32 )%p, (uint16 )%p, (bool )%d)\n", instancePtr, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+  TRACE("((intptr_t )%p, (void *)%p, (int )%d, (CSteamID )%p, (uint32 )%d, (uint16 )%d, (bool )%d)\n", instancePtr, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
   auto result = SteamAPI_ISteamUser_InitiateGameConnection(instancePtr, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
   TRACE("() = (int )%d\n", result);
 
@@ -912,7 +912,7 @@ int  SteamAPI_ISteamUser_InitiateGameConnection_(intptr_t  instancePtr, void * p
 
 void  SteamAPI_ISteamUser_TerminateGameConnection_(intptr_t  instancePtr, uint32  unIPServer, uint16  usPortServer)
 {
-  TRACE("((intptr_t )%p, (uint32 )%p, (uint16 )%p)\n", instancePtr, unIPServer, usPortServer);
+  TRACE("((intptr_t )%p, (uint32 )%d, (uint16 )%d)\n", instancePtr, unIPServer, usPortServer);
   SteamAPI_ISteamUser_TerminateGameConnection(instancePtr, unIPServer, usPortServer);
   
 }
@@ -954,7 +954,7 @@ void  SteamAPI_ISteamUser_StopVoiceRecording_(intptr_t  instancePtr)
 
 EVoiceResult  SteamAPI_ISteamUser_GetAvailableVoice_(intptr_t  instancePtr, uint32 * pcbCompressed, uint32 * pcbUncompressed, uint32  nUncompressedVoiceDesiredSampleRate)
 {
-  TRACE("((intptr_t )%p, (uint32 *)%p, (uint32 *)%p, (uint32 )%p)\n", instancePtr, pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
+  TRACE("((intptr_t )%p, (uint32 *)%d, (uint32 *)%d, (uint32 )%d)\n", instancePtr, pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
   auto result = SteamAPI_ISteamUser_GetAvailableVoice(instancePtr, pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
   TRACE("() = (EVoiceResult )%p\n", result);
 
@@ -964,7 +964,7 @@ EVoiceResult  SteamAPI_ISteamUser_GetAvailableVoice_(intptr_t  instancePtr, uint
 
 EVoiceResult  SteamAPI_ISteamUser_GetVoice_(intptr_t  instancePtr, bool  bWantCompressed, void * pDestBuffer, uint32  cbDestBufferSize, uint32 * nBytesWritten, bool  bWantUncompressed, void * pUncompressedDestBuffer, uint32  cbUncompressedDestBufferSize, uint32 * nUncompressBytesWritten, uint32  nUncompressedVoiceDesiredSampleRate)
 {
-  TRACE("((intptr_t )%p, (bool )%d, (void *)%p, (uint32 )%p, (uint32 *)%p, (bool )%d, (void *)%p, (uint32 )%p, (uint32 *)%p, (uint32 )%p)\n", instancePtr, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
+  TRACE("((intptr_t )%p, (bool )%d, (void *)%p, (uint32 )%d, (uint32 *)%d, (bool )%d, (void *)%p, (uint32 )%d, (uint32 *)%d, (uint32 )%d)\n", instancePtr, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
   auto result = SteamAPI_ISteamUser_GetVoice(instancePtr, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
   TRACE("() = (EVoiceResult )%p\n", result);
 
@@ -974,7 +974,7 @@ EVoiceResult  SteamAPI_ISteamUser_GetVoice_(intptr_t  instancePtr, bool  bWantCo
 
 EVoiceResult  SteamAPI_ISteamUser_DecompressVoice_(intptr_t  instancePtr, void * pCompressed, uint32  cbCompressed, void * pDestBuffer, uint32  cbDestBufferSize, uint32 * nBytesWritten, uint32  nDesiredSampleRate)
 {
-  TRACE("((intptr_t )%p, (void *)%p, (uint32 )%p, (void *)%p, (uint32 )%p, (uint32 *)%p, (uint32 )%p)\n", instancePtr, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+  TRACE("((intptr_t )%p, (void *)%p, (uint32 )%d, (void *)%p, (uint32 )%d, (uint32 *)%d, (uint32 )%d)\n", instancePtr, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
   auto result = SteamAPI_ISteamUser_DecompressVoice(instancePtr, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
   TRACE("() = (EVoiceResult )%p\n", result);
 
@@ -986,7 +986,7 @@ uint32  SteamAPI_ISteamUser_GetVoiceOptimalSampleRate_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamUser_GetVoiceOptimalSampleRate(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -994,7 +994,7 @@ uint32  SteamAPI_ISteamUser_GetVoiceOptimalSampleRate_(intptr_t  instancePtr)
 
 HAuthTicket  SteamAPI_ISteamUser_GetAuthSessionTicket_(intptr_t  instancePtr, void * pTicket, int  cbMaxTicket, uint32 * pcbTicket)
 {
-  TRACE("((intptr_t )%p, (void *)%p, (int )%d, (uint32 *)%p)\n", instancePtr, pTicket, cbMaxTicket, pcbTicket);
+  TRACE("((intptr_t )%p, (void *)%p, (int )%d, (uint32 *)%d)\n", instancePtr, pTicket, cbMaxTicket, pcbTicket);
   auto result = SteamAPI_ISteamUser_GetAuthSessionTicket(instancePtr, pTicket, cbMaxTicket, pcbTicket);
   TRACE("() = (HAuthTicket )%p\n", result);
 
@@ -1050,7 +1050,7 @@ bool  SteamAPI_ISteamUser_BIsBehindNAT_(intptr_t  instancePtr)
 
 void  SteamAPI_ISteamUser_AdvertiseGame_(intptr_t  instancePtr, CSteamID  steamIDGameServer, uint32  unIPServer, uint16  usPortServer)
 {
-  TRACE("((intptr_t )%p, (CSteamID )%p, (uint32 )%p, (uint16 )%p)\n", instancePtr, steamIDGameServer, unIPServer, usPortServer);
+  TRACE("((intptr_t )%p, (CSteamID )%p, (uint32 )%d, (uint16 )%d)\n", instancePtr, steamIDGameServer, unIPServer, usPortServer);
   SteamAPI_ISteamUser_AdvertiseGame(instancePtr, steamIDGameServer, unIPServer, usPortServer);
   
 }
@@ -1068,7 +1068,7 @@ SteamAPICall_t  SteamAPI_ISteamUser_RequestEncryptedAppTicket_(intptr_t  instanc
 
 bool  SteamAPI_ISteamUser_GetEncryptedAppTicket_(intptr_t  instancePtr, void * pTicket, int  cbMaxTicket, uint32 * pcbTicket)
 {
-  TRACE("((intptr_t )%p, (void *)%p, (int )%d, (uint32 *)%p)\n", instancePtr, pTicket, cbMaxTicket, pcbTicket);
+  TRACE("((intptr_t )%p, (void *)%p, (int )%d, (uint32 *)%d)\n", instancePtr, pTicket, cbMaxTicket, pcbTicket);
   auto result = SteamAPI_ISteamUser_GetEncryptedAppTicket(instancePtr, pTicket, cbMaxTicket, pcbTicket);
   TRACE("() = (bool )%d\n", result);
 
@@ -1150,7 +1150,7 @@ uint64  SteamAPI_ISteamFriends_GetFriendByIndex_(intptr_t  instancePtr, int  iFr
 {
   TRACE("((intptr_t )%p, (int )%d, (int )%d)\n", instancePtr, iFriend, iFriendFlags);
   auto result = SteamAPI_ISteamFriends_GetFriendByIndex(instancePtr, iFriend, iFriendFlags);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -1298,7 +1298,7 @@ uint64  SteamAPI_ISteamFriends_GetClanByIndex_(intptr_t  instancePtr, int  iClan
 {
   TRACE("((intptr_t )%p, (int )%d)\n", instancePtr, iClan);
   auto result = SteamAPI_ISteamFriends_GetClanByIndex(instancePtr, iClan);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -1358,7 +1358,7 @@ uint64  SteamAPI_ISteamFriends_GetFriendFromSourceByIndex_(intptr_t  instancePtr
 {
   TRACE("((intptr_t )%p, (CSteamID )%p, (int )%d)\n", instancePtr, steamIDSource, iFriend);
   auto result = SteamAPI_ISteamFriends_GetFriendFromSourceByIndex(instancePtr, steamIDSource, iFriend);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -1484,7 +1484,7 @@ uint64  SteamAPI_ISteamFriends_GetClanOwner_(intptr_t  instancePtr, CSteamID  st
 {
   TRACE("((intptr_t )%p, (CSteamID )%p)\n", instancePtr, steamIDClan);
   auto result = SteamAPI_ISteamFriends_GetClanOwner(instancePtr, steamIDClan);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -1504,7 +1504,7 @@ uint64  SteamAPI_ISteamFriends_GetClanOfficerByIndex_(intptr_t  instancePtr, CSt
 {
   TRACE("((intptr_t )%p, (CSteamID )%p, (int )%d)\n", instancePtr, steamIDClan, iOfficer);
   auto result = SteamAPI_ISteamFriends_GetClanOfficerByIndex(instancePtr, steamIDClan, iOfficer);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -1514,7 +1514,7 @@ uint32  SteamAPI_ISteamFriends_GetUserRestrictions_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamFriends_GetUserRestrictions(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -1600,7 +1600,7 @@ uint64  SteamAPI_ISteamFriends_GetCoplayFriend_(intptr_t  instancePtr, int  iCop
 {
   TRACE("((intptr_t )%p, (int )%d)\n", instancePtr, iCoplayFriend);
   auto result = SteamAPI_ISteamFriends_GetCoplayFriend(instancePtr, iCoplayFriend);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -1660,7 +1660,7 @@ uint64  SteamAPI_ISteamFriends_GetChatMemberByIndex_(intptr_t  instancePtr, CSte
 {
   TRACE("((intptr_t )%p, (CSteamID )%p, (int )%d)\n", instancePtr, steamIDClan, iUser);
   auto result = SteamAPI_ISteamFriends_GetChatMemberByIndex(instancePtr, steamIDClan, iUser);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -1778,7 +1778,7 @@ SteamAPICall_t  SteamAPI_ISteamFriends_IsFollowing_(intptr_t  instancePtr, CStea
 
 SteamAPICall_t  SteamAPI_ISteamFriends_EnumerateFollowingList_(intptr_t  instancePtr, uint32  unStartIndex)
 {
-  TRACE("((intptr_t )%p, (uint32 )%p)\n", instancePtr, unStartIndex);
+  TRACE("((intptr_t )%p, (uint32 )%d)\n", instancePtr, unStartIndex);
   auto result = SteamAPI_ISteamFriends_EnumerateFollowingList(instancePtr, unStartIndex);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -1790,7 +1790,7 @@ uint32  SteamAPI_ISteamUtils_GetSecondsSinceAppActive_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamUtils_GetSecondsSinceAppActive(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -1800,7 +1800,7 @@ uint32  SteamAPI_ISteamUtils_GetSecondsSinceComputerActive_(intptr_t  instancePt
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamUtils_GetSecondsSinceComputerActive(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -1820,7 +1820,7 @@ uint32  SteamAPI_ISteamUtils_GetServerRealTime_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamUtils_GetServerRealTime(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -1838,7 +1838,7 @@ char * SteamAPI_ISteamUtils_GetIPCountry_(intptr_t  instancePtr)
 
 bool  SteamAPI_ISteamUtils_GetImageSize_(intptr_t  instancePtr, int  iImage, uint32 * pnWidth, uint32 * pnHeight)
 {
-  TRACE("((intptr_t )%p, (int )%d, (uint32 *)%p, (uint32 *)%p)\n", instancePtr, iImage, pnWidth, pnHeight);
+  TRACE("((intptr_t )%p, (int )%d, (uint32 *)%d, (uint32 *)%d)\n", instancePtr, iImage, pnWidth, pnHeight);
   auto result = SteamAPI_ISteamUtils_GetImageSize(instancePtr, iImage, pnWidth, pnHeight);
   TRACE("() = (bool )%d\n", result);
 
@@ -1858,7 +1858,7 @@ bool  SteamAPI_ISteamUtils_GetImageRGBA_(intptr_t  instancePtr, int  iImage, uin
 
 bool  SteamAPI_ISteamUtils_GetCSERIPPort_(intptr_t  instancePtr, uint32 * unIP, uint16 * usPort)
 {
-  TRACE("((intptr_t )%p, (uint32 *)%p, (uint16 *)%p)\n", instancePtr, unIP, usPort);
+  TRACE("((intptr_t )%p, (uint32 *)%d, (uint16 *)%d)\n", instancePtr, unIP, usPort);
   auto result = SteamAPI_ISteamUtils_GetCSERIPPort(instancePtr, unIP, usPort);
   TRACE("() = (bool )%d\n", result);
 
@@ -1880,7 +1880,7 @@ uint32  SteamAPI_ISteamUtils_GetAppID_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamUtils_GetAppID(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -1928,7 +1928,7 @@ uint32  SteamAPI_ISteamUtils_GetIPCCallCount_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamUtils_GetIPCCallCount(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -1974,7 +1974,7 @@ SteamAPICall_t  SteamAPI_ISteamUtils_CheckFileSignature_(intptr_t  instancePtr, 
 
 bool  SteamAPI_ISteamUtils_ShowGamepadTextInput_(intptr_t  instancePtr, EGamepadTextInputMode  eInputMode, EGamepadTextInputLineMode  eLineInputMode, char * pchDescription, uint32  unCharMax, char * pchExistingText)
 {
-  TRACE("((intptr_t )%p, (EGamepadTextInputMode )%p, (EGamepadTextInputLineMode )%p, (char *)\"%s\", (uint32 )%p, (char *)\"%s\")\n", instancePtr, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
+  TRACE("((intptr_t )%p, (EGamepadTextInputMode )%p, (EGamepadTextInputLineMode )%p, (char *)\"%s\", (uint32 )%d, (char *)\"%s\")\n", instancePtr, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
   auto result = SteamAPI_ISteamUtils_ShowGamepadTextInput(instancePtr, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
   TRACE("() = (bool )%d\n", result);
 
@@ -1986,7 +1986,7 @@ uint32  SteamAPI_ISteamUtils_GetEnteredGamepadTextLength_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamUtils_GetEnteredGamepadTextLength(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -1994,7 +1994,7 @@ uint32  SteamAPI_ISteamUtils_GetEnteredGamepadTextLength_(intptr_t  instancePtr)
 
 bool  SteamAPI_ISteamUtils_GetEnteredGamepadTextInput_(intptr_t  instancePtr, char * pchText, uint32  cchText)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (uint32 )%p)\n", instancePtr, pchText, cchText);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (uint32 )%d)\n", instancePtr, pchText, cchText);
   auto result = SteamAPI_ISteamUtils_GetEnteredGamepadTextInput(instancePtr, pchText, cchText);
   TRACE("() = (bool )%d\n", result);
 
@@ -2034,7 +2034,7 @@ int  SteamAPI_ISteamMatchmaking_GetFavoriteGameCount_(intptr_t  instancePtr)
 
 bool  SteamAPI_ISteamMatchmaking_GetFavoriteGame_(intptr_t  instancePtr, int  iGame, AppId_t * pnAppID, uint32 * pnIP, uint16 * pnConnPort, uint16 * pnQueryPort, uint32 * punFlags, uint32 * pRTime32LastPlayedOnServer)
 {
-  TRACE("((intptr_t )%p, (int )%d, (AppId_t *)%p, (uint32 *)%p, (uint16 *)%p, (uint16 *)%p, (uint32 *)%p, (uint32 *)%p)\n", instancePtr, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
+  TRACE("((intptr_t )%p, (int )%d, (AppId_t *)%p, (uint32 *)%d, (uint16 *)%d, (uint16 *)%d, (uint32 *)%d, (uint32 *)%d)\n", instancePtr, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
   auto result = SteamAPI_ISteamMatchmaking_GetFavoriteGame(instancePtr, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
   TRACE("() = (bool )%d\n", result);
 
@@ -2044,7 +2044,7 @@ bool  SteamAPI_ISteamMatchmaking_GetFavoriteGame_(intptr_t  instancePtr, int  iG
 
 int  SteamAPI_ISteamMatchmaking_AddFavoriteGame_(intptr_t  instancePtr, AppId_t  nAppID, uint32  nIP, uint16  nConnPort, uint16  nQueryPort, uint32  unFlags, uint32  rTime32LastPlayedOnServer)
 {
-  TRACE("((intptr_t )%p, (AppId_t )%p, (uint32 )%p, (uint16 )%p, (uint16 )%p, (uint32 )%p, (uint32 )%p)\n", instancePtr, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
+  TRACE("((intptr_t )%p, (AppId_t )%p, (uint32 )%d, (uint16 )%d, (uint16 )%d, (uint32 )%d, (uint32 )%d)\n", instancePtr, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
   auto result = SteamAPI_ISteamMatchmaking_AddFavoriteGame(instancePtr, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
   TRACE("() = (int )%d\n", result);
 
@@ -2054,7 +2054,7 @@ int  SteamAPI_ISteamMatchmaking_AddFavoriteGame_(intptr_t  instancePtr, AppId_t 
 
 bool  SteamAPI_ISteamMatchmaking_RemoveFavoriteGame_(intptr_t  instancePtr, AppId_t  nAppID, uint32  nIP, uint16  nConnPort, uint16  nQueryPort, uint32  unFlags)
 {
-  TRACE("((intptr_t )%p, (AppId_t )%p, (uint32 )%p, (uint16 )%p, (uint16 )%p, (uint32 )%p)\n", instancePtr, nAppID, nIP, nConnPort, nQueryPort, unFlags);
+  TRACE("((intptr_t )%p, (AppId_t )%p, (uint32 )%d, (uint16 )%d, (uint16 )%d, (uint32 )%d)\n", instancePtr, nAppID, nIP, nConnPort, nQueryPort, unFlags);
   auto result = SteamAPI_ISteamMatchmaking_RemoveFavoriteGame(instancePtr, nAppID, nIP, nConnPort, nQueryPort, unFlags);
   TRACE("() = (bool )%d\n", result);
 
@@ -2132,7 +2132,7 @@ uint64  SteamAPI_ISteamMatchmaking_GetLobbyByIndex_(intptr_t  instancePtr, int  
 {
   TRACE("((intptr_t )%p, (int )%d)\n", instancePtr, iLobby);
   auto result = SteamAPI_ISteamMatchmaking_GetLobbyByIndex(instancePtr, iLobby);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -2190,7 +2190,7 @@ uint64  SteamAPI_ISteamMatchmaking_GetLobbyMemberByIndex_(intptr_t  instancePtr,
 {
   TRACE("((intptr_t )%p, (CSteamID )%p, (int )%d)\n", instancePtr, steamIDLobby, iMember);
   auto result = SteamAPI_ISteamMatchmaking_GetLobbyMemberByIndex(instancePtr, steamIDLobby, iMember);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -2296,7 +2296,7 @@ bool  SteamAPI_ISteamMatchmaking_RequestLobbyData_(intptr_t  instancePtr, CSteam
 
 void  SteamAPI_ISteamMatchmaking_SetLobbyGameServer_(intptr_t  instancePtr, CSteamID  steamIDLobby, uint32  unGameServerIP, uint16  unGameServerPort, CSteamID  steamIDGameServer)
 {
-  TRACE("((intptr_t )%p, (CSteamID )%p, (uint32 )%p, (uint16 )%p, (CSteamID )%p)\n", instancePtr, steamIDLobby, unGameServerIP, unGameServerPort, steamIDGameServer);
+  TRACE("((intptr_t )%p, (CSteamID )%p, (uint32 )%d, (uint16 )%d, (CSteamID )%p)\n", instancePtr, steamIDLobby, unGameServerIP, unGameServerPort, steamIDGameServer);
   SteamAPI_ISteamMatchmaking_SetLobbyGameServer(instancePtr, steamIDLobby, unGameServerIP, unGameServerPort, steamIDGameServer);
   
 }
@@ -2304,7 +2304,7 @@ void  SteamAPI_ISteamMatchmaking_SetLobbyGameServer_(intptr_t  instancePtr, CSte
 
 bool  SteamAPI_ISteamMatchmaking_GetLobbyGameServer_(intptr_t  instancePtr, CSteamID  steamIDLobby, uint32 * punGameServerIP, uint16 * punGameServerPort, CSteamID * psteamIDGameServer)
 {
-  TRACE("((intptr_t )%p, (CSteamID )%p, (uint32 *)%p, (uint16 *)%p, (CSteamID *)%p)\n", instancePtr, steamIDLobby, punGameServerIP, punGameServerPort, psteamIDGameServer);
+  TRACE("((intptr_t )%p, (CSteamID )%p, (uint32 *)%d, (uint16 *)%d, (CSteamID *)%p)\n", instancePtr, steamIDLobby, punGameServerIP, punGameServerPort, psteamIDGameServer);
   auto result = SteamAPI_ISteamMatchmaking_GetLobbyGameServer(instancePtr, steamIDLobby, punGameServerIP, punGameServerPort, psteamIDGameServer);
   TRACE("() = (bool )%d\n", result);
 
@@ -2356,7 +2356,7 @@ uint64  SteamAPI_ISteamMatchmaking_GetLobbyOwner_(intptr_t  instancePtr, CSteamI
 {
   TRACE("((intptr_t )%p, (CSteamID )%p)\n", instancePtr, steamIDLobby);
   auto result = SteamAPI_ISteamMatchmaking_GetLobbyOwner(instancePtr, steamIDLobby);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -2472,7 +2472,7 @@ void  SteamAPI_ISteamMatchmakingRulesResponse_RulesRefreshComplete_(intptr_t  in
 
 HServerListRequest  SteamAPI_ISteamMatchmakingServers_RequestInternetServerList_(intptr_t  instancePtr, AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-  TRACE("((intptr_t )%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%p, (ISteamMatchmakingServerListResponse *)%p)\n", instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
+  TRACE("((intptr_t )%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
   auto result = SteamAPI_ISteamMatchmakingServers_RequestInternetServerList(instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
@@ -2492,7 +2492,7 @@ HServerListRequest  SteamAPI_ISteamMatchmakingServers_RequestLANServerList_(intp
 
 HServerListRequest  SteamAPI_ISteamMatchmakingServers_RequestFriendsServerList_(intptr_t  instancePtr, AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-  TRACE("((intptr_t )%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%p, (ISteamMatchmakingServerListResponse *)%p)\n", instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
+  TRACE("((intptr_t )%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
   auto result = SteamAPI_ISteamMatchmakingServers_RequestFriendsServerList(instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
@@ -2502,7 +2502,7 @@ HServerListRequest  SteamAPI_ISteamMatchmakingServers_RequestFriendsServerList_(
 
 HServerListRequest  SteamAPI_ISteamMatchmakingServers_RequestFavoritesServerList_(intptr_t  instancePtr, AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-  TRACE("((intptr_t )%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%p, (ISteamMatchmakingServerListResponse *)%p)\n", instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
+  TRACE("((intptr_t )%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
   auto result = SteamAPI_ISteamMatchmakingServers_RequestFavoritesServerList(instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
@@ -2512,7 +2512,7 @@ HServerListRequest  SteamAPI_ISteamMatchmakingServers_RequestFavoritesServerList
 
 HServerListRequest  SteamAPI_ISteamMatchmakingServers_RequestHistoryServerList_(intptr_t  instancePtr, AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-  TRACE("((intptr_t )%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%p, (ISteamMatchmakingServerListResponse *)%p)\n", instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
+  TRACE("((intptr_t )%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
   auto result = SteamAPI_ISteamMatchmakingServers_RequestHistoryServerList(instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
@@ -2522,7 +2522,7 @@ HServerListRequest  SteamAPI_ISteamMatchmakingServers_RequestHistoryServerList_(
 
 HServerListRequest  SteamAPI_ISteamMatchmakingServers_RequestSpectatorServerList_(intptr_t  instancePtr, AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-  TRACE("((intptr_t )%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%p, (ISteamMatchmakingServerListResponse *)%p)\n", instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
+  TRACE("((intptr_t )%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
   auto result = SteamAPI_ISteamMatchmakingServers_RequestSpectatorServerList(instancePtr, iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
@@ -2594,7 +2594,7 @@ void  SteamAPI_ISteamMatchmakingServers_RefreshServer_(intptr_t  instancePtr, HS
 
 HServerQuery  SteamAPI_ISteamMatchmakingServers_PingServer_(intptr_t  instancePtr, uint32  unIP, uint16  usPort, ISteamMatchmakingPingResponse * pRequestServersResponse)
 {
-  TRACE("((intptr_t )%p, (uint32 )%p, (uint16 )%p, (ISteamMatchmakingPingResponse *)%p)\n", instancePtr, unIP, usPort, pRequestServersResponse);
+  TRACE("((intptr_t )%p, (uint32 )%d, (uint16 )%d, (ISteamMatchmakingPingResponse *)%p)\n", instancePtr, unIP, usPort, pRequestServersResponse);
   auto result = SteamAPI_ISteamMatchmakingServers_PingServer(instancePtr, unIP, usPort, pRequestServersResponse);
   TRACE("() = (HServerQuery )%p\n", result);
 
@@ -2604,7 +2604,7 @@ HServerQuery  SteamAPI_ISteamMatchmakingServers_PingServer_(intptr_t  instancePt
 
 HServerQuery  SteamAPI_ISteamMatchmakingServers_PlayerDetails_(intptr_t  instancePtr, uint32  unIP, uint16  usPort, ISteamMatchmakingPlayersResponse * pRequestServersResponse)
 {
-  TRACE("((intptr_t )%p, (uint32 )%p, (uint16 )%p, (ISteamMatchmakingPlayersResponse *)%p)\n", instancePtr, unIP, usPort, pRequestServersResponse);
+  TRACE("((intptr_t )%p, (uint32 )%d, (uint16 )%d, (ISteamMatchmakingPlayersResponse *)%p)\n", instancePtr, unIP, usPort, pRequestServersResponse);
   auto result = SteamAPI_ISteamMatchmakingServers_PlayerDetails(instancePtr, unIP, usPort, pRequestServersResponse);
   TRACE("() = (HServerQuery )%p\n", result);
 
@@ -2614,7 +2614,7 @@ HServerQuery  SteamAPI_ISteamMatchmakingServers_PlayerDetails_(intptr_t  instanc
 
 HServerQuery  SteamAPI_ISteamMatchmakingServers_ServerRules_(intptr_t  instancePtr, uint32  unIP, uint16  usPort, ISteamMatchmakingRulesResponse * pRequestServersResponse)
 {
-  TRACE("((intptr_t )%p, (uint32 )%p, (uint16 )%p, (ISteamMatchmakingRulesResponse *)%p)\n", instancePtr, unIP, usPort, pRequestServersResponse);
+  TRACE("((intptr_t )%p, (uint32 )%d, (uint16 )%d, (ISteamMatchmakingRulesResponse *)%p)\n", instancePtr, unIP, usPort, pRequestServersResponse);
   auto result = SteamAPI_ISteamMatchmakingServers_ServerRules(instancePtr, unIP, usPort, pRequestServersResponse);
   TRACE("() = (HServerQuery )%p\n", result);
 
@@ -2632,7 +2632,7 @@ void  SteamAPI_ISteamMatchmakingServers_CancelServerQuery_(intptr_t  instancePtr
 
 bool  SteamAPI_ISteamRemoteStorage_FileWrite_(intptr_t  instancePtr, char * pchFile, void * pvData, int32  cubData)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (void *)%p, (int32 )%p)\n", instancePtr, pchFile, pvData, cubData);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (void *)%p, (int32 )%d)\n", instancePtr, pchFile, pvData, cubData);
   auto result = SteamAPI_ISteamRemoteStorage_FileWrite(instancePtr, pchFile, pvData, cubData);
   TRACE("() = (bool )%d\n", result);
 
@@ -2642,9 +2642,9 @@ bool  SteamAPI_ISteamRemoteStorage_FileWrite_(intptr_t  instancePtr, char * pchF
 
 int32  SteamAPI_ISteamRemoteStorage_FileRead_(intptr_t  instancePtr, char * pchFile, void * pvData, int32  cubDataToRead)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (void *)%p, (int32 )%p)\n", instancePtr, pchFile, pvData, cubDataToRead);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (void *)%p, (int32 )%d)\n", instancePtr, pchFile, pvData, cubDataToRead);
   auto result = SteamAPI_ISteamRemoteStorage_FileRead(instancePtr, pchFile, pvData, cubDataToRead);
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -2702,7 +2702,7 @@ UGCFileWriteStreamHandle_t  SteamAPI_ISteamRemoteStorage_FileWriteStreamOpen_(in
 
 bool  SteamAPI_ISteamRemoteStorage_FileWriteStreamWriteChunk_(intptr_t  instancePtr, UGCFileWriteStreamHandle_t  writeHandle, void * pvData, int32  cubData)
 {
-  TRACE("((intptr_t )%p, (UGCFileWriteStreamHandle_t )%p, (void *)%p, (int32 )%p)\n", instancePtr, writeHandle, pvData, cubData);
+  TRACE("((intptr_t )%p, (UGCFileWriteStreamHandle_t )%p, (void *)%p, (int32 )%d)\n", instancePtr, writeHandle, pvData, cubData);
   auto result = SteamAPI_ISteamRemoteStorage_FileWriteStreamWriteChunk(instancePtr, writeHandle, pvData, cubData);
   TRACE("() = (bool )%d\n", result);
 
@@ -2754,7 +2754,7 @@ int32  SteamAPI_ISteamRemoteStorage_GetFileSize_(intptr_t  instancePtr, char * p
 {
   TRACE("((intptr_t )%p, (char *)\"%s\")\n", instancePtr, pchFile);
   auto result = SteamAPI_ISteamRemoteStorage_GetFileSize(instancePtr, pchFile);
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -2764,7 +2764,7 @@ int64  SteamAPI_ISteamRemoteStorage_GetFileTimestamp_(intptr_t  instancePtr, cha
 {
   TRACE("((intptr_t )%p, (char *)\"%s\")\n", instancePtr, pchFile);
   auto result = SteamAPI_ISteamRemoteStorage_GetFileTimestamp(instancePtr, pchFile);
-  TRACE("() = (int64 )%p\n", result);
+  TRACE("() = (int64 )%d\n", result);
 
   return result;
 }
@@ -2784,7 +2784,7 @@ int32  SteamAPI_ISteamRemoteStorage_GetFileCount_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamRemoteStorage_GetFileCount(instancePtr);
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -2792,7 +2792,7 @@ int32  SteamAPI_ISteamRemoteStorage_GetFileCount_(intptr_t  instancePtr)
 
 char * SteamAPI_ISteamRemoteStorage_GetFileNameAndSize_(intptr_t  instancePtr, int  iFile, int32 * pnFileSizeInBytes)
 {
-  TRACE("((intptr_t )%p, (int )%d, (int32 *)%p)\n", instancePtr, iFile, pnFileSizeInBytes);
+  TRACE("((intptr_t )%p, (int )%d, (int32 *)%d)\n", instancePtr, iFile, pnFileSizeInBytes);
   auto result = SteamAPI_ISteamRemoteStorage_GetFileNameAndSize(instancePtr, iFile, pnFileSizeInBytes);
   TRACE("() = (char *)\"%s\"\n", result);
 
@@ -2802,7 +2802,7 @@ char * SteamAPI_ISteamRemoteStorage_GetFileNameAndSize_(intptr_t  instancePtr, i
 
 bool  SteamAPI_ISteamRemoteStorage_GetQuota_(intptr_t  instancePtr, uint64 * pnTotalBytes, uint64 * puAvailableBytes)
 {
-  TRACE("((intptr_t )%p, (uint64 *)%p, (uint64 *)%p)\n", instancePtr, pnTotalBytes, puAvailableBytes);
+  TRACE("((intptr_t )%p, (uint64 *)%d, (uint64 *)%d)\n", instancePtr, pnTotalBytes, puAvailableBytes);
   auto result = SteamAPI_ISteamRemoteStorage_GetQuota(instancePtr, pnTotalBytes, puAvailableBytes);
   TRACE("() = (bool )%d\n", result);
 
@@ -2840,7 +2840,7 @@ void  SteamAPI_ISteamRemoteStorage_SetCloudEnabledForApp_(intptr_t  instancePtr,
 
 SteamAPICall_t  SteamAPI_ISteamRemoteStorage_UGCDownload_(intptr_t  instancePtr, UGCHandle_t  hContent, uint32  unPriority)
 {
-  TRACE("((intptr_t )%p, (UGCHandle_t )%p, (uint32 )%p)\n", instancePtr, hContent, unPriority);
+  TRACE("((intptr_t )%p, (UGCHandle_t )%p, (uint32 )%d)\n", instancePtr, hContent, unPriority);
   auto result = SteamAPI_ISteamRemoteStorage_UGCDownload(instancePtr, hContent, unPriority);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -2850,7 +2850,7 @@ SteamAPICall_t  SteamAPI_ISteamRemoteStorage_UGCDownload_(intptr_t  instancePtr,
 
 bool  SteamAPI_ISteamRemoteStorage_GetUGCDownloadProgress_(intptr_t  instancePtr, UGCHandle_t  hContent, int32 * pnBytesDownloaded, int32 * pnBytesExpected)
 {
-  TRACE("((intptr_t )%p, (UGCHandle_t )%p, (int32 *)%p, (int32 *)%p)\n", instancePtr, hContent, pnBytesDownloaded, pnBytesExpected);
+  TRACE("((intptr_t )%p, (UGCHandle_t )%p, (int32 *)%d, (int32 *)%d)\n", instancePtr, hContent, pnBytesDownloaded, pnBytesExpected);
   auto result = SteamAPI_ISteamRemoteStorage_GetUGCDownloadProgress(instancePtr, hContent, pnBytesDownloaded, pnBytesExpected);
   TRACE("() = (bool )%d\n", result);
 
@@ -2860,7 +2860,7 @@ bool  SteamAPI_ISteamRemoteStorage_GetUGCDownloadProgress_(intptr_t  instancePtr
 
 bool  SteamAPI_ISteamRemoteStorage_GetUGCDetails_(intptr_t  instancePtr, UGCHandle_t  hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
 {
-  TRACE("((intptr_t )%p, (UGCHandle_t )%p, (AppId_t *)%p, (char **)\"%s\", (int32 *)%p, (CSteamID *)%p)\n", instancePtr, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
+  TRACE("((intptr_t )%p, (UGCHandle_t )%p, (AppId_t *)%p, (char **)\"%s\", (int32 *)%d, (CSteamID *)%p)\n", instancePtr, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
   auto result = SteamAPI_ISteamRemoteStorage_GetUGCDetails(instancePtr, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
   TRACE("() = (bool )%d\n", result);
 
@@ -2870,9 +2870,9 @@ bool  SteamAPI_ISteamRemoteStorage_GetUGCDetails_(intptr_t  instancePtr, UGCHand
 
 int32  SteamAPI_ISteamRemoteStorage_UGCRead_(intptr_t  instancePtr, UGCHandle_t  hContent, void * pvData, int32  cubDataToRead, uint32  cOffset, EUGCReadAction  eAction)
 {
-  TRACE("((intptr_t )%p, (UGCHandle_t )%p, (void *)%p, (int32 )%p, (uint32 )%p, (EUGCReadAction )%p)\n", instancePtr, hContent, pvData, cubDataToRead, cOffset, eAction);
+  TRACE("((intptr_t )%p, (UGCHandle_t )%p, (void *)%p, (int32 )%d, (uint32 )%d, (EUGCReadAction )%p)\n", instancePtr, hContent, pvData, cubDataToRead, cOffset, eAction);
   auto result = SteamAPI_ISteamRemoteStorage_UGCRead(instancePtr, hContent, pvData, cubDataToRead, cOffset, eAction);
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -2882,7 +2882,7 @@ int32  SteamAPI_ISteamRemoteStorage_GetCachedUGCCount_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamRemoteStorage_GetCachedUGCCount(instancePtr);
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -2890,7 +2890,7 @@ int32  SteamAPI_ISteamRemoteStorage_GetCachedUGCCount_(intptr_t  instancePtr)
 
 UGCHandle_t  SteamAPI_ISteamRemoteStorage_GetCachedUGCHandle_(intptr_t  instancePtr, int32  iCachedContent)
 {
-  TRACE("((intptr_t )%p, (int32 )%p)\n", instancePtr, iCachedContent);
+  TRACE("((intptr_t )%p, (int32 )%d)\n", instancePtr, iCachedContent);
   auto result = SteamAPI_ISteamRemoteStorage_GetCachedUGCHandle(instancePtr, iCachedContent);
   TRACE("() = (UGCHandle_t )%p\n", result);
 
@@ -2990,7 +2990,7 @@ SteamAPICall_t  SteamAPI_ISteamRemoteStorage_CommitPublishedFileUpdate_(intptr_t
 
 SteamAPICall_t  SteamAPI_ISteamRemoteStorage_GetPublishedFileDetails_(intptr_t  instancePtr, PublishedFileId_t  unPublishedFileId, uint32  unMaxSecondsOld)
 {
-  TRACE("((intptr_t )%p, (PublishedFileId_t )%p, (uint32 )%p)\n", instancePtr, unPublishedFileId, unMaxSecondsOld);
+  TRACE("((intptr_t )%p, (PublishedFileId_t )%p, (uint32 )%d)\n", instancePtr, unPublishedFileId, unMaxSecondsOld);
   auto result = SteamAPI_ISteamRemoteStorage_GetPublishedFileDetails(instancePtr, unPublishedFileId, unMaxSecondsOld);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -3010,7 +3010,7 @@ SteamAPICall_t  SteamAPI_ISteamRemoteStorage_DeletePublishedFile_(intptr_t  inst
 
 SteamAPICall_t  SteamAPI_ISteamRemoteStorage_EnumerateUserPublishedFiles_(intptr_t  instancePtr, uint32  unStartIndex)
 {
-  TRACE("((intptr_t )%p, (uint32 )%p)\n", instancePtr, unStartIndex);
+  TRACE("((intptr_t )%p, (uint32 )%d)\n", instancePtr, unStartIndex);
   auto result = SteamAPI_ISteamRemoteStorage_EnumerateUserPublishedFiles(instancePtr, unStartIndex);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -3030,7 +3030,7 @@ SteamAPICall_t  SteamAPI_ISteamRemoteStorage_SubscribePublishedFile_(intptr_t  i
 
 SteamAPICall_t  SteamAPI_ISteamRemoteStorage_EnumerateUserSubscribedFiles_(intptr_t  instancePtr, uint32  unStartIndex)
 {
-  TRACE("((intptr_t )%p, (uint32 )%p)\n", instancePtr, unStartIndex);
+  TRACE("((intptr_t )%p, (uint32 )%d)\n", instancePtr, unStartIndex);
   auto result = SteamAPI_ISteamRemoteStorage_EnumerateUserSubscribedFiles(instancePtr, unStartIndex);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -3090,7 +3090,7 @@ SteamAPICall_t  SteamAPI_ISteamRemoteStorage_GetUserPublishedItemVoteDetails_(in
 
 SteamAPICall_t  SteamAPI_ISteamRemoteStorage_EnumerateUserSharedWorkshopFiles_(intptr_t  instancePtr, CSteamID  steamId, uint32  unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
 {
-  TRACE("((intptr_t )%p, (CSteamID )%p, (uint32 )%p, (SteamParamStringArray_t *)%p, (SteamParamStringArray_t *)%p)\n", instancePtr, steamId, unStartIndex, pRequiredTags, pExcludedTags);
+  TRACE("((intptr_t )%p, (CSteamID )%p, (uint32 )%d, (SteamParamStringArray_t *)%p, (SteamParamStringArray_t *)%p)\n", instancePtr, steamId, unStartIndex, pRequiredTags, pExcludedTags);
   auto result = SteamAPI_ISteamRemoteStorage_EnumerateUserSharedWorkshopFiles(instancePtr, steamId, unStartIndex, pRequiredTags, pExcludedTags);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -3120,7 +3120,7 @@ SteamAPICall_t  SteamAPI_ISteamRemoteStorage_SetUserPublishedFileAction_(intptr_
 
 SteamAPICall_t  SteamAPI_ISteamRemoteStorage_EnumeratePublishedFilesByUserAction_(intptr_t  instancePtr, EWorkshopFileAction  eAction, uint32  unStartIndex)
 {
-  TRACE("((intptr_t )%p, (EWorkshopFileAction )%p, (uint32 )%p)\n", instancePtr, eAction, unStartIndex);
+  TRACE("((intptr_t )%p, (EWorkshopFileAction )%p, (uint32 )%d)\n", instancePtr, eAction, unStartIndex);
   auto result = SteamAPI_ISteamRemoteStorage_EnumeratePublishedFilesByUserAction(instancePtr, eAction, unStartIndex);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -3130,7 +3130,7 @@ SteamAPICall_t  SteamAPI_ISteamRemoteStorage_EnumeratePublishedFilesByUserAction
 
 SteamAPICall_t  SteamAPI_ISteamRemoteStorage_EnumeratePublishedWorkshopFiles_(intptr_t  instancePtr, EWorkshopEnumerationType  eEnumerationType, uint32  unStartIndex, uint32  unCount, uint32  unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
 {
-  TRACE("((intptr_t )%p, (EWorkshopEnumerationType )%p, (uint32 )%p, (uint32 )%p, (uint32 )%p, (SteamParamStringArray_t *)%p, (SteamParamStringArray_t *)%p)\n", instancePtr, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
+  TRACE("((intptr_t )%p, (EWorkshopEnumerationType )%p, (uint32 )%d, (uint32 )%d, (uint32 )%d, (SteamParamStringArray_t *)%p, (SteamParamStringArray_t *)%p)\n", instancePtr, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
   auto result = SteamAPI_ISteamRemoteStorage_EnumeratePublishedWorkshopFiles(instancePtr, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -3140,7 +3140,7 @@ SteamAPICall_t  SteamAPI_ISteamRemoteStorage_EnumeratePublishedWorkshopFiles_(in
 
 SteamAPICall_t  SteamAPI_ISteamRemoteStorage_UGCDownloadToLocation_(intptr_t  instancePtr, UGCHandle_t  hContent, char * pchLocation, uint32  unPriority)
 {
-  TRACE("((intptr_t )%p, (UGCHandle_t )%p, (char *)\"%s\", (uint32 )%p)\n", instancePtr, hContent, pchLocation, unPriority);
+  TRACE("((intptr_t )%p, (UGCHandle_t )%p, (char *)\"%s\", (uint32 )%d)\n", instancePtr, hContent, pchLocation, unPriority);
   auto result = SteamAPI_ISteamRemoteStorage_UGCDownloadToLocation(instancePtr, hContent, pchLocation, unPriority);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -3160,7 +3160,7 @@ bool  SteamAPI_ISteamUserStats_RequestCurrentStats_(intptr_t  instancePtr)
 
 bool  SteamAPI_ISteamUserStats_GetStat_(intptr_t  instancePtr, char * pchName, int32 * pData)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (int32 *)%p)\n", instancePtr, pchName, pData);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (int32 *)%d)\n", instancePtr, pchName, pData);
   auto result = SteamAPI_ISteamUserStats_GetStat(instancePtr, pchName, pData);
   TRACE("() = (bool )%d\n", result);
 
@@ -3180,7 +3180,7 @@ bool  SteamAPI_ISteamUserStats_GetStat0_(intptr_t  instancePtr, char * pchName, 
 
 bool  SteamAPI_ISteamUserStats_SetStat_(intptr_t  instancePtr, char * pchName, int32  nData)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (int32 )%p)\n", instancePtr, pchName, nData);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (int32 )%d)\n", instancePtr, pchName, nData);
   auto result = SteamAPI_ISteamUserStats_SetStat(instancePtr, pchName, nData);
   TRACE("() = (bool )%d\n", result);
 
@@ -3240,7 +3240,7 @@ bool  SteamAPI_ISteamUserStats_ClearAchievement_(intptr_t  instancePtr, char * p
 
 bool  SteamAPI_ISteamUserStats_GetAchievementAndUnlockTime_(intptr_t  instancePtr, char * pchName, bool * pbAchieved, uint32 * punUnlockTime)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (bool *)%d, (uint32 *)%p)\n", instancePtr, pchName, pbAchieved, punUnlockTime);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (bool *)%d, (uint32 *)%d)\n", instancePtr, pchName, pbAchieved, punUnlockTime);
   auto result = SteamAPI_ISteamUserStats_GetAchievementAndUnlockTime(instancePtr, pchName, pbAchieved, punUnlockTime);
   TRACE("() = (bool )%d\n", result);
 
@@ -3280,7 +3280,7 @@ char * SteamAPI_ISteamUserStats_GetAchievementDisplayAttribute_(intptr_t  instan
 
 bool  SteamAPI_ISteamUserStats_IndicateAchievementProgress_(intptr_t  instancePtr, char * pchName, uint32  nCurProgress, uint32  nMaxProgress)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (uint32 )%p, (uint32 )%p)\n", instancePtr, pchName, nCurProgress, nMaxProgress);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (uint32 )%d, (uint32 )%d)\n", instancePtr, pchName, nCurProgress, nMaxProgress);
   auto result = SteamAPI_ISteamUserStats_IndicateAchievementProgress(instancePtr, pchName, nCurProgress, nMaxProgress);
   TRACE("() = (bool )%d\n", result);
 
@@ -3292,7 +3292,7 @@ uint32  SteamAPI_ISteamUserStats_GetNumAchievements_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamUserStats_GetNumAchievements(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -3300,7 +3300,7 @@ uint32  SteamAPI_ISteamUserStats_GetNumAchievements_(intptr_t  instancePtr)
 
 char * SteamAPI_ISteamUserStats_GetAchievementName_(intptr_t  instancePtr, uint32  iAchievement)
 {
-  TRACE("((intptr_t )%p, (uint32 )%p)\n", instancePtr, iAchievement);
+  TRACE("((intptr_t )%p, (uint32 )%d)\n", instancePtr, iAchievement);
   auto result = SteamAPI_ISteamUserStats_GetAchievementName(instancePtr, iAchievement);
   TRACE("() = (char *)\"%s\"\n", result);
 
@@ -3320,7 +3320,7 @@ SteamAPICall_t  SteamAPI_ISteamUserStats_RequestUserStats_(intptr_t  instancePtr
 
 bool  SteamAPI_ISteamUserStats_GetUserStat_(intptr_t  instancePtr, CSteamID  steamIDUser, char * pchName, int32 * pData)
 {
-  TRACE("((intptr_t )%p, (CSteamID )%p, (char *)\"%s\", (int32 *)%p)\n", instancePtr, steamIDUser, pchName, pData);
+  TRACE("((intptr_t )%p, (CSteamID )%p, (char *)\"%s\", (int32 *)%d)\n", instancePtr, steamIDUser, pchName, pData);
   auto result = SteamAPI_ISteamUserStats_GetUserStat(instancePtr, steamIDUser, pchName, pData);
   TRACE("() = (bool )%d\n", result);
 
@@ -3350,7 +3350,7 @@ bool  SteamAPI_ISteamUserStats_GetUserAchievement_(intptr_t  instancePtr, CSteam
 
 bool  SteamAPI_ISteamUserStats_GetUserAchievementAndUnlockTime_(intptr_t  instancePtr, CSteamID  steamIDUser, char * pchName, bool * pbAchieved, uint32 * punUnlockTime)
 {
-  TRACE("((intptr_t )%p, (CSteamID )%p, (char *)\"%s\", (bool *)%d, (uint32 *)%p)\n", instancePtr, steamIDUser, pchName, pbAchieved, punUnlockTime);
+  TRACE("((intptr_t )%p, (CSteamID )%p, (char *)\"%s\", (bool *)%d, (uint32 *)%d)\n", instancePtr, steamIDUser, pchName, pbAchieved, punUnlockTime);
   auto result = SteamAPI_ISteamUserStats_GetUserAchievementAndUnlockTime(instancePtr, steamIDUser, pchName, pbAchieved, punUnlockTime);
   TRACE("() = (bool )%d\n", result);
 
@@ -3450,7 +3450,7 @@ SteamAPICall_t  SteamAPI_ISteamUserStats_DownloadLeaderboardEntriesForUsers_(int
 
 bool  SteamAPI_ISteamUserStats_GetDownloadedLeaderboardEntry_(intptr_t  instancePtr, SteamLeaderboardEntries_t  hSteamLeaderboardEntries, int  index, LeaderboardEntry_t * pLeaderboardEntry, int32 * pDetails, int  cDetailsMax)
 {
-  TRACE("((intptr_t )%p, (SteamLeaderboardEntries_t )%p, (int )%d, (LeaderboardEntry_t *)%p, (int32 *)%p, (int )%d)\n", instancePtr, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+  TRACE("((intptr_t )%p, (SteamLeaderboardEntries_t )%p, (int )%d, (LeaderboardEntry_t *)%p, (int32 *)%d, (int )%d)\n", instancePtr, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
   auto result = SteamAPI_ISteamUserStats_GetDownloadedLeaderboardEntry(instancePtr, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
   TRACE("() = (bool )%d\n", result);
 
@@ -3460,7 +3460,7 @@ bool  SteamAPI_ISteamUserStats_GetDownloadedLeaderboardEntry_(intptr_t  instance
 
 SteamAPICall_t  SteamAPI_ISteamUserStats_UploadLeaderboardScore_(intptr_t  instancePtr, SteamLeaderboard_t  hSteamLeaderboard, ELeaderboardUploadScoreMethod  eLeaderboardUploadScoreMethod, int32  nScore, int32 * pScoreDetails, int  cScoreDetailsCount)
 {
-  TRACE("((intptr_t )%p, (SteamLeaderboard_t )%p, (ELeaderboardUploadScoreMethod )%p, (int32 )%p, (int32 *)%p, (int )%d)\n", instancePtr, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+  TRACE("((intptr_t )%p, (SteamLeaderboard_t )%p, (ELeaderboardUploadScoreMethod )%p, (int32 )%d, (int32 *)%d, (int )%d)\n", instancePtr, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
   auto result = SteamAPI_ISteamUserStats_UploadLeaderboardScore(instancePtr, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -3500,7 +3500,7 @@ SteamAPICall_t  SteamAPI_ISteamUserStats_RequestGlobalAchievementPercentages_(in
 
 int  SteamAPI_ISteamUserStats_GetMostAchievedAchievementInfo_(intptr_t  instancePtr, char * pchName, uint32  unNameBufLen, float * pflPercent, bool * pbAchieved)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (uint32 )%p, (float *)%f, (bool *)%d)\n", instancePtr, pchName, unNameBufLen, pflPercent, pbAchieved);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (uint32 )%d, (float *)%f, (bool *)%d)\n", instancePtr, pchName, unNameBufLen, pflPercent, pbAchieved);
   auto result = SteamAPI_ISteamUserStats_GetMostAchievedAchievementInfo(instancePtr, pchName, unNameBufLen, pflPercent, pbAchieved);
   TRACE("() = (int )%d\n", result);
 
@@ -3510,7 +3510,7 @@ int  SteamAPI_ISteamUserStats_GetMostAchievedAchievementInfo_(intptr_t  instance
 
 int  SteamAPI_ISteamUserStats_GetNextMostAchievedAchievementInfo_(intptr_t  instancePtr, int  iIteratorPrevious, char * pchName, uint32  unNameBufLen, float * pflPercent, bool * pbAchieved)
 {
-  TRACE("((intptr_t )%p, (int )%d, (char *)\"%s\", (uint32 )%p, (float *)%f, (bool *)%d)\n", instancePtr, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
+  TRACE("((intptr_t )%p, (int )%d, (char *)\"%s\", (uint32 )%d, (float *)%f, (bool *)%d)\n", instancePtr, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
   auto result = SteamAPI_ISteamUserStats_GetNextMostAchievedAchievementInfo(instancePtr, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
   TRACE("() = (int )%d\n", result);
 
@@ -3540,7 +3540,7 @@ SteamAPICall_t  SteamAPI_ISteamUserStats_RequestGlobalStats_(intptr_t  instanceP
 
 bool  SteamAPI_ISteamUserStats_GetGlobalStat_(intptr_t  instancePtr, char * pchStatName, int64 * pData)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (int64 *)%p)\n", instancePtr, pchStatName, pData);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (int64 *)%d)\n", instancePtr, pchStatName, pData);
   auto result = SteamAPI_ISteamUserStats_GetGlobalStat(instancePtr, pchStatName, pData);
   TRACE("() = (bool )%d\n", result);
 
@@ -3560,9 +3560,9 @@ bool  SteamAPI_ISteamUserStats_GetGlobalStat0_(intptr_t  instancePtr, char * pch
 
 int32  SteamAPI_ISteamUserStats_GetGlobalStatHistory_(intptr_t  instancePtr, char * pchStatName, int64 * pData, uint32  cubData)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (int64 *)%p, (uint32 )%p)\n", instancePtr, pchStatName, pData, cubData);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (int64 *)%d, (uint32 )%d)\n", instancePtr, pchStatName, pData, cubData);
   auto result = SteamAPI_ISteamUserStats_GetGlobalStatHistory(instancePtr, pchStatName, pData, cubData);
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -3570,9 +3570,9 @@ int32  SteamAPI_ISteamUserStats_GetGlobalStatHistory_(intptr_t  instancePtr, cha
 
 int32  SteamAPI_ISteamUserStats_GetGlobalStatHistory0_(intptr_t  instancePtr, char * pchStatName, double * pData, uint32  cubData)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (double *)%f, (uint32 )%p)\n", instancePtr, pchStatName, pData, cubData);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (double *)%f, (uint32 )%d)\n", instancePtr, pchStatName, pData, cubData);
   auto result = SteamAPI_ISteamUserStats_GetGlobalStatHistory0(instancePtr, pchStatName, pData, cubData);
-  TRACE("() = (int32 )%p\n", result);
+  TRACE("() = (int32 )%d\n", result);
 
   return result;
 }
@@ -3662,7 +3662,7 @@ uint32  SteamAPI_ISteamApps_GetEarliestPurchaseUnixTime_(intptr_t  instancePtr, 
 {
   TRACE("((intptr_t )%p, (AppId_t )%p)\n", instancePtr, nAppID);
   auto result = SteamAPI_ISteamApps_GetEarliestPurchaseUnixTime(instancePtr, nAppID);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -3744,9 +3744,9 @@ bool  SteamAPI_ISteamApps_MarkContentCorrupt_(intptr_t  instancePtr, bool  bMiss
 
 uint32  SteamAPI_ISteamApps_GetInstalledDepots_(intptr_t  instancePtr, AppId_t  appID, DepotId_t * pvecDepots, uint32  cMaxDepots)
 {
-  TRACE("((intptr_t )%p, (AppId_t )%p, (DepotId_t *)%p, (uint32 )%p)\n", instancePtr, appID, pvecDepots, cMaxDepots);
+  TRACE("((intptr_t )%p, (AppId_t )%p, (DepotId_t *)%p, (uint32 )%d)\n", instancePtr, appID, pvecDepots, cMaxDepots);
   auto result = SteamAPI_ISteamApps_GetInstalledDepots(instancePtr, appID, pvecDepots, cMaxDepots);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -3754,9 +3754,9 @@ uint32  SteamAPI_ISteamApps_GetInstalledDepots_(intptr_t  instancePtr, AppId_t  
 
 uint32  SteamAPI_ISteamApps_GetAppInstallDir_(intptr_t  instancePtr, AppId_t  appID, char * pchFolder, uint32  cchFolderBufferSize)
 {
-  TRACE("((intptr_t )%p, (AppId_t )%p, (char *)\"%s\", (uint32 )%p)\n", instancePtr, appID, pchFolder, cchFolderBufferSize);
+  TRACE("((intptr_t )%p, (AppId_t )%p, (char *)\"%s\", (uint32 )%d)\n", instancePtr, appID, pchFolder, cchFolderBufferSize);
   auto result = SteamAPI_ISteamApps_GetAppInstallDir(instancePtr, appID, pchFolder, cchFolderBufferSize);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -3776,7 +3776,7 @@ uint64  SteamAPI_ISteamApps_GetAppOwner_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamApps_GetAppOwner(instancePtr);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -3794,7 +3794,7 @@ char * SteamAPI_ISteamApps_GetLaunchQueryParam_(intptr_t  instancePtr, char * pc
 
 bool  SteamAPI_ISteamApps_GetDlcDownloadProgress_(intptr_t  instancePtr, AppId_t  nAppID, uint64 * punBytesDownloaded, uint64 * punBytesTotal)
 {
-  TRACE("((intptr_t )%p, (AppId_t )%p, (uint64 *)%p, (uint64 *)%p)\n", instancePtr, nAppID, punBytesDownloaded, punBytesTotal);
+  TRACE("((intptr_t )%p, (AppId_t )%p, (uint64 *)%d, (uint64 *)%d)\n", instancePtr, nAppID, punBytesDownloaded, punBytesTotal);
   auto result = SteamAPI_ISteamApps_GetDlcDownloadProgress(instancePtr, nAppID, punBytesDownloaded, punBytesTotal);
   TRACE("() = (bool )%d\n", result);
 
@@ -3814,7 +3814,7 @@ int  SteamAPI_ISteamApps_GetAppBuildId_(intptr_t  instancePtr)
 
 bool  SteamAPI_ISteamNetworking_SendP2PPacket_(intptr_t  instancePtr, CSteamID  steamIDRemote, void * pubData, uint32  cubData, EP2PSend  eP2PSendType, int  nChannel)
 {
-  TRACE("((intptr_t )%p, (CSteamID )%p, (void *)%p, (uint32 )%p, (EP2PSend )%p, (int )%d)\n", instancePtr, steamIDRemote, pubData, cubData, eP2PSendType, nChannel);
+  TRACE("((intptr_t )%p, (CSteamID )%p, (void *)%p, (uint32 )%d, (EP2PSend )%p, (int )%d)\n", instancePtr, steamIDRemote, pubData, cubData, eP2PSendType, nChannel);
   auto result = SteamAPI_ISteamNetworking_SendP2PPacket(instancePtr, steamIDRemote, pubData, cubData, eP2PSendType, nChannel);
   TRACE("() = (bool )%d\n", result);
 
@@ -3824,7 +3824,7 @@ bool  SteamAPI_ISteamNetworking_SendP2PPacket_(intptr_t  instancePtr, CSteamID  
 
 bool  SteamAPI_ISteamNetworking_IsP2PPacketAvailable_(intptr_t  instancePtr, uint32 * pcubMsgSize, int  nChannel)
 {
-  TRACE("((intptr_t )%p, (uint32 *)%p, (int )%d)\n", instancePtr, pcubMsgSize, nChannel);
+  TRACE("((intptr_t )%p, (uint32 *)%d, (int )%d)\n", instancePtr, pcubMsgSize, nChannel);
   auto result = SteamAPI_ISteamNetworking_IsP2PPacketAvailable(instancePtr, pcubMsgSize, nChannel);
   TRACE("() = (bool )%d\n", result);
 
@@ -3834,7 +3834,7 @@ bool  SteamAPI_ISteamNetworking_IsP2PPacketAvailable_(intptr_t  instancePtr, uin
 
 bool  SteamAPI_ISteamNetworking_ReadP2PPacket_(intptr_t  instancePtr, void * pubDest, uint32  cubDest, uint32 * pcubMsgSize, CSteamID * psteamIDRemote, int  nChannel)
 {
-  TRACE("((intptr_t )%p, (void *)%p, (uint32 )%p, (uint32 *)%p, (CSteamID *)%p, (int )%d)\n", instancePtr, pubDest, cubDest, pcubMsgSize, psteamIDRemote, nChannel);
+  TRACE("((intptr_t )%p, (void *)%p, (uint32 )%d, (uint32 *)%d, (CSteamID *)%p, (int )%d)\n", instancePtr, pubDest, cubDest, pcubMsgSize, psteamIDRemote, nChannel);
   auto result = SteamAPI_ISteamNetworking_ReadP2PPacket(instancePtr, pubDest, cubDest, pcubMsgSize, psteamIDRemote, nChannel);
   TRACE("() = (bool )%d\n", result);
 
@@ -3894,7 +3894,7 @@ bool  SteamAPI_ISteamNetworking_AllowP2PPacketRelay_(intptr_t  instancePtr, bool
 
 SNetListenSocket_t  SteamAPI_ISteamNetworking_CreateListenSocket_(intptr_t  instancePtr, int  nVirtualP2PPort, uint32  nIP, uint16  nPort, bool  bAllowUseOfPacketRelay)
 {
-  TRACE("((intptr_t )%p, (int )%d, (uint32 )%p, (uint16 )%p, (bool )%d)\n", instancePtr, nVirtualP2PPort, nIP, nPort, bAllowUseOfPacketRelay);
+  TRACE("((intptr_t )%p, (int )%d, (uint32 )%d, (uint16 )%d, (bool )%d)\n", instancePtr, nVirtualP2PPort, nIP, nPort, bAllowUseOfPacketRelay);
   auto result = SteamAPI_ISteamNetworking_CreateListenSocket(instancePtr, nVirtualP2PPort, nIP, nPort, bAllowUseOfPacketRelay);
   TRACE("() = (SNetListenSocket_t )%p\n", result);
 
@@ -3914,7 +3914,7 @@ SNetSocket_t  SteamAPI_ISteamNetworking_CreateP2PConnectionSocket_(intptr_t  ins
 
 SNetSocket_t  SteamAPI_ISteamNetworking_CreateConnectionSocket_(intptr_t  instancePtr, uint32  nIP, uint16  nPort, int  nTimeoutSec)
 {
-  TRACE("((intptr_t )%p, (uint32 )%p, (uint16 )%p, (int )%d)\n", instancePtr, nIP, nPort, nTimeoutSec);
+  TRACE("((intptr_t )%p, (uint32 )%d, (uint16 )%d, (int )%d)\n", instancePtr, nIP, nPort, nTimeoutSec);
   auto result = SteamAPI_ISteamNetworking_CreateConnectionSocket(instancePtr, nIP, nPort, nTimeoutSec);
   TRACE("() = (SNetSocket_t )%p\n", result);
 
@@ -3944,7 +3944,7 @@ bool  SteamAPI_ISteamNetworking_DestroyListenSocket_(intptr_t  instancePtr, SNet
 
 bool  SteamAPI_ISteamNetworking_SendDataOnSocket_(intptr_t  instancePtr, SNetSocket_t  hSocket, void * pubData, uint32  cubData, bool  bReliable)
 {
-  TRACE("((intptr_t )%p, (SNetSocket_t )%p, (void *)%p, (uint32 )%p, (bool )%d)\n", instancePtr, hSocket, pubData, cubData, bReliable);
+  TRACE("((intptr_t )%p, (SNetSocket_t )%p, (void *)%p, (uint32 )%d, (bool )%d)\n", instancePtr, hSocket, pubData, cubData, bReliable);
   auto result = SteamAPI_ISteamNetworking_SendDataOnSocket(instancePtr, hSocket, pubData, cubData, bReliable);
   TRACE("() = (bool )%d\n", result);
 
@@ -3954,7 +3954,7 @@ bool  SteamAPI_ISteamNetworking_SendDataOnSocket_(intptr_t  instancePtr, SNetSoc
 
 bool  SteamAPI_ISteamNetworking_IsDataAvailableOnSocket_(intptr_t  instancePtr, SNetSocket_t  hSocket, uint32 * pcubMsgSize)
 {
-  TRACE("((intptr_t )%p, (SNetSocket_t )%p, (uint32 *)%p)\n", instancePtr, hSocket, pcubMsgSize);
+  TRACE("((intptr_t )%p, (SNetSocket_t )%p, (uint32 *)%d)\n", instancePtr, hSocket, pcubMsgSize);
   auto result = SteamAPI_ISteamNetworking_IsDataAvailableOnSocket(instancePtr, hSocket, pcubMsgSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -3964,7 +3964,7 @@ bool  SteamAPI_ISteamNetworking_IsDataAvailableOnSocket_(intptr_t  instancePtr, 
 
 bool  SteamAPI_ISteamNetworking_RetrieveDataFromSocket_(intptr_t  instancePtr, SNetSocket_t  hSocket, void * pubDest, uint32  cubDest, uint32 * pcubMsgSize)
 {
-  TRACE("((intptr_t )%p, (SNetSocket_t )%p, (void *)%p, (uint32 )%p, (uint32 *)%p)\n", instancePtr, hSocket, pubDest, cubDest, pcubMsgSize);
+  TRACE("((intptr_t )%p, (SNetSocket_t )%p, (void *)%p, (uint32 )%d, (uint32 *)%d)\n", instancePtr, hSocket, pubDest, cubDest, pcubMsgSize);
   auto result = SteamAPI_ISteamNetworking_RetrieveDataFromSocket(instancePtr, hSocket, pubDest, cubDest, pcubMsgSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -3974,7 +3974,7 @@ bool  SteamAPI_ISteamNetworking_RetrieveDataFromSocket_(intptr_t  instancePtr, S
 
 bool  SteamAPI_ISteamNetworking_IsDataAvailable_(intptr_t  instancePtr, SNetListenSocket_t  hListenSocket, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
 {
-  TRACE("((intptr_t )%p, (SNetListenSocket_t )%p, (uint32 *)%p, (SNetSocket_t *)%p)\n", instancePtr, hListenSocket, pcubMsgSize, phSocket);
+  TRACE("((intptr_t )%p, (SNetListenSocket_t )%p, (uint32 *)%d, (SNetSocket_t *)%p)\n", instancePtr, hListenSocket, pcubMsgSize, phSocket);
   auto result = SteamAPI_ISteamNetworking_IsDataAvailable(instancePtr, hListenSocket, pcubMsgSize, phSocket);
   TRACE("() = (bool )%d\n", result);
 
@@ -3984,7 +3984,7 @@ bool  SteamAPI_ISteamNetworking_IsDataAvailable_(intptr_t  instancePtr, SNetList
 
 bool  SteamAPI_ISteamNetworking_RetrieveData_(intptr_t  instancePtr, SNetListenSocket_t  hListenSocket, void * pubDest, uint32  cubDest, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
 {
-  TRACE("((intptr_t )%p, (SNetListenSocket_t )%p, (void *)%p, (uint32 )%p, (uint32 *)%p, (SNetSocket_t *)%p)\n", instancePtr, hListenSocket, pubDest, cubDest, pcubMsgSize, phSocket);
+  TRACE("((intptr_t )%p, (SNetListenSocket_t )%p, (void *)%p, (uint32 )%d, (uint32 *)%d, (SNetSocket_t *)%p)\n", instancePtr, hListenSocket, pubDest, cubDest, pcubMsgSize, phSocket);
   auto result = SteamAPI_ISteamNetworking_RetrieveData(instancePtr, hListenSocket, pubDest, cubDest, pcubMsgSize, phSocket);
   TRACE("() = (bool )%d\n", result);
 
@@ -3994,7 +3994,7 @@ bool  SteamAPI_ISteamNetworking_RetrieveData_(intptr_t  instancePtr, SNetListenS
 
 bool  SteamAPI_ISteamNetworking_GetSocketInfo_(intptr_t  instancePtr, SNetSocket_t  hSocket, CSteamID * pSteamIDRemote, int * peSocketStatus, uint32 * punIPRemote, uint16 * punPortRemote)
 {
-  TRACE("((intptr_t )%p, (SNetSocket_t )%p, (CSteamID *)%p, (int *)%d, (uint32 *)%p, (uint16 *)%p)\n", instancePtr, hSocket, pSteamIDRemote, peSocketStatus, punIPRemote, punPortRemote);
+  TRACE("((intptr_t )%p, (SNetSocket_t )%p, (CSteamID *)%p, (int *)%d, (uint32 *)%d, (uint16 *)%d)\n", instancePtr, hSocket, pSteamIDRemote, peSocketStatus, punIPRemote, punPortRemote);
   auto result = SteamAPI_ISteamNetworking_GetSocketInfo(instancePtr, hSocket, pSteamIDRemote, peSocketStatus, punIPRemote, punPortRemote);
   TRACE("() = (bool )%d\n", result);
 
@@ -4004,7 +4004,7 @@ bool  SteamAPI_ISteamNetworking_GetSocketInfo_(intptr_t  instancePtr, SNetSocket
 
 bool  SteamAPI_ISteamNetworking_GetListenSocketInfo_(intptr_t  instancePtr, SNetListenSocket_t  hListenSocket, uint32 * pnIP, uint16 * pnPort)
 {
-  TRACE("((intptr_t )%p, (SNetListenSocket_t )%p, (uint32 *)%p, (uint16 *)%p)\n", instancePtr, hListenSocket, pnIP, pnPort);
+  TRACE("((intptr_t )%p, (SNetListenSocket_t )%p, (uint32 *)%d, (uint16 *)%d)\n", instancePtr, hListenSocket, pnIP, pnPort);
   auto result = SteamAPI_ISteamNetworking_GetListenSocketInfo(instancePtr, hListenSocket, pnIP, pnPort);
   TRACE("() = (bool )%d\n", result);
 
@@ -4034,7 +4034,7 @@ int  SteamAPI_ISteamNetworking_GetMaxPacketSize_(intptr_t  instancePtr, SNetSock
 
 ScreenshotHandle  SteamAPI_ISteamScreenshots_WriteScreenshot_(intptr_t  instancePtr, void * pubRGB, uint32  cubRGB, int  nWidth, int  nHeight)
 {
-  TRACE("((intptr_t )%p, (void *)%p, (uint32 )%p, (int )%d, (int )%d)\n", instancePtr, pubRGB, cubRGB, nWidth, nHeight);
+  TRACE("((intptr_t )%p, (void *)%p, (uint32 )%d, (int )%d, (int )%d)\n", instancePtr, pubRGB, cubRGB, nWidth, nHeight);
   auto result = SteamAPI_ISteamScreenshots_WriteScreenshot(instancePtr, pubRGB, cubRGB, nWidth, nHeight);
   TRACE("() = (ScreenshotHandle )%p\n", result);
 
@@ -4230,7 +4230,7 @@ bool  SteamAPI_ISteamMusicRemote_SetDisplayName_(intptr_t  instancePtr, char * p
 
 bool  SteamAPI_ISteamMusicRemote_SetPNGIcon_64x64_(intptr_t  instancePtr, void * pvBuffer, uint32  cbBufferLength)
 {
-  TRACE("((intptr_t )%p, (void *)%p, (uint32 )%p)\n", instancePtr, pvBuffer, cbBufferLength);
+  TRACE("((intptr_t )%p, (void *)%p, (uint32 )%d)\n", instancePtr, pvBuffer, cbBufferLength);
   auto result = SteamAPI_ISteamMusicRemote_SetPNGIcon_64x64(instancePtr, pvBuffer, cbBufferLength);
   TRACE("() = (bool )%d\n", result);
 
@@ -4380,7 +4380,7 @@ bool  SteamAPI_ISteamMusicRemote_UpdateCurrentEntryElapsedSeconds_(intptr_t  ins
 
 bool  SteamAPI_ISteamMusicRemote_UpdateCurrentEntryCoverArt_(intptr_t  instancePtr, void * pvBuffer, uint32  cbBufferLength)
 {
-  TRACE("((intptr_t )%p, (void *)%p, (uint32 )%p)\n", instancePtr, pvBuffer, cbBufferLength);
+  TRACE("((intptr_t )%p, (void *)%p, (uint32 )%d)\n", instancePtr, pvBuffer, cbBufferLength);
   auto result = SteamAPI_ISteamMusicRemote_UpdateCurrentEntryCoverArt(instancePtr, pvBuffer, cbBufferLength);
   TRACE("() = (bool )%d\n", result);
 
@@ -4510,7 +4510,7 @@ HTTPRequestHandle  SteamAPI_ISteamHTTP_CreateHTTPRequest_(intptr_t  instancePtr,
 
 bool  SteamAPI_ISteamHTTP_SetHTTPRequestContextValue_(intptr_t  instancePtr, HTTPRequestHandle  hRequest, uint64  ulContextValue)
 {
-  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (uint64 )%p)\n", instancePtr, hRequest, ulContextValue);
+  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (uint64 )%d)\n", instancePtr, hRequest, ulContextValue);
   auto result = SteamAPI_ISteamHTTP_SetHTTPRequestContextValue(instancePtr, hRequest, ulContextValue);
   TRACE("() = (bool )%d\n", result);
 
@@ -4520,7 +4520,7 @@ bool  SteamAPI_ISteamHTTP_SetHTTPRequestContextValue_(intptr_t  instancePtr, HTT
 
 bool  SteamAPI_ISteamHTTP_SetHTTPRequestNetworkActivityTimeout_(intptr_t  instancePtr, HTTPRequestHandle  hRequest, uint32  unTimeoutSeconds)
 {
-  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (uint32 )%p)\n", instancePtr, hRequest, unTimeoutSeconds);
+  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (uint32 )%d)\n", instancePtr, hRequest, unTimeoutSeconds);
   auto result = SteamAPI_ISteamHTTP_SetHTTPRequestNetworkActivityTimeout(instancePtr, hRequest, unTimeoutSeconds);
   TRACE("() = (bool )%d\n", result);
 
@@ -4590,7 +4590,7 @@ bool  SteamAPI_ISteamHTTP_PrioritizeHTTPRequest_(intptr_t  instancePtr, HTTPRequ
 
 bool  SteamAPI_ISteamHTTP_GetHTTPResponseHeaderSize_(intptr_t  instancePtr, HTTPRequestHandle  hRequest, char * pchHeaderName, uint32 * unResponseHeaderSize)
 {
-  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (char *)\"%s\", (uint32 *)%p)\n", instancePtr, hRequest, pchHeaderName, unResponseHeaderSize);
+  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (char *)\"%s\", (uint32 *)%d)\n", instancePtr, hRequest, pchHeaderName, unResponseHeaderSize);
   auto result = SteamAPI_ISteamHTTP_GetHTTPResponseHeaderSize(instancePtr, hRequest, pchHeaderName, unResponseHeaderSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -4600,7 +4600,7 @@ bool  SteamAPI_ISteamHTTP_GetHTTPResponseHeaderSize_(intptr_t  instancePtr, HTTP
 
 bool  SteamAPI_ISteamHTTP_GetHTTPResponseHeaderValue_(intptr_t  instancePtr, HTTPRequestHandle  hRequest, char * pchHeaderName, uint8 * pHeaderValueBuffer, uint32  unBufferSize)
 {
-  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (char *)\"%s\", (uint8 *)%p, (uint32 )%p)\n", instancePtr, hRequest, pchHeaderName, pHeaderValueBuffer, unBufferSize);
+  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (char *)\"%s\", (uint8 *)%p, (uint32 )%d)\n", instancePtr, hRequest, pchHeaderName, pHeaderValueBuffer, unBufferSize);
   auto result = SteamAPI_ISteamHTTP_GetHTTPResponseHeaderValue(instancePtr, hRequest, pchHeaderName, pHeaderValueBuffer, unBufferSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -4610,7 +4610,7 @@ bool  SteamAPI_ISteamHTTP_GetHTTPResponseHeaderValue_(intptr_t  instancePtr, HTT
 
 bool  SteamAPI_ISteamHTTP_GetHTTPResponseBodySize_(intptr_t  instancePtr, HTTPRequestHandle  hRequest, uint32 * unBodySize)
 {
-  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (uint32 *)%p)\n", instancePtr, hRequest, unBodySize);
+  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (uint32 *)%d)\n", instancePtr, hRequest, unBodySize);
   auto result = SteamAPI_ISteamHTTP_GetHTTPResponseBodySize(instancePtr, hRequest, unBodySize);
   TRACE("() = (bool )%d\n", result);
 
@@ -4620,7 +4620,7 @@ bool  SteamAPI_ISteamHTTP_GetHTTPResponseBodySize_(intptr_t  instancePtr, HTTPRe
 
 bool  SteamAPI_ISteamHTTP_GetHTTPResponseBodyData_(intptr_t  instancePtr, HTTPRequestHandle  hRequest, uint8 * pBodyDataBuffer, uint32  unBufferSize)
 {
-  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (uint8 *)%p, (uint32 )%p)\n", instancePtr, hRequest, pBodyDataBuffer, unBufferSize);
+  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (uint8 *)%p, (uint32 )%d)\n", instancePtr, hRequest, pBodyDataBuffer, unBufferSize);
   auto result = SteamAPI_ISteamHTTP_GetHTTPResponseBodyData(instancePtr, hRequest, pBodyDataBuffer, unBufferSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -4630,7 +4630,7 @@ bool  SteamAPI_ISteamHTTP_GetHTTPResponseBodyData_(intptr_t  instancePtr, HTTPRe
 
 bool  SteamAPI_ISteamHTTP_GetHTTPStreamingResponseBodyData_(intptr_t  instancePtr, HTTPRequestHandle  hRequest, uint32  cOffset, uint8 * pBodyDataBuffer, uint32  unBufferSize)
 {
-  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (uint32 )%p, (uint8 *)%p, (uint32 )%p)\n", instancePtr, hRequest, cOffset, pBodyDataBuffer, unBufferSize);
+  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (uint32 )%d, (uint8 *)%p, (uint32 )%d)\n", instancePtr, hRequest, cOffset, pBodyDataBuffer, unBufferSize);
   auto result = SteamAPI_ISteamHTTP_GetHTTPStreamingResponseBodyData(instancePtr, hRequest, cOffset, pBodyDataBuffer, unBufferSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -4660,7 +4660,7 @@ bool  SteamAPI_ISteamHTTP_GetHTTPDownloadProgressPct_(intptr_t  instancePtr, HTT
 
 bool  SteamAPI_ISteamHTTP_SetHTTPRequestRawPostBody_(intptr_t  instancePtr, HTTPRequestHandle  hRequest, char * pchContentType, uint8 * pubBody, uint32  unBodyLen)
 {
-  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (char *)\"%s\", (uint8 *)%p, (uint32 )%p)\n", instancePtr, hRequest, pchContentType, pubBody, unBodyLen);
+  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (char *)\"%s\", (uint8 *)%p, (uint32 )%d)\n", instancePtr, hRequest, pchContentType, pubBody, unBodyLen);
   auto result = SteamAPI_ISteamHTTP_SetHTTPRequestRawPostBody(instancePtr, hRequest, pchContentType, pubBody, unBodyLen);
   TRACE("() = (bool )%d\n", result);
 
@@ -4730,7 +4730,7 @@ bool  SteamAPI_ISteamHTTP_SetHTTPRequestRequiresVerifiedCertificate_(intptr_t  i
 
 bool  SteamAPI_ISteamHTTP_SetHTTPRequestAbsoluteTimeoutMS_(intptr_t  instancePtr, HTTPRequestHandle  hRequest, uint32  unMilliseconds)
 {
-  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (uint32 )%p)\n", instancePtr, hRequest, unMilliseconds);
+  TRACE("((intptr_t )%p, (HTTPRequestHandle )%p, (uint32 )%d)\n", instancePtr, hRequest, unMilliseconds);
   auto result = SteamAPI_ISteamHTTP_SetHTTPRequestAbsoluteTimeoutMS(instancePtr, hRequest, unMilliseconds);
   TRACE("() = (bool )%d\n", result);
 
@@ -4750,7 +4750,7 @@ bool  SteamAPI_ISteamHTTP_GetHTTPRequestWasTimedOut_(intptr_t  instancePtr, HTTP
 
 ClientUnifiedMessageHandle  SteamAPI_ISteamUnifiedMessages_SendMethod_(intptr_t  instancePtr, char * pchServiceMethod, void * pRequestBuffer, uint32  unRequestBufferSize, uint64  unContext)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (void *)%p, (uint32 )%p, (uint64 )%p)\n", instancePtr, pchServiceMethod, pRequestBuffer, unRequestBufferSize, unContext);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (void *)%p, (uint32 )%d, (uint64 )%d)\n", instancePtr, pchServiceMethod, pRequestBuffer, unRequestBufferSize, unContext);
   auto result = SteamAPI_ISteamUnifiedMessages_SendMethod(instancePtr, pchServiceMethod, pRequestBuffer, unRequestBufferSize, unContext);
   TRACE("() = (ClientUnifiedMessageHandle )%p\n", result);
 
@@ -4760,7 +4760,7 @@ ClientUnifiedMessageHandle  SteamAPI_ISteamUnifiedMessages_SendMethod_(intptr_t 
 
 bool  SteamAPI_ISteamUnifiedMessages_GetMethodResponseInfo_(intptr_t  instancePtr, ClientUnifiedMessageHandle  hHandle, uint32 * punResponseSize, EResult * peResult)
 {
-  TRACE("((intptr_t )%p, (ClientUnifiedMessageHandle )%p, (uint32 *)%p, (EResult *)%p)\n", instancePtr, hHandle, punResponseSize, peResult);
+  TRACE("((intptr_t )%p, (ClientUnifiedMessageHandle )%p, (uint32 *)%d, (EResult *)%p)\n", instancePtr, hHandle, punResponseSize, peResult);
   auto result = SteamAPI_ISteamUnifiedMessages_GetMethodResponseInfo(instancePtr, hHandle, punResponseSize, peResult);
   TRACE("() = (bool )%d\n", result);
 
@@ -4770,7 +4770,7 @@ bool  SteamAPI_ISteamUnifiedMessages_GetMethodResponseInfo_(intptr_t  instancePt
 
 bool  SteamAPI_ISteamUnifiedMessages_GetMethodResponseData_(intptr_t  instancePtr, ClientUnifiedMessageHandle  hHandle, void * pResponseBuffer, uint32  unResponseBufferSize, bool  bAutoRelease)
 {
-  TRACE("((intptr_t )%p, (ClientUnifiedMessageHandle )%p, (void *)%p, (uint32 )%p, (bool )%d)\n", instancePtr, hHandle, pResponseBuffer, unResponseBufferSize, bAutoRelease);
+  TRACE("((intptr_t )%p, (ClientUnifiedMessageHandle )%p, (void *)%p, (uint32 )%d, (bool )%d)\n", instancePtr, hHandle, pResponseBuffer, unResponseBufferSize, bAutoRelease);
   auto result = SteamAPI_ISteamUnifiedMessages_GetMethodResponseData(instancePtr, hHandle, pResponseBuffer, unResponseBufferSize, bAutoRelease);
   TRACE("() = (bool )%d\n", result);
 
@@ -4790,7 +4790,7 @@ bool  SteamAPI_ISteamUnifiedMessages_ReleaseMethod_(intptr_t  instancePtr, Clien
 
 bool  SteamAPI_ISteamUnifiedMessages_SendNotification_(intptr_t  instancePtr, char * pchServiceNotification, void * pNotificationBuffer, uint32  unNotificationBufferSize)
 {
-  TRACE("((intptr_t )%p, (char *)\"%s\", (void *)%p, (uint32 )%p)\n", instancePtr, pchServiceNotification, pNotificationBuffer, unNotificationBufferSize);
+  TRACE("((intptr_t )%p, (char *)\"%s\", (void *)%p, (uint32 )%d)\n", instancePtr, pchServiceNotification, pNotificationBuffer, unNotificationBufferSize);
   auto result = SteamAPI_ISteamUnifiedMessages_SendNotification(instancePtr, pchServiceNotification, pNotificationBuffer, unNotificationBufferSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -4836,7 +4836,7 @@ void  SteamAPI_ISteamController_TriggerHapticPulse_(intptr_t  instancePtr, Contr
 
 UGCQueryHandle_t  SteamAPI_ISteamUGC_CreateQueryUserUGCRequest_(intptr_t  instancePtr, AccountID_t  unAccountID, EUserUGCList  eListType, EUGCMatchingUGCType  eMatchingUGCType, EUserUGCListSortOrder  eSortOrder, AppId_t  nCreatorAppID, AppId_t  nConsumerAppID, uint32  unPage)
 {
-  TRACE("((intptr_t )%p, (AccountID_t )%p, (EUserUGCList )%p, (EUGCMatchingUGCType )%p, (EUserUGCListSortOrder )%p, (AppId_t )%p, (AppId_t )%p, (uint32 )%p)\n", instancePtr, unAccountID, eListType, eMatchingUGCType, eSortOrder, nCreatorAppID, nConsumerAppID, unPage);
+  TRACE("((intptr_t )%p, (AccountID_t )%p, (EUserUGCList )%p, (EUGCMatchingUGCType )%p, (EUserUGCListSortOrder )%p, (AppId_t )%p, (AppId_t )%p, (uint32 )%d)\n", instancePtr, unAccountID, eListType, eMatchingUGCType, eSortOrder, nCreatorAppID, nConsumerAppID, unPage);
   auto result = SteamAPI_ISteamUGC_CreateQueryUserUGCRequest(instancePtr, unAccountID, eListType, eMatchingUGCType, eSortOrder, nCreatorAppID, nConsumerAppID, unPage);
   TRACE("() = (UGCQueryHandle_t )%p\n", result);
 
@@ -4846,7 +4846,7 @@ UGCQueryHandle_t  SteamAPI_ISteamUGC_CreateQueryUserUGCRequest_(intptr_t  instan
 
 UGCQueryHandle_t  SteamAPI_ISteamUGC_CreateQueryAllUGCRequest_(intptr_t  instancePtr, EUGCQuery  eQueryType, EUGCMatchingUGCType  eMatchingeMatchingUGCTypeFileType, AppId_t  nCreatorAppID, AppId_t  nConsumerAppID, uint32  unPage)
 {
-  TRACE("((intptr_t )%p, (EUGCQuery )%p, (EUGCMatchingUGCType )%p, (AppId_t )%p, (AppId_t )%p, (uint32 )%p)\n", instancePtr, eQueryType, eMatchingeMatchingUGCTypeFileType, nCreatorAppID, nConsumerAppID, unPage);
+  TRACE("((intptr_t )%p, (EUGCQuery )%p, (EUGCMatchingUGCType )%p, (AppId_t )%p, (AppId_t )%p, (uint32 )%d)\n", instancePtr, eQueryType, eMatchingeMatchingUGCTypeFileType, nCreatorAppID, nConsumerAppID, unPage);
   auto result = SteamAPI_ISteamUGC_CreateQueryAllUGCRequest(instancePtr, eQueryType, eMatchingeMatchingUGCTypeFileType, nCreatorAppID, nConsumerAppID, unPage);
   TRACE("() = (UGCQueryHandle_t )%p\n", result);
 
@@ -4856,7 +4856,7 @@ UGCQueryHandle_t  SteamAPI_ISteamUGC_CreateQueryAllUGCRequest_(intptr_t  instanc
 
 UGCQueryHandle_t  SteamAPI_ISteamUGC_CreateQueryUGCDetailsRequest_(intptr_t  instancePtr, PublishedFileId_t * pvecPublishedFileID, uint32  unNumPublishedFileIDs)
 {
-  TRACE("((intptr_t )%p, (PublishedFileId_t *)%p, (uint32 )%p)\n", instancePtr, pvecPublishedFileID, unNumPublishedFileIDs);
+  TRACE("((intptr_t )%p, (PublishedFileId_t *)%p, (uint32 )%d)\n", instancePtr, pvecPublishedFileID, unNumPublishedFileIDs);
   auto result = SteamAPI_ISteamUGC_CreateQueryUGCDetailsRequest(instancePtr, pvecPublishedFileID, unNumPublishedFileIDs);
   TRACE("() = (UGCQueryHandle_t )%p\n", result);
 
@@ -4876,7 +4876,7 @@ SteamAPICall_t  SteamAPI_ISteamUGC_SendQueryUGCRequest_(intptr_t  instancePtr, U
 
 bool  SteamAPI_ISteamUGC_GetQueryUGCResult_(intptr_t  instancePtr, UGCQueryHandle_t  handle, uint32  index, SteamUGCDetails_t * pDetails)
 {
-  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%p, (SteamUGCDetails_t *)%p)\n", instancePtr, handle, index, pDetails);
+  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%d, (SteamUGCDetails_t *)%p)\n", instancePtr, handle, index, pDetails);
   auto result = SteamAPI_ISteamUGC_GetQueryUGCResult(instancePtr, handle, index, pDetails);
   TRACE("() = (bool )%d\n", result);
 
@@ -4886,7 +4886,7 @@ bool  SteamAPI_ISteamUGC_GetQueryUGCResult_(intptr_t  instancePtr, UGCQueryHandl
 
 bool  SteamAPI_ISteamUGC_GetQueryUGCPreviewURL_(intptr_t  instancePtr, UGCQueryHandle_t  handle, uint32  index, char * pchURL, uint32  cchURLSize)
 {
-  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%p, (char *)\"%s\", (uint32 )%p)\n", instancePtr, handle, index, pchURL, cchURLSize);
+  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%d, (char *)\"%s\", (uint32 )%d)\n", instancePtr, handle, index, pchURL, cchURLSize);
   auto result = SteamAPI_ISteamUGC_GetQueryUGCPreviewURL(instancePtr, handle, index, pchURL, cchURLSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -4896,7 +4896,7 @@ bool  SteamAPI_ISteamUGC_GetQueryUGCPreviewURL_(intptr_t  instancePtr, UGCQueryH
 
 bool  SteamAPI_ISteamUGC_GetQueryUGCMetadata_(intptr_t  instancePtr, UGCQueryHandle_t  handle, uint32  index, char * pchMetadata, uint32  cchMetadatasize)
 {
-  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%p, (char *)\"%s\", (uint32 )%p)\n", instancePtr, handle, index, pchMetadata, cchMetadatasize);
+  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%d, (char *)\"%s\", (uint32 )%d)\n", instancePtr, handle, index, pchMetadata, cchMetadatasize);
   auto result = SteamAPI_ISteamUGC_GetQueryUGCMetadata(instancePtr, handle, index, pchMetadata, cchMetadatasize);
   TRACE("() = (bool )%d\n", result);
 
@@ -4906,7 +4906,7 @@ bool  SteamAPI_ISteamUGC_GetQueryUGCMetadata_(intptr_t  instancePtr, UGCQueryHan
 
 bool  SteamAPI_ISteamUGC_GetQueryUGCChildren_(intptr_t  instancePtr, UGCQueryHandle_t  handle, uint32  index, PublishedFileId_t * pvecPublishedFileID, uint32  cMaxEntries)
 {
-  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%p, (PublishedFileId_t *)%p, (uint32 )%p)\n", instancePtr, handle, index, pvecPublishedFileID, cMaxEntries);
+  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%d, (PublishedFileId_t *)%p, (uint32 )%d)\n", instancePtr, handle, index, pvecPublishedFileID, cMaxEntries);
   auto result = SteamAPI_ISteamUGC_GetQueryUGCChildren(instancePtr, handle, index, pvecPublishedFileID, cMaxEntries);
   TRACE("() = (bool )%d\n", result);
 
@@ -4916,7 +4916,7 @@ bool  SteamAPI_ISteamUGC_GetQueryUGCChildren_(intptr_t  instancePtr, UGCQueryHan
 
 bool  SteamAPI_ISteamUGC_GetQueryUGCStatistic_(intptr_t  instancePtr, UGCQueryHandle_t  handle, uint32  index, EItemStatistic  eStatType, uint64 * pStatValue)
 {
-  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%p, (EItemStatistic )%p, (uint64 *)%p)\n", instancePtr, handle, index, eStatType, pStatValue);
+  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%d, (EItemStatistic )%p, (uint64 *)%d)\n", instancePtr, handle, index, eStatType, pStatValue);
   auto result = SteamAPI_ISteamUGC_GetQueryUGCStatistic(instancePtr, handle, index, eStatType, pStatValue);
   TRACE("() = (bool )%d\n", result);
 
@@ -4926,9 +4926,9 @@ bool  SteamAPI_ISteamUGC_GetQueryUGCStatistic_(intptr_t  instancePtr, UGCQueryHa
 
 uint32  SteamAPI_ISteamUGC_GetQueryUGCNumAdditionalPreviews_(intptr_t  instancePtr, UGCQueryHandle_t  handle, uint32  index)
 {
-  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%p)\n", instancePtr, handle, index);
+  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%d)\n", instancePtr, handle, index);
   auto result = SteamAPI_ISteamUGC_GetQueryUGCNumAdditionalPreviews(instancePtr, handle, index);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -4936,7 +4936,7 @@ uint32  SteamAPI_ISteamUGC_GetQueryUGCNumAdditionalPreviews_(intptr_t  instanceP
 
 bool  SteamAPI_ISteamUGC_GetQueryUGCAdditionalPreview_(intptr_t  instancePtr, UGCQueryHandle_t  handle, uint32  index, uint32  previewIndex, char * pchURLOrVideoID, uint32  cchURLSize, char * pchOriginalFileName, uint32  cchOriginalFileNameSize, EItemPreviewType * pPreviewType)
 {
-  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%p, (uint32 )%p, (char *)\"%s\", (uint32 )%p, (char *)\"%s\", (uint32 )%p, (EItemPreviewType *)%p)\n", instancePtr, handle, index, previewIndex, pchURLOrVideoID, cchURLSize, pchOriginalFileName, cchOriginalFileNameSize, pPreviewType);
+  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%d, (uint32 )%d, (char *)\"%s\", (uint32 )%d, (char *)\"%s\", (uint32 )%d, (EItemPreviewType *)%p)\n", instancePtr, handle, index, previewIndex, pchURLOrVideoID, cchURLSize, pchOriginalFileName, cchOriginalFileNameSize, pPreviewType);
   auto result = SteamAPI_ISteamUGC_GetQueryUGCAdditionalPreview(instancePtr, handle, index, previewIndex, pchURLOrVideoID, cchURLSize, pchOriginalFileName, cchOriginalFileNameSize, pPreviewType);
   TRACE("() = (bool )%d\n", result);
 
@@ -5026,7 +5026,7 @@ bool  SteamAPI_ISteamUGC_SetReturnTotalOnly_(intptr_t  instancePtr, UGCQueryHand
 
 bool  SteamAPI_ISteamUGC_SetAllowCachedResponse_(intptr_t  instancePtr, UGCQueryHandle_t  handle, uint32  unMaxAgeSeconds)
 {
-  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%p)\n", instancePtr, handle, unMaxAgeSeconds);
+  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%d)\n", instancePtr, handle, unMaxAgeSeconds);
   auto result = SteamAPI_ISteamUGC_SetAllowCachedResponse(instancePtr, handle, unMaxAgeSeconds);
   TRACE("() = (bool )%d\n", result);
 
@@ -5066,7 +5066,7 @@ bool  SteamAPI_ISteamUGC_SetSearchText_(intptr_t  instancePtr, UGCQueryHandle_t 
 
 bool  SteamAPI_ISteamUGC_SetRankedByTrendDays_(intptr_t  instancePtr, UGCQueryHandle_t  handle, uint32  unDays)
 {
-  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%p)\n", instancePtr, handle, unDays);
+  TRACE("((intptr_t )%p, (UGCQueryHandle_t )%p, (uint32 )%d)\n", instancePtr, handle, unDays);
   auto result = SteamAPI_ISteamUGC_SetRankedByTrendDays(instancePtr, handle, unDays);
   TRACE("() = (bool )%d\n", result);
 
@@ -5076,7 +5076,7 @@ bool  SteamAPI_ISteamUGC_SetRankedByTrendDays_(intptr_t  instancePtr, UGCQueryHa
 
 SteamAPICall_t  SteamAPI_ISteamUGC_RequestUGCDetails_(intptr_t  instancePtr, PublishedFileId_t  nPublishedFileID, uint32  unMaxAgeSeconds)
 {
-  TRACE("((intptr_t )%p, (PublishedFileId_t )%p, (uint32 )%p)\n", instancePtr, nPublishedFileID, unMaxAgeSeconds);
+  TRACE("((intptr_t )%p, (PublishedFileId_t )%p, (uint32 )%d)\n", instancePtr, nPublishedFileID, unMaxAgeSeconds);
   auto result = SteamAPI_ISteamUGC_RequestUGCDetails(instancePtr, nPublishedFileID, unMaxAgeSeconds);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
@@ -5186,7 +5186,7 @@ SteamAPICall_t  SteamAPI_ISteamUGC_SubmitItemUpdate_(intptr_t  instancePtr, UGCU
 
 EItemUpdateStatus  SteamAPI_ISteamUGC_GetItemUpdateProgress_(intptr_t  instancePtr, UGCUpdateHandle_t  handle, uint64 * punBytesProcessed, uint64 * punBytesTotal)
 {
-  TRACE("((intptr_t )%p, (UGCUpdateHandle_t )%p, (uint64 *)%p, (uint64 *)%p)\n", instancePtr, handle, punBytesProcessed, punBytesTotal);
+  TRACE("((intptr_t )%p, (UGCUpdateHandle_t )%p, (uint64 *)%d, (uint64 *)%d)\n", instancePtr, handle, punBytesProcessed, punBytesTotal);
   auto result = SteamAPI_ISteamUGC_GetItemUpdateProgress(instancePtr, handle, punBytesProcessed, punBytesTotal);
   TRACE("() = (EItemUpdateStatus )%p\n", result);
 
@@ -5238,7 +5238,7 @@ uint32  SteamAPI_ISteamUGC_GetNumSubscribedItems_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamUGC_GetNumSubscribedItems(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -5246,9 +5246,9 @@ uint32  SteamAPI_ISteamUGC_GetNumSubscribedItems_(intptr_t  instancePtr)
 
 uint32  SteamAPI_ISteamUGC_GetSubscribedItems_(intptr_t  instancePtr, PublishedFileId_t * pvecPublishedFileID, uint32  cMaxEntries)
 {
-  TRACE("((intptr_t )%p, (PublishedFileId_t *)%p, (uint32 )%p)\n", instancePtr, pvecPublishedFileID, cMaxEntries);
+  TRACE("((intptr_t )%p, (PublishedFileId_t *)%p, (uint32 )%d)\n", instancePtr, pvecPublishedFileID, cMaxEntries);
   auto result = SteamAPI_ISteamUGC_GetSubscribedItems(instancePtr, pvecPublishedFileID, cMaxEntries);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -5258,7 +5258,7 @@ uint32  SteamAPI_ISteamUGC_GetItemState_(intptr_t  instancePtr, PublishedFileId_
 {
   TRACE("((intptr_t )%p, (PublishedFileId_t )%p)\n", instancePtr, nPublishedFileID);
   auto result = SteamAPI_ISteamUGC_GetItemState(instancePtr, nPublishedFileID);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -5266,7 +5266,7 @@ uint32  SteamAPI_ISteamUGC_GetItemState_(intptr_t  instancePtr, PublishedFileId_
 
 bool  SteamAPI_ISteamUGC_GetItemInstallInfo_(intptr_t  instancePtr, PublishedFileId_t  nPublishedFileID, uint64 * punSizeOnDisk, char * pchFolder, uint32  cchFolderSize, uint32 * punTimeStamp)
 {
-  TRACE("((intptr_t )%p, (PublishedFileId_t )%p, (uint64 *)%p, (char *)\"%s\", (uint32 )%p, (uint32 *)%p)\n", instancePtr, nPublishedFileID, punSizeOnDisk, pchFolder, cchFolderSize, punTimeStamp);
+  TRACE("((intptr_t )%p, (PublishedFileId_t )%p, (uint64 *)%d, (char *)\"%s\", (uint32 )%d, (uint32 *)%d)\n", instancePtr, nPublishedFileID, punSizeOnDisk, pchFolder, cchFolderSize, punTimeStamp);
   auto result = SteamAPI_ISteamUGC_GetItemInstallInfo(instancePtr, nPublishedFileID, punSizeOnDisk, pchFolder, cchFolderSize, punTimeStamp);
   TRACE("() = (bool )%d\n", result);
 
@@ -5276,7 +5276,7 @@ bool  SteamAPI_ISteamUGC_GetItemInstallInfo_(intptr_t  instancePtr, PublishedFil
 
 bool  SteamAPI_ISteamUGC_GetItemDownloadInfo_(intptr_t  instancePtr, PublishedFileId_t  nPublishedFileID, uint64 * punBytesDownloaded, uint64 * punBytesTotal)
 {
-  TRACE("((intptr_t )%p, (PublishedFileId_t )%p, (uint64 *)%p, (uint64 *)%p)\n", instancePtr, nPublishedFileID, punBytesDownloaded, punBytesTotal);
+  TRACE("((intptr_t )%p, (PublishedFileId_t )%p, (uint64 *)%d, (uint64 *)%d)\n", instancePtr, nPublishedFileID, punBytesDownloaded, punBytesTotal);
   auto result = SteamAPI_ISteamUGC_GetItemDownloadInfo(instancePtr, nPublishedFileID, punBytesDownloaded, punBytesTotal);
   TRACE("() = (bool )%d\n", result);
 
@@ -5298,7 +5298,7 @@ uint32  SteamAPI_ISteamAppList_GetNumInstalledApps_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamAppList_GetNumInstalledApps(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -5306,9 +5306,9 @@ uint32  SteamAPI_ISteamAppList_GetNumInstalledApps_(intptr_t  instancePtr)
 
 uint32  SteamAPI_ISteamAppList_GetInstalledApps_(intptr_t  instancePtr, AppId_t * pvecAppID, uint32  unMaxAppIDs)
 {
-  TRACE("((intptr_t )%p, (AppId_t *)%p, (uint32 )%p)\n", instancePtr, pvecAppID, unMaxAppIDs);
+  TRACE("((intptr_t )%p, (AppId_t *)%p, (uint32 )%d)\n", instancePtr, pvecAppID, unMaxAppIDs);
   auto result = SteamAPI_ISteamAppList_GetInstalledApps(instancePtr, pvecAppID, unMaxAppIDs);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -5400,7 +5400,7 @@ void  SteamAPI_ISteamHTMLSurface_LoadURL_(intptr_t  instancePtr, HHTMLBrowser  u
 
 void  SteamAPI_ISteamHTMLSurface_SetSize_(intptr_t  instancePtr, HHTMLBrowser  unBrowserHandle, uint32  unWidth, uint32  unHeight)
 {
-  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (uint32 )%p, (uint32 )%p)\n", instancePtr, unBrowserHandle, unWidth, unHeight);
+  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (uint32 )%d, (uint32 )%d)\n", instancePtr, unBrowserHandle, unWidth, unHeight);
   SteamAPI_ISteamHTMLSurface_SetSize(instancePtr, unBrowserHandle, unWidth, unHeight);
   
 }
@@ -5488,7 +5488,7 @@ void  SteamAPI_ISteamHTMLSurface_MouseMove_(intptr_t  instancePtr, HHTMLBrowser 
 
 void  SteamAPI_ISteamHTMLSurface_MouseWheel_(intptr_t  instancePtr, HHTMLBrowser  unBrowserHandle, int32  nDelta)
 {
-  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (int32 )%p)\n", instancePtr, unBrowserHandle, nDelta);
+  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (int32 )%d)\n", instancePtr, unBrowserHandle, nDelta);
   SteamAPI_ISteamHTMLSurface_MouseWheel(instancePtr, unBrowserHandle, nDelta);
   
 }
@@ -5496,7 +5496,7 @@ void  SteamAPI_ISteamHTMLSurface_MouseWheel_(intptr_t  instancePtr, HHTMLBrowser
 
 void  SteamAPI_ISteamHTMLSurface_KeyDown_(intptr_t  instancePtr, HHTMLBrowser  unBrowserHandle, uint32  nNativeKeyCode, ISteamHTMLSurface::EHTMLKeyModifiers  eHTMLKeyModifiers)
 {
-  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (uint32 )%p, (ISteamHTMLSurface::EHTMLKeyModifiers )%p)\n", instancePtr, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (uint32 )%d, (ISteamHTMLSurface::EHTMLKeyModifiers )%p)\n", instancePtr, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
   SteamAPI_ISteamHTMLSurface_KeyDown(instancePtr, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
   
 }
@@ -5504,7 +5504,7 @@ void  SteamAPI_ISteamHTMLSurface_KeyDown_(intptr_t  instancePtr, HHTMLBrowser  u
 
 void  SteamAPI_ISteamHTMLSurface_KeyUp_(intptr_t  instancePtr, HHTMLBrowser  unBrowserHandle, uint32  nNativeKeyCode, ISteamHTMLSurface::EHTMLKeyModifiers  eHTMLKeyModifiers)
 {
-  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (uint32 )%p, (ISteamHTMLSurface::EHTMLKeyModifiers )%p)\n", instancePtr, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (uint32 )%d, (ISteamHTMLSurface::EHTMLKeyModifiers )%p)\n", instancePtr, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
   SteamAPI_ISteamHTMLSurface_KeyUp(instancePtr, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
   
 }
@@ -5512,7 +5512,7 @@ void  SteamAPI_ISteamHTMLSurface_KeyUp_(intptr_t  instancePtr, HHTMLBrowser  unB
 
 void  SteamAPI_ISteamHTMLSurface_KeyChar_(intptr_t  instancePtr, HHTMLBrowser  unBrowserHandle, uint32  cUnicodeChar, ISteamHTMLSurface::EHTMLKeyModifiers  eHTMLKeyModifiers)
 {
-  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (uint32 )%p, (ISteamHTMLSurface::EHTMLKeyModifiers )%p)\n", instancePtr, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
+  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (uint32 )%d, (ISteamHTMLSurface::EHTMLKeyModifiers )%p)\n", instancePtr, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
   SteamAPI_ISteamHTMLSurface_KeyChar(instancePtr, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
   
 }
@@ -5520,7 +5520,7 @@ void  SteamAPI_ISteamHTMLSurface_KeyChar_(intptr_t  instancePtr, HHTMLBrowser  u
 
 void  SteamAPI_ISteamHTMLSurface_SetHorizontalScroll_(intptr_t  instancePtr, HHTMLBrowser  unBrowserHandle, uint32  nAbsolutePixelScroll)
 {
-  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (uint32 )%p)\n", instancePtr, unBrowserHandle, nAbsolutePixelScroll);
+  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (uint32 )%d)\n", instancePtr, unBrowserHandle, nAbsolutePixelScroll);
   SteamAPI_ISteamHTMLSurface_SetHorizontalScroll(instancePtr, unBrowserHandle, nAbsolutePixelScroll);
   
 }
@@ -5528,7 +5528,7 @@ void  SteamAPI_ISteamHTMLSurface_SetHorizontalScroll_(intptr_t  instancePtr, HHT
 
 void  SteamAPI_ISteamHTMLSurface_SetVerticalScroll_(intptr_t  instancePtr, HHTMLBrowser  unBrowserHandle, uint32  nAbsolutePixelScroll)
 {
-  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (uint32 )%p)\n", instancePtr, unBrowserHandle, nAbsolutePixelScroll);
+  TRACE("((intptr_t )%p, (HHTMLBrowser )%p, (uint32 )%d)\n", instancePtr, unBrowserHandle, nAbsolutePixelScroll);
   SteamAPI_ISteamHTMLSurface_SetVerticalScroll(instancePtr, unBrowserHandle, nAbsolutePixelScroll);
   
 }
@@ -5642,7 +5642,7 @@ EResult  SteamAPI_ISteamInventory_GetResultStatus_(intptr_t  instancePtr, SteamI
 
 bool  SteamAPI_ISteamInventory_GetResultItems_(intptr_t  instancePtr, SteamInventoryResult_t  resultHandle, SteamItemDetails_t * pOutItemsArray, uint32 * punOutItemsArraySize)
 {
-  TRACE("((intptr_t )%p, (SteamInventoryResult_t )%p, (SteamItemDetails_t *)%p, (uint32 *)%p)\n", instancePtr, resultHandle, pOutItemsArray, punOutItemsArraySize);
+  TRACE("((intptr_t )%p, (SteamInventoryResult_t )%p, (SteamItemDetails_t *)%p, (uint32 *)%d)\n", instancePtr, resultHandle, pOutItemsArray, punOutItemsArraySize);
   auto result = SteamAPI_ISteamInventory_GetResultItems(instancePtr, resultHandle, pOutItemsArray, punOutItemsArraySize);
   TRACE("() = (bool )%d\n", result);
 
@@ -5654,7 +5654,7 @@ uint32  SteamAPI_ISteamInventory_GetResultTimestamp_(intptr_t  instancePtr, Stea
 {
   TRACE("((intptr_t )%p, (SteamInventoryResult_t )%p)\n", instancePtr, resultHandle);
   auto result = SteamAPI_ISteamInventory_GetResultTimestamp(instancePtr, resultHandle);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -5690,7 +5690,7 @@ bool  SteamAPI_ISteamInventory_GetAllItems_(intptr_t  instancePtr, SteamInventor
 
 bool  SteamAPI_ISteamInventory_GetItemsByID_(intptr_t  instancePtr, SteamInventoryResult_t * pResultHandle, SteamItemInstanceID_t * pInstanceIDs, uint32  unCountInstanceIDs)
 {
-  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (SteamItemInstanceID_t *)%p, (uint32 )%p)\n", instancePtr, pResultHandle, pInstanceIDs, unCountInstanceIDs);
+  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (SteamItemInstanceID_t *)%p, (uint32 )%d)\n", instancePtr, pResultHandle, pInstanceIDs, unCountInstanceIDs);
   auto result = SteamAPI_ISteamInventory_GetItemsByID(instancePtr, pResultHandle, pInstanceIDs, unCountInstanceIDs);
   TRACE("() = (bool )%d\n", result);
 
@@ -5700,7 +5700,7 @@ bool  SteamAPI_ISteamInventory_GetItemsByID_(intptr_t  instancePtr, SteamInvento
 
 bool  SteamAPI_ISteamInventory_SerializeResult_(intptr_t  instancePtr, SteamInventoryResult_t  resultHandle, void * pOutBuffer, uint32 * punOutBufferSize)
 {
-  TRACE("((intptr_t )%p, (SteamInventoryResult_t )%p, (void *)%p, (uint32 *)%p)\n", instancePtr, resultHandle, pOutBuffer, punOutBufferSize);
+  TRACE("((intptr_t )%p, (SteamInventoryResult_t )%p, (void *)%p, (uint32 *)%d)\n", instancePtr, resultHandle, pOutBuffer, punOutBufferSize);
   auto result = SteamAPI_ISteamInventory_SerializeResult(instancePtr, resultHandle, pOutBuffer, punOutBufferSize);
   TRACE("() = (bool )%d\n", result);
 
@@ -5710,7 +5710,7 @@ bool  SteamAPI_ISteamInventory_SerializeResult_(intptr_t  instancePtr, SteamInve
 
 bool  SteamAPI_ISteamInventory_DeserializeResult_(intptr_t  instancePtr, SteamInventoryResult_t * pOutResultHandle, void * pBuffer, uint32  unBufferSize, bool  bRESERVED_MUST_BE_FALSE)
 {
-  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (void *)%p, (uint32 )%p, (bool )%d)\n", instancePtr, pOutResultHandle, pBuffer, unBufferSize, bRESERVED_MUST_BE_FALSE);
+  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (void *)%p, (uint32 )%d, (bool )%d)\n", instancePtr, pOutResultHandle, pBuffer, unBufferSize, bRESERVED_MUST_BE_FALSE);
   auto result = SteamAPI_ISteamInventory_DeserializeResult(instancePtr, pOutResultHandle, pBuffer, unBufferSize, bRESERVED_MUST_BE_FALSE);
   TRACE("() = (bool )%d\n", result);
 
@@ -5720,7 +5720,7 @@ bool  SteamAPI_ISteamInventory_DeserializeResult_(intptr_t  instancePtr, SteamIn
 
 bool  SteamAPI_ISteamInventory_GenerateItems_(intptr_t  instancePtr, SteamInventoryResult_t * pResultHandle, SteamItemDef_t * pArrayItemDefs, uint32 * punArrayQuantity, uint32  unArrayLength)
 {
-  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (SteamItemDef_t *)%p, (uint32 *)%p, (uint32 )%p)\n", instancePtr, pResultHandle, pArrayItemDefs, punArrayQuantity, unArrayLength);
+  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (SteamItemDef_t *)%p, (uint32 *)%d, (uint32 )%d)\n", instancePtr, pResultHandle, pArrayItemDefs, punArrayQuantity, unArrayLength);
   auto result = SteamAPI_ISteamInventory_GenerateItems(instancePtr, pResultHandle, pArrayItemDefs, punArrayQuantity, unArrayLength);
   TRACE("() = (bool )%d\n", result);
 
@@ -5750,7 +5750,7 @@ bool  SteamAPI_ISteamInventory_AddPromoItem_(intptr_t  instancePtr, SteamInvento
 
 bool  SteamAPI_ISteamInventory_AddPromoItems_(intptr_t  instancePtr, SteamInventoryResult_t * pResultHandle, SteamItemDef_t * pArrayItemDefs, uint32  unArrayLength)
 {
-  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (SteamItemDef_t *)%p, (uint32 )%p)\n", instancePtr, pResultHandle, pArrayItemDefs, unArrayLength);
+  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (SteamItemDef_t *)%p, (uint32 )%d)\n", instancePtr, pResultHandle, pArrayItemDefs, unArrayLength);
   auto result = SteamAPI_ISteamInventory_AddPromoItems(instancePtr, pResultHandle, pArrayItemDefs, unArrayLength);
   TRACE("() = (bool )%d\n", result);
 
@@ -5760,7 +5760,7 @@ bool  SteamAPI_ISteamInventory_AddPromoItems_(intptr_t  instancePtr, SteamInvent
 
 bool  SteamAPI_ISteamInventory_ConsumeItem_(intptr_t  instancePtr, SteamInventoryResult_t * pResultHandle, SteamItemInstanceID_t  itemConsume, uint32  unQuantity)
 {
-  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (SteamItemInstanceID_t )%p, (uint32 )%p)\n", instancePtr, pResultHandle, itemConsume, unQuantity);
+  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (SteamItemInstanceID_t )%p, (uint32 )%d)\n", instancePtr, pResultHandle, itemConsume, unQuantity);
   auto result = SteamAPI_ISteamInventory_ConsumeItem(instancePtr, pResultHandle, itemConsume, unQuantity);
   TRACE("() = (bool )%d\n", result);
 
@@ -5770,7 +5770,7 @@ bool  SteamAPI_ISteamInventory_ConsumeItem_(intptr_t  instancePtr, SteamInventor
 
 bool  SteamAPI_ISteamInventory_ExchangeItems_(intptr_t  instancePtr, SteamInventoryResult_t * pResultHandle, SteamItemDef_t * pArrayGenerate, uint32 * punArrayGenerateQuantity, uint32  unArrayGenerateLength, SteamItemInstanceID_t * pArrayDestroy, uint32 * punArrayDestroyQuantity, uint32  unArrayDestroyLength)
 {
-  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (SteamItemDef_t *)%p, (uint32 *)%p, (uint32 )%p, (SteamItemInstanceID_t *)%p, (uint32 *)%p, (uint32 )%p)\n", instancePtr, pResultHandle, pArrayGenerate, punArrayGenerateQuantity, unArrayGenerateLength, pArrayDestroy, punArrayDestroyQuantity, unArrayDestroyLength);
+  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (SteamItemDef_t *)%p, (uint32 *)%d, (uint32 )%d, (SteamItemInstanceID_t *)%p, (uint32 *)%d, (uint32 )%d)\n", instancePtr, pResultHandle, pArrayGenerate, punArrayGenerateQuantity, unArrayGenerateLength, pArrayDestroy, punArrayDestroyQuantity, unArrayDestroyLength);
   auto result = SteamAPI_ISteamInventory_ExchangeItems(instancePtr, pResultHandle, pArrayGenerate, punArrayGenerateQuantity, unArrayGenerateLength, pArrayDestroy, punArrayDestroyQuantity, unArrayDestroyLength);
   TRACE("() = (bool )%d\n", result);
 
@@ -5780,7 +5780,7 @@ bool  SteamAPI_ISteamInventory_ExchangeItems_(intptr_t  instancePtr, SteamInvent
 
 bool  SteamAPI_ISteamInventory_TransferItemQuantity_(intptr_t  instancePtr, SteamInventoryResult_t * pResultHandle, SteamItemInstanceID_t  itemIdSource, uint32  unQuantity, SteamItemInstanceID_t  itemIdDest)
 {
-  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (SteamItemInstanceID_t )%p, (uint32 )%p, (SteamItemInstanceID_t )%p)\n", instancePtr, pResultHandle, itemIdSource, unQuantity, itemIdDest);
+  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (SteamItemInstanceID_t )%p, (uint32 )%d, (SteamItemInstanceID_t )%p)\n", instancePtr, pResultHandle, itemIdSource, unQuantity, itemIdDest);
   auto result = SteamAPI_ISteamInventory_TransferItemQuantity(instancePtr, pResultHandle, itemIdSource, unQuantity, itemIdDest);
   TRACE("() = (bool )%d\n", result);
 
@@ -5808,7 +5808,7 @@ bool  SteamAPI_ISteamInventory_TriggerItemDrop_(intptr_t  instancePtr, SteamInve
 
 bool  SteamAPI_ISteamInventory_TradeItems_(intptr_t  instancePtr, SteamInventoryResult_t * pResultHandle, CSteamID  steamIDTradePartner, SteamItemInstanceID_t * pArrayGive, uint32 * pArrayGiveQuantity, uint32  nArrayGiveLength, SteamItemInstanceID_t * pArrayGet, uint32 * pArrayGetQuantity, uint32  nArrayGetLength)
 {
-  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (CSteamID )%p, (SteamItemInstanceID_t *)%p, (uint32 *)%p, (uint32 )%p, (SteamItemInstanceID_t *)%p, (uint32 *)%p, (uint32 )%p)\n", instancePtr, pResultHandle, steamIDTradePartner, pArrayGive, pArrayGiveQuantity, nArrayGiveLength, pArrayGet, pArrayGetQuantity, nArrayGetLength);
+  TRACE("((intptr_t )%p, (SteamInventoryResult_t *)%p, (CSteamID )%p, (SteamItemInstanceID_t *)%p, (uint32 *)%d, (uint32 )%d, (SteamItemInstanceID_t *)%p, (uint32 *)%d, (uint32 )%d)\n", instancePtr, pResultHandle, steamIDTradePartner, pArrayGive, pArrayGiveQuantity, nArrayGiveLength, pArrayGet, pArrayGetQuantity, nArrayGetLength);
   auto result = SteamAPI_ISteamInventory_TradeItems(instancePtr, pResultHandle, steamIDTradePartner, pArrayGive, pArrayGiveQuantity, nArrayGiveLength, pArrayGet, pArrayGetQuantity, nArrayGetLength);
   TRACE("() = (bool )%d\n", result);
 
@@ -5828,7 +5828,7 @@ bool  SteamAPI_ISteamInventory_LoadItemDefinitions_(intptr_t  instancePtr)
 
 bool  SteamAPI_ISteamInventory_GetItemDefinitionIDs_(intptr_t  instancePtr, SteamItemDef_t * pItemDefIDs, uint32 * punItemDefIDsArraySize)
 {
-  TRACE("((intptr_t )%p, (SteamItemDef_t *)%p, (uint32 *)%p)\n", instancePtr, pItemDefIDs, punItemDefIDsArraySize);
+  TRACE("((intptr_t )%p, (SteamItemDef_t *)%p, (uint32 *)%d)\n", instancePtr, pItemDefIDs, punItemDefIDsArraySize);
   auto result = SteamAPI_ISteamInventory_GetItemDefinitionIDs(instancePtr, pItemDefIDs, punItemDefIDsArraySize);
   TRACE("() = (bool )%d\n", result);
 
@@ -5838,7 +5838,7 @@ bool  SteamAPI_ISteamInventory_GetItemDefinitionIDs_(intptr_t  instancePtr, Stea
 
 bool  SteamAPI_ISteamInventory_GetItemDefinitionProperty_(intptr_t  instancePtr, SteamItemDef_t  iDefinition, char * pchPropertyName, char * pchValueBuffer, uint32 * punValueBufferSizeOut)
 {
-  TRACE("((intptr_t )%p, (SteamItemDef_t )%p, (char *)\"%s\", (char *)\"%s\", (uint32 *)%p)\n", instancePtr, iDefinition, pchPropertyName, pchValueBuffer, punValueBufferSizeOut);
+  TRACE("((intptr_t )%p, (SteamItemDef_t )%p, (char *)\"%s\", (char *)\"%s\", (uint32 *)%d)\n", instancePtr, iDefinition, pchPropertyName, pchValueBuffer, punValueBufferSizeOut);
   auto result = SteamAPI_ISteamInventory_GetItemDefinitionProperty(instancePtr, iDefinition, pchPropertyName, pchValueBuffer, punValueBufferSizeOut);
   TRACE("() = (bool )%d\n", result);
 
@@ -5866,7 +5866,7 @@ bool  SteamAPI_ISteamVideo_IsBroadcasting_(intptr_t  instancePtr, int * pnNumVie
 
 bool  SteamAPI_ISteamGameServer_InitGameServer_(intptr_t  instancePtr, uint32  unIP, uint16  usGamePort, uint16  usQueryPort, uint32  unFlags, AppId_t  nGameAppId, char * pchVersionString)
 {
-  TRACE("((intptr_t )%p, (uint32 )%p, (uint16 )%p, (uint16 )%p, (uint32 )%p, (AppId_t )%p, (char *)\"%s\")\n", instancePtr, unIP, usGamePort, usQueryPort, unFlags, nGameAppId, pchVersionString);
+  TRACE("((intptr_t )%p, (uint32 )%d, (uint16 )%d, (uint16 )%d, (uint32 )%d, (AppId_t )%p, (char *)\"%s\")\n", instancePtr, unIP, usGamePort, usQueryPort, unFlags, nGameAppId, pchVersionString);
   auto result = SteamAPI_ISteamGameServer_InitGameServer(instancePtr, unIP, usGamePort, usQueryPort, unFlags, nGameAppId, pchVersionString);
   TRACE("() = (bool )%d\n", result);
 
@@ -5954,7 +5954,7 @@ uint64  SteamAPI_ISteamGameServer_GetSteamID_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamGameServer_GetSteamID(instancePtr);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -6012,7 +6012,7 @@ void  SteamAPI_ISteamGameServer_SetPasswordProtected_(intptr_t  instancePtr, boo
 
 void  SteamAPI_ISteamGameServer_SetSpectatorPort_(intptr_t  instancePtr, uint16  unSpectatorPort)
 {
-  TRACE("((intptr_t )%p, (uint16 )%p)\n", instancePtr, unSpectatorPort);
+  TRACE("((intptr_t )%p, (uint16 )%d)\n", instancePtr, unSpectatorPort);
   SteamAPI_ISteamGameServer_SetSpectatorPort(instancePtr, unSpectatorPort);
   
 }
@@ -6068,7 +6068,7 @@ void  SteamAPI_ISteamGameServer_SetRegion_(intptr_t  instancePtr, char * pszRegi
 
 bool  SteamAPI_ISteamGameServer_SendUserConnectAndAuthenticate_(intptr_t  instancePtr, uint32  unIPClient, void * pvAuthBlob, uint32  cubAuthBlobSize, CSteamID * pSteamIDUser)
 {
-  TRACE("((intptr_t )%p, (uint32 )%p, (void *)%p, (uint32 )%p, (CSteamID *)%p)\n", instancePtr, unIPClient, pvAuthBlob, cubAuthBlobSize, pSteamIDUser);
+  TRACE("((intptr_t )%p, (uint32 )%d, (void *)%p, (uint32 )%d, (CSteamID *)%p)\n", instancePtr, unIPClient, pvAuthBlob, cubAuthBlobSize, pSteamIDUser);
   auto result = SteamAPI_ISteamGameServer_SendUserConnectAndAuthenticate(instancePtr, unIPClient, pvAuthBlob, cubAuthBlobSize, pSteamIDUser);
   TRACE("() = (bool )%d\n", result);
 
@@ -6080,7 +6080,7 @@ uint64  SteamAPI_ISteamGameServer_CreateUnauthenticatedUserConnection_(intptr_t 
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamGameServer_CreateUnauthenticatedUserConnection(instancePtr);
-  TRACE("() = (uint64 )%p\n", result);
+  TRACE("() = (uint64 )%d\n", result);
 
   return result;
 }
@@ -6096,7 +6096,7 @@ void  SteamAPI_ISteamGameServer_SendUserDisconnect_(intptr_t  instancePtr, CStea
 
 bool  SteamAPI_ISteamGameServer_BUpdateUserData_(intptr_t  instancePtr, CSteamID  steamIDUser, char * pchPlayerName, uint32  uScore)
 {
-  TRACE("((intptr_t )%p, (CSteamID )%p, (char *)\"%s\", (uint32 )%p)\n", instancePtr, steamIDUser, pchPlayerName, uScore);
+  TRACE("((intptr_t )%p, (CSteamID )%p, (char *)\"%s\", (uint32 )%d)\n", instancePtr, steamIDUser, pchPlayerName, uScore);
   auto result = SteamAPI_ISteamGameServer_BUpdateUserData(instancePtr, steamIDUser, pchPlayerName, uScore);
   TRACE("() = (bool )%d\n", result);
 
@@ -6106,7 +6106,7 @@ bool  SteamAPI_ISteamGameServer_BUpdateUserData_(intptr_t  instancePtr, CSteamID
 
 HAuthTicket  SteamAPI_ISteamGameServer_GetAuthSessionTicket_(intptr_t  instancePtr, void * pTicket, int  cbMaxTicket, uint32 * pcbTicket)
 {
-  TRACE("((intptr_t )%p, (void *)%p, (int )%d, (uint32 *)%p)\n", instancePtr, pTicket, cbMaxTicket, pcbTicket);
+  TRACE("((intptr_t )%p, (void *)%p, (int )%d, (uint32 *)%d)\n", instancePtr, pTicket, cbMaxTicket, pcbTicket);
   auto result = SteamAPI_ISteamGameServer_GetAuthSessionTicket(instancePtr, pTicket, cbMaxTicket, pcbTicket);
   TRACE("() = (HAuthTicket )%p\n", result);
 
@@ -6182,7 +6182,7 @@ uint32  SteamAPI_ISteamGameServer_GetPublicIP_(intptr_t  instancePtr)
 {
   TRACE("((intptr_t )%p)\n", instancePtr);
   auto result = SteamAPI_ISteamGameServer_GetPublicIP(instancePtr);
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -6190,7 +6190,7 @@ uint32  SteamAPI_ISteamGameServer_GetPublicIP_(intptr_t  instancePtr)
 
 bool  SteamAPI_ISteamGameServer_HandleIncomingPacket_(intptr_t  instancePtr, void * pData, int  cbData, uint32  srcIP, uint16  srcPort)
 {
-  TRACE("((intptr_t )%p, (void *)%p, (int )%d, (uint32 )%p, (uint16 )%p)\n", instancePtr, pData, cbData, srcIP, srcPort);
+  TRACE("((intptr_t )%p, (void *)%p, (int )%d, (uint32 )%d, (uint16 )%d)\n", instancePtr, pData, cbData, srcIP, srcPort);
   auto result = SteamAPI_ISteamGameServer_HandleIncomingPacket(instancePtr, pData, cbData, srcIP, srcPort);
   TRACE("() = (bool )%d\n", result);
 
@@ -6200,7 +6200,7 @@ bool  SteamAPI_ISteamGameServer_HandleIncomingPacket_(intptr_t  instancePtr, voi
 
 int  SteamAPI_ISteamGameServer_GetNextOutgoingPacket_(intptr_t  instancePtr, void * pOut, int  cbMaxOut, uint32 * pNetAdr, uint16 * pPort)
 {
-  TRACE("((intptr_t )%p, (void *)%p, (int )%d, (uint32 *)%p, (uint16 *)%p)\n", instancePtr, pOut, cbMaxOut, pNetAdr, pPort);
+  TRACE("((intptr_t )%p, (void *)%p, (int )%d, (uint32 *)%d, (uint16 *)%d)\n", instancePtr, pOut, cbMaxOut, pNetAdr, pPort);
   auto result = SteamAPI_ISteamGameServer_GetNextOutgoingPacket(instancePtr, pOut, cbMaxOut, pNetAdr, pPort);
   TRACE("() = (int )%d\n", result);
 
@@ -6264,7 +6264,7 @@ SteamAPICall_t  SteamAPI_ISteamGameServerStats_RequestUserStats_(intptr_t  insta
 
 bool  SteamAPI_ISteamGameServerStats_GetUserStat_(intptr_t  instancePtr, CSteamID  steamIDUser, char * pchName, int32 * pData)
 {
-  TRACE("((intptr_t )%p, (CSteamID )%p, (char *)\"%s\", (int32 *)%p)\n", instancePtr, steamIDUser, pchName, pData);
+  TRACE("((intptr_t )%p, (CSteamID )%p, (char *)\"%s\", (int32 *)%d)\n", instancePtr, steamIDUser, pchName, pData);
   auto result = SteamAPI_ISteamGameServerStats_GetUserStat(instancePtr, steamIDUser, pchName, pData);
   TRACE("() = (bool )%d\n", result);
 
@@ -6294,7 +6294,7 @@ bool  SteamAPI_ISteamGameServerStats_GetUserAchievement_(intptr_t  instancePtr, 
 
 bool  SteamAPI_ISteamGameServerStats_SetUserStat_(intptr_t  instancePtr, CSteamID  steamIDUser, char * pchName, int32  nData)
 {
-  TRACE("((intptr_t )%p, (CSteamID )%p, (char *)\"%s\", (int32 )%p)\n", instancePtr, steamIDUser, pchName, nData);
+  TRACE("((intptr_t )%p, (CSteamID )%p, (char *)\"%s\", (int32 )%d)\n", instancePtr, steamIDUser, pchName, nData);
   auto result = SteamAPI_ISteamGameServerStats_SetUserStat(instancePtr, steamIDUser, pchName, nData);
   TRACE("() = (bool )%d\n", result);
 

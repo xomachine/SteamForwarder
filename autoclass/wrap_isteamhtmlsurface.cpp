@@ -48,7 +48,7 @@ void  ISteamHTMLSurface_::LoadURL(HHTMLBrowser  unBrowserHandle, char * pchURL, 
 
 void  ISteamHTMLSurface_::SetSize(HHTMLBrowser  unBrowserHandle, uint32  unWidth, uint32  unHeight)
 {
-  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (uint32 )%p, (uint32 )%p)\n", this, unBrowserHandle, unWidth, unHeight);
+  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (uint32 )%d, (uint32 )%d)\n", this, unBrowserHandle, unWidth, unHeight);
   this->internal->SetSize(unBrowserHandle, unWidth, unHeight);
   
 }
@@ -136,7 +136,7 @@ void  ISteamHTMLSurface_::MouseMove(HHTMLBrowser  unBrowserHandle, int  x, int  
 
 void  ISteamHTMLSurface_::MouseWheel(HHTMLBrowser  unBrowserHandle, int32  nDelta)
 {
-  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (int32 )%p)\n", this, unBrowserHandle, nDelta);
+  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (int32 )%d)\n", this, unBrowserHandle, nDelta);
   this->internal->MouseWheel(unBrowserHandle, nDelta);
   
 }
@@ -144,7 +144,7 @@ void  ISteamHTMLSurface_::MouseWheel(HHTMLBrowser  unBrowserHandle, int32  nDelt
 
 void  ISteamHTMLSurface_::KeyDown(HHTMLBrowser  unBrowserHandle, uint32  nNativeKeyCode, ISteamHTMLSurface::EHTMLKeyModifiers  eHTMLKeyModifiers)
 {
-  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (uint32 )%p, (ISteamHTMLSurface::EHTMLKeyModifiers )%p)\n", this, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (uint32 )%d, (ISteamHTMLSurface::EHTMLKeyModifiers )%p)\n", this, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
   this->internal->KeyDown(unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
   
 }
@@ -152,7 +152,7 @@ void  ISteamHTMLSurface_::KeyDown(HHTMLBrowser  unBrowserHandle, uint32  nNative
 
 void  ISteamHTMLSurface_::KeyUp(HHTMLBrowser  unBrowserHandle, uint32  nNativeKeyCode, ISteamHTMLSurface::EHTMLKeyModifiers  eHTMLKeyModifiers)
 {
-  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (uint32 )%p, (ISteamHTMLSurface::EHTMLKeyModifiers )%p)\n", this, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (uint32 )%d, (ISteamHTMLSurface::EHTMLKeyModifiers )%p)\n", this, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
   this->internal->KeyUp(unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
   
 }
@@ -160,7 +160,7 @@ void  ISteamHTMLSurface_::KeyUp(HHTMLBrowser  unBrowserHandle, uint32  nNativeKe
 
 void  ISteamHTMLSurface_::KeyChar(HHTMLBrowser  unBrowserHandle, uint32  cUnicodeChar, ISteamHTMLSurface::EHTMLKeyModifiers  eHTMLKeyModifiers)
 {
-  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (uint32 )%p, (ISteamHTMLSurface::EHTMLKeyModifiers )%p)\n", this, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
+  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (uint32 )%d, (ISteamHTMLSurface::EHTMLKeyModifiers )%p)\n", this, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
   this->internal->KeyChar(unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
   
 }
@@ -168,7 +168,7 @@ void  ISteamHTMLSurface_::KeyChar(HHTMLBrowser  unBrowserHandle, uint32  cUnicod
 
 void  ISteamHTMLSurface_::SetHorizontalScroll(HHTMLBrowser  unBrowserHandle, uint32  nAbsolutePixelScroll)
 {
-  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (uint32 )%p)\n", this, unBrowserHandle, nAbsolutePixelScroll);
+  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (uint32 )%d)\n", this, unBrowserHandle, nAbsolutePixelScroll);
   this->internal->SetHorizontalScroll(unBrowserHandle, nAbsolutePixelScroll);
   
 }
@@ -176,7 +176,7 @@ void  ISteamHTMLSurface_::SetHorizontalScroll(HHTMLBrowser  unBrowserHandle, uin
 
 void  ISteamHTMLSurface_::SetVerticalScroll(HHTMLBrowser  unBrowserHandle, uint32  nAbsolutePixelScroll)
 {
-  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (uint32 )%p)\n", this, unBrowserHandle, nAbsolutePixelScroll);
+  TRACE("((ISteamHTMLSurface *)%p, (HHTMLBrowser )%p, (uint32 )%d)\n", this, unBrowserHandle, nAbsolutePixelScroll);
   this->internal->SetVerticalScroll(unBrowserHandle, nAbsolutePixelScroll);
   
 }

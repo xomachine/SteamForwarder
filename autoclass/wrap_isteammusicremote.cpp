@@ -52,7 +52,7 @@ bool  ISteamMusicRemote_::SetDisplayName(char * pchDisplayName)
 
 bool  ISteamMusicRemote_::SetPNGIcon_64x64(void * pvBuffer, uint32  cbBufferLength)
 {
-  TRACE("((ISteamMusicRemote *)%p, (void *)%p, (uint32 )%p)\n", this, pvBuffer, cbBufferLength);
+  TRACE("((ISteamMusicRemote *)%p, (void *)%p, (uint32 )%d)\n", this, pvBuffer, cbBufferLength);
   auto result = this->internal->SetPNGIcon_64x64(pvBuffer, cbBufferLength);
   TRACE("() = (bool )%d\n", result);
 
@@ -202,7 +202,7 @@ bool  ISteamMusicRemote_::UpdateCurrentEntryElapsedSeconds(int  nValue)
 
 bool  ISteamMusicRemote_::UpdateCurrentEntryCoverArt(void * pvBuffer, uint32  cbBufferLength)
 {
-  TRACE("((ISteamMusicRemote *)%p, (void *)%p, (uint32 )%p)\n", this, pvBuffer, cbBufferLength);
+  TRACE("((ISteamMusicRemote *)%p, (void *)%p, (uint32 )%d)\n", this, pvBuffer, cbBufferLength);
   auto result = this->internal->UpdateCurrentEntryCoverArt(pvBuffer, cbBufferLength);
   TRACE("() = (bool )%d\n", result);
 

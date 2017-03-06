@@ -30,7 +30,7 @@ CSteamID * ISteamUser_::GetSteamID(CSteamID * hidden)
 
 int  ISteamUser_::InitiateGameConnection(void * pAuthBlob, int  cbMaxAuthBlob, CSteamID  steamIDGameServer, uint32  unIPServer, uint16  usPortServer, bool  bSecure)
 {
-  TRACE("((ISteamUser *)%p, (void *)%p, (int )%d, (CSteamID )%p, (uint32 )%p, (uint16 )%p, (bool )%d)\n", this, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+  TRACE("((ISteamUser *)%p, (void *)%p, (int )%d, (CSteamID )%p, (uint32 )%d, (uint16 )%d, (bool )%d)\n", this, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
   auto result = this->internal->InitiateGameConnection(pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
   TRACE("() = (int )%d\n", result);
 
@@ -40,7 +40,7 @@ int  ISteamUser_::InitiateGameConnection(void * pAuthBlob, int  cbMaxAuthBlob, C
 
 void  ISteamUser_::TerminateGameConnection(uint32  unIPServer, uint16  usPortServer)
 {
-  TRACE("((ISteamUser *)%p, (uint32 )%p, (uint16 )%p)\n", this, unIPServer, usPortServer);
+  TRACE("((ISteamUser *)%p, (uint32 )%d, (uint16 )%d)\n", this, unIPServer, usPortServer);
   this->internal->TerminateGameConnection(unIPServer, usPortServer);
   
 }
@@ -82,7 +82,7 @@ void  ISteamUser_::StopVoiceRecording()
 
 EVoiceResult  ISteamUser_::GetAvailableVoice(uint32 * pcbCompressed, uint32 * pcbUncompressed, uint32  nUncompressedVoiceDesiredSampleRate)
 {
-  TRACE("((ISteamUser *)%p, (uint32 *)%p, (uint32 *)%p, (uint32 )%p)\n", this, pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
+  TRACE("((ISteamUser *)%p, (uint32 *)%d, (uint32 *)%d, (uint32 )%d)\n", this, pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
   auto result = this->internal->GetAvailableVoice(pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
   TRACE("() = (EVoiceResult )%p\n", result);
 
@@ -92,7 +92,7 @@ EVoiceResult  ISteamUser_::GetAvailableVoice(uint32 * pcbCompressed, uint32 * pc
 
 EVoiceResult  ISteamUser_::GetVoice(bool  bWantCompressed, void * pDestBuffer, uint32  cbDestBufferSize, uint32 * nBytesWritten, bool  bWantUncompressed, void * pUncompressedDestBuffer, uint32  cbUncompressedDestBufferSize, uint32 * nUncompressBytesWritten, uint32  nUncompressedVoiceDesiredSampleRate)
 {
-  TRACE("((ISteamUser *)%p, (bool )%d, (void *)%p, (uint32 )%p, (uint32 *)%p, (bool )%d, (void *)%p, (uint32 )%p, (uint32 *)%p, (uint32 )%p)\n", this, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
+  TRACE("((ISteamUser *)%p, (bool )%d, (void *)%p, (uint32 )%d, (uint32 *)%d, (bool )%d, (void *)%p, (uint32 )%d, (uint32 *)%d, (uint32 )%d)\n", this, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
   auto result = this->internal->GetVoice(bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
   TRACE("() = (EVoiceResult )%p\n", result);
 
@@ -102,7 +102,7 @@ EVoiceResult  ISteamUser_::GetVoice(bool  bWantCompressed, void * pDestBuffer, u
 
 EVoiceResult  ISteamUser_::DecompressVoice(void * pCompressed, uint32  cbCompressed, void * pDestBuffer, uint32  cbDestBufferSize, uint32 * nBytesWritten, uint32  nDesiredSampleRate)
 {
-  TRACE("((ISteamUser *)%p, (void *)%p, (uint32 )%p, (void *)%p, (uint32 )%p, (uint32 *)%p, (uint32 )%p)\n", this, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+  TRACE("((ISteamUser *)%p, (void *)%p, (uint32 )%d, (void *)%p, (uint32 )%d, (uint32 *)%d, (uint32 )%d)\n", this, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
   auto result = this->internal->DecompressVoice(pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
   TRACE("() = (EVoiceResult )%p\n", result);
 
@@ -114,7 +114,7 @@ uint32  ISteamUser_::GetVoiceOptimalSampleRate()
 {
   TRACE("((ISteamUser *)%p)\n", this);
   auto result = this->internal->GetVoiceOptimalSampleRate();
-  TRACE("() = (uint32 )%p\n", result);
+  TRACE("() = (uint32 )%d\n", result);
 
   return result;
 }
@@ -122,7 +122,7 @@ uint32  ISteamUser_::GetVoiceOptimalSampleRate()
 
 HAuthTicket  ISteamUser_::GetAuthSessionTicket(void * pTicket, int  cbMaxTicket, uint32 * pcbTicket)
 {
-  TRACE("((ISteamUser *)%p, (void *)%p, (int )%d, (uint32 *)%p)\n", this, pTicket, cbMaxTicket, pcbTicket);
+  TRACE("((ISteamUser *)%p, (void *)%p, (int )%d, (uint32 *)%d)\n", this, pTicket, cbMaxTicket, pcbTicket);
   auto result = this->internal->GetAuthSessionTicket(pTicket, cbMaxTicket, pcbTicket);
   TRACE("() = (HAuthTicket )%p\n", result);
 
@@ -178,7 +178,7 @@ bool  ISteamUser_::BIsBehindNAT()
 
 void  ISteamUser_::AdvertiseGame(CSteamID  steamIDGameServer, uint32  unIPServer, uint16  usPortServer)
 {
-  TRACE("((ISteamUser *)%p, (CSteamID )%p, (uint32 )%p, (uint16 )%p)\n", this, steamIDGameServer, unIPServer, usPortServer);
+  TRACE("((ISteamUser *)%p, (CSteamID )%p, (uint32 )%d, (uint16 )%d)\n", this, steamIDGameServer, unIPServer, usPortServer);
   this->internal->AdvertiseGame(steamIDGameServer, unIPServer, usPortServer);
   
 }
@@ -196,7 +196,7 @@ SteamAPICall_t  ISteamUser_::RequestEncryptedAppTicket(void * pDataToInclude, in
 
 bool  ISteamUser_::GetEncryptedAppTicket(void * pTicket, int  cbMaxTicket, uint32 * pcbTicket)
 {
-  TRACE("((ISteamUser *)%p, (void *)%p, (int )%d, (uint32 *)%p)\n", this, pTicket, cbMaxTicket, pcbTicket);
+  TRACE("((ISteamUser *)%p, (void *)%p, (int )%d, (uint32 *)%d)\n", this, pTicket, cbMaxTicket, pcbTicket);
   auto result = this->internal->GetEncryptedAppTicket(pTicket, cbMaxTicket, pcbTicket);
   TRACE("() = (bool )%d\n", result);
 
