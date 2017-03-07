@@ -3,7 +3,7 @@
 int  ISteamMatchmaking_::GetFavoriteGameCount()
 {
   TRACE("((ISteamMatchmaking *)%p)\n", this);
-  auto result = this->internal->GetFavoriteGameCount();
+  int  result = this->internal->GetFavoriteGameCount();
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -13,7 +13,7 @@ int  ISteamMatchmaking_::GetFavoriteGameCount()
 bool  ISteamMatchmaking_::GetFavoriteGame(int  iGame, AppId_t * pnAppID, uint32 * pnIP, uint16 * pnConnPort, uint16 * pnQueryPort, uint32 * punFlags, uint32 * pRTime32LastPlayedOnServer)
 {
   TRACE("((ISteamMatchmaking *)%p, (int )%d, (AppId_t *)%p, (uint32 *)%d, (uint16 *)%d, (uint16 *)%d, (uint32 *)%d, (uint32 *)%d)\n", this, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
-  auto result = this->internal->GetFavoriteGame(iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
+  bool  result = this->internal->GetFavoriteGame(iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -23,7 +23,7 @@ bool  ISteamMatchmaking_::GetFavoriteGame(int  iGame, AppId_t * pnAppID, uint32 
 int  ISteamMatchmaking_::AddFavoriteGame(AppId_t  nAppID, uint32  nIP, uint16  nConnPort, uint16  nQueryPort, uint32  unFlags, uint32  rTime32LastPlayedOnServer)
 {
   TRACE("((ISteamMatchmaking *)%p, (AppId_t )%p, (uint32 )%d, (uint16 )%d, (uint16 )%d, (uint32 )%d, (uint32 )%d)\n", this, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
-  auto result = this->internal->AddFavoriteGame(nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
+  int  result = this->internal->AddFavoriteGame(nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -33,7 +33,7 @@ int  ISteamMatchmaking_::AddFavoriteGame(AppId_t  nAppID, uint32  nIP, uint16  n
 bool  ISteamMatchmaking_::RemoveFavoriteGame(AppId_t  nAppID, uint32  nIP, uint16  nConnPort, uint16  nQueryPort, uint32  unFlags)
 {
   TRACE("((ISteamMatchmaking *)%p, (AppId_t )%p, (uint32 )%d, (uint16 )%d, (uint16 )%d, (uint32 )%d)\n", this, nAppID, nIP, nConnPort, nQueryPort, unFlags);
-  auto result = this->internal->RemoveFavoriteGame(nAppID, nIP, nConnPort, nQueryPort, unFlags);
+  bool  result = this->internal->RemoveFavoriteGame(nAppID, nIP, nConnPort, nQueryPort, unFlags);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -43,7 +43,7 @@ bool  ISteamMatchmaking_::RemoveFavoriteGame(AppId_t  nAppID, uint32  nIP, uint1
 SteamAPICall_t  ISteamMatchmaking_::RequestLobbyList()
 {
   TRACE("((ISteamMatchmaking *)%p)\n", this);
-  auto result = this->internal->RequestLobbyList();
+  SteamAPICall_t  result = this->internal->RequestLobbyList();
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
   return result;
@@ -117,7 +117,7 @@ CSteamID * ISteamMatchmaking_::GetLobbyByIndex(CSteamID * hidden, int  iLobby)
 SteamAPICall_t  ISteamMatchmaking_::CreateLobby(ELobbyType  eLobbyType, int  cMaxMembers)
 {
   TRACE("((ISteamMatchmaking *)%p, (ELobbyType )%p, (int )%d)\n", this, eLobbyType, cMaxMembers);
-  auto result = this->internal->CreateLobby(eLobbyType, cMaxMembers);
+  SteamAPICall_t  result = this->internal->CreateLobby(eLobbyType, cMaxMembers);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
   return result;
@@ -127,7 +127,7 @@ SteamAPICall_t  ISteamMatchmaking_::CreateLobby(ELobbyType  eLobbyType, int  cMa
 SteamAPICall_t  ISteamMatchmaking_::JoinLobby(CSteamID  steamIDLobby)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p)\n", this, steamIDLobby);
-  auto result = this->internal->JoinLobby(steamIDLobby);
+  SteamAPICall_t  result = this->internal->JoinLobby(steamIDLobby);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
   return result;
@@ -145,7 +145,7 @@ void  ISteamMatchmaking_::LeaveLobby(CSteamID  steamIDLobby)
 bool  ISteamMatchmaking_::InviteUserToLobby(CSteamID  steamIDLobby, CSteamID  steamIDInvitee)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (CSteamID )%p)\n", this, steamIDLobby, steamIDInvitee);
-  auto result = this->internal->InviteUserToLobby(steamIDLobby, steamIDInvitee);
+  bool  result = this->internal->InviteUserToLobby(steamIDLobby, steamIDInvitee);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -155,7 +155,7 @@ bool  ISteamMatchmaking_::InviteUserToLobby(CSteamID  steamIDLobby, CSteamID  st
 int  ISteamMatchmaking_::GetNumLobbyMembers(CSteamID  steamIDLobby)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p)\n", this, steamIDLobby);
-  auto result = this->internal->GetNumLobbyMembers(steamIDLobby);
+  int  result = this->internal->GetNumLobbyMembers(steamIDLobby);
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -173,7 +173,7 @@ CSteamID * ISteamMatchmaking_::GetLobbyMemberByIndex(CSteamID * hidden, CSteamID
 char * ISteamMatchmaking_::GetLobbyData(CSteamID  steamIDLobby, char * pchKey)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (char *)\"%s\")\n", this, steamIDLobby, pchKey);
-  auto result = this->internal->GetLobbyData(steamIDLobby, pchKey);
+  char * result = this->internal->GetLobbyData(steamIDLobby, pchKey);
   TRACE("() = (char *)\"%s\"\n", result);
 
   return result;
@@ -183,7 +183,7 @@ char * ISteamMatchmaking_::GetLobbyData(CSteamID  steamIDLobby, char * pchKey)
 bool  ISteamMatchmaking_::SetLobbyData(CSteamID  steamIDLobby, char * pchKey, char * pchValue)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (char *)\"%s\", (char *)\"%s\")\n", this, steamIDLobby, pchKey, pchValue);
-  auto result = this->internal->SetLobbyData(steamIDLobby, pchKey, pchValue);
+  bool  result = this->internal->SetLobbyData(steamIDLobby, pchKey, pchValue);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -193,7 +193,7 @@ bool  ISteamMatchmaking_::SetLobbyData(CSteamID  steamIDLobby, char * pchKey, ch
 int  ISteamMatchmaking_::GetLobbyDataCount(CSteamID  steamIDLobby)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p)\n", this, steamIDLobby);
-  auto result = this->internal->GetLobbyDataCount(steamIDLobby);
+  int  result = this->internal->GetLobbyDataCount(steamIDLobby);
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -203,7 +203,7 @@ int  ISteamMatchmaking_::GetLobbyDataCount(CSteamID  steamIDLobby)
 bool  ISteamMatchmaking_::GetLobbyDataByIndex(CSteamID  steamIDLobby, int  iLobbyData, char * pchKey, int  cchKeyBufferSize, char * pchValue, int  cchValueBufferSize)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (int )%d, (char *)\"%s\", (int )%d, (char *)\"%s\", (int )%d)\n", this, steamIDLobby, iLobbyData, pchKey, cchKeyBufferSize, pchValue, cchValueBufferSize);
-  auto result = this->internal->GetLobbyDataByIndex(steamIDLobby, iLobbyData, pchKey, cchKeyBufferSize, pchValue, cchValueBufferSize);
+  bool  result = this->internal->GetLobbyDataByIndex(steamIDLobby, iLobbyData, pchKey, cchKeyBufferSize, pchValue, cchValueBufferSize);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -213,7 +213,7 @@ bool  ISteamMatchmaking_::GetLobbyDataByIndex(CSteamID  steamIDLobby, int  iLobb
 bool  ISteamMatchmaking_::DeleteLobbyData(CSteamID  steamIDLobby, char * pchKey)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (char *)\"%s\")\n", this, steamIDLobby, pchKey);
-  auto result = this->internal->DeleteLobbyData(steamIDLobby, pchKey);
+  bool  result = this->internal->DeleteLobbyData(steamIDLobby, pchKey);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -223,7 +223,7 @@ bool  ISteamMatchmaking_::DeleteLobbyData(CSteamID  steamIDLobby, char * pchKey)
 char * ISteamMatchmaking_::GetLobbyMemberData(CSteamID  steamIDLobby, CSteamID  steamIDUser, char * pchKey)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (CSteamID )%p, (char *)\"%s\")\n", this, steamIDLobby, steamIDUser, pchKey);
-  auto result = this->internal->GetLobbyMemberData(steamIDLobby, steamIDUser, pchKey);
+  char * result = this->internal->GetLobbyMemberData(steamIDLobby, steamIDUser, pchKey);
   TRACE("() = (char *)\"%s\"\n", result);
 
   return result;
@@ -241,7 +241,7 @@ void  ISteamMatchmaking_::SetLobbyMemberData(CSteamID  steamIDLobby, char * pchK
 bool  ISteamMatchmaking_::SendLobbyChatMsg(CSteamID  steamIDLobby, void * pvMsgBody, int  cubMsgBody)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (void *)%p, (int )%d)\n", this, steamIDLobby, pvMsgBody, cubMsgBody);
-  auto result = this->internal->SendLobbyChatMsg(steamIDLobby, pvMsgBody, cubMsgBody);
+  bool  result = this->internal->SendLobbyChatMsg(steamIDLobby, pvMsgBody, cubMsgBody);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -251,7 +251,7 @@ bool  ISteamMatchmaking_::SendLobbyChatMsg(CSteamID  steamIDLobby, void * pvMsgB
 int  ISteamMatchmaking_::GetLobbyChatEntry(CSteamID  steamIDLobby, int  iChatID, CSteamID * pSteamIDUser, void * pvData, int  cubData, EChatEntryType * peChatEntryType)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (int )%d, (CSteamID *)%p, (void *)%p, (int )%d, (EChatEntryType *)%p)\n", this, steamIDLobby, iChatID, pSteamIDUser, pvData, cubData, peChatEntryType);
-  auto result = this->internal->GetLobbyChatEntry(steamIDLobby, iChatID, pSteamIDUser, pvData, cubData, peChatEntryType);
+  int  result = this->internal->GetLobbyChatEntry(steamIDLobby, iChatID, pSteamIDUser, pvData, cubData, peChatEntryType);
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -261,7 +261,7 @@ int  ISteamMatchmaking_::GetLobbyChatEntry(CSteamID  steamIDLobby, int  iChatID,
 bool  ISteamMatchmaking_::RequestLobbyData(CSteamID  steamIDLobby)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p)\n", this, steamIDLobby);
-  auto result = this->internal->RequestLobbyData(steamIDLobby);
+  bool  result = this->internal->RequestLobbyData(steamIDLobby);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -279,7 +279,7 @@ void  ISteamMatchmaking_::SetLobbyGameServer(CSteamID  steamIDLobby, uint32  unG
 bool  ISteamMatchmaking_::GetLobbyGameServer(CSteamID  steamIDLobby, uint32 * punGameServerIP, uint16 * punGameServerPort, CSteamID * psteamIDGameServer)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (uint32 *)%d, (uint16 *)%d, (CSteamID *)%p)\n", this, steamIDLobby, punGameServerIP, punGameServerPort, psteamIDGameServer);
-  auto result = this->internal->GetLobbyGameServer(steamIDLobby, punGameServerIP, punGameServerPort, psteamIDGameServer);
+  bool  result = this->internal->GetLobbyGameServer(steamIDLobby, punGameServerIP, punGameServerPort, psteamIDGameServer);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -289,7 +289,7 @@ bool  ISteamMatchmaking_::GetLobbyGameServer(CSteamID  steamIDLobby, uint32 * pu
 bool  ISteamMatchmaking_::SetLobbyMemberLimit(CSteamID  steamIDLobby, int  cMaxMembers)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (int )%d)\n", this, steamIDLobby, cMaxMembers);
-  auto result = this->internal->SetLobbyMemberLimit(steamIDLobby, cMaxMembers);
+  bool  result = this->internal->SetLobbyMemberLimit(steamIDLobby, cMaxMembers);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -299,7 +299,7 @@ bool  ISteamMatchmaking_::SetLobbyMemberLimit(CSteamID  steamIDLobby, int  cMaxM
 int  ISteamMatchmaking_::GetLobbyMemberLimit(CSteamID  steamIDLobby)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p)\n", this, steamIDLobby);
-  auto result = this->internal->GetLobbyMemberLimit(steamIDLobby);
+  int  result = this->internal->GetLobbyMemberLimit(steamIDLobby);
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -309,7 +309,7 @@ int  ISteamMatchmaking_::GetLobbyMemberLimit(CSteamID  steamIDLobby)
 bool  ISteamMatchmaking_::SetLobbyType(CSteamID  steamIDLobby, ELobbyType  eLobbyType)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (ELobbyType )%p)\n", this, steamIDLobby, eLobbyType);
-  auto result = this->internal->SetLobbyType(steamIDLobby, eLobbyType);
+  bool  result = this->internal->SetLobbyType(steamIDLobby, eLobbyType);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -319,7 +319,7 @@ bool  ISteamMatchmaking_::SetLobbyType(CSteamID  steamIDLobby, ELobbyType  eLobb
 bool  ISteamMatchmaking_::SetLobbyJoinable(CSteamID  steamIDLobby, bool  bLobbyJoinable)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (bool )%d)\n", this, steamIDLobby, bLobbyJoinable);
-  auto result = this->internal->SetLobbyJoinable(steamIDLobby, bLobbyJoinable);
+  bool  result = this->internal->SetLobbyJoinable(steamIDLobby, bLobbyJoinable);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -337,7 +337,7 @@ CSteamID * ISteamMatchmaking_::GetLobbyOwner(CSteamID * hidden, CSteamID  steamI
 bool  ISteamMatchmaking_::SetLobbyOwner(CSteamID  steamIDLobby, CSteamID  steamIDNewOwner)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (CSteamID )%p)\n", this, steamIDLobby, steamIDNewOwner);
-  auto result = this->internal->SetLobbyOwner(steamIDLobby, steamIDNewOwner);
+  bool  result = this->internal->SetLobbyOwner(steamIDLobby, steamIDNewOwner);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -347,7 +347,7 @@ bool  ISteamMatchmaking_::SetLobbyOwner(CSteamID  steamIDLobby, CSteamID  steamI
 bool  ISteamMatchmaking_::SetLinkedLobby(CSteamID  steamIDLobby, CSteamID  steamIDLobbyDependent)
 {
   TRACE("((ISteamMatchmaking *)%p, (CSteamID )%p, (CSteamID )%p)\n", this, steamIDLobby, steamIDLobbyDependent);
-  auto result = this->internal->SetLinkedLobby(steamIDLobby, steamIDLobbyDependent);
+  bool  result = this->internal->SetLinkedLobby(steamIDLobby, steamIDLobbyDependent);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -495,7 +495,7 @@ ISteamMatchmakingRulesResponse_::~ISteamMatchmakingRulesResponse_()
 HServerListRequest  ISteamMatchmakingServers_::RequestInternetServerList(AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
   TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
-  auto result = this->internal->RequestInternetServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
+  HServerListRequest  result = this->internal->RequestInternetServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
   return result;
@@ -505,7 +505,7 @@ HServerListRequest  ISteamMatchmakingServers_::RequestInternetServerList(AppId_t
 HServerListRequest  ISteamMatchmakingServers_::RequestLANServerList(AppId_t  iApp, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
   TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, pRequestServersResponse);
-  auto result = this->internal->RequestLANServerList(iApp, pRequestServersResponse);
+  HServerListRequest  result = this->internal->RequestLANServerList(iApp, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
   return result;
@@ -515,7 +515,7 @@ HServerListRequest  ISteamMatchmakingServers_::RequestLANServerList(AppId_t  iAp
 HServerListRequest  ISteamMatchmakingServers_::RequestFriendsServerList(AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
   TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
-  auto result = this->internal->RequestFriendsServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
+  HServerListRequest  result = this->internal->RequestFriendsServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
   return result;
@@ -525,7 +525,7 @@ HServerListRequest  ISteamMatchmakingServers_::RequestFriendsServerList(AppId_t 
 HServerListRequest  ISteamMatchmakingServers_::RequestFavoritesServerList(AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
   TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
-  auto result = this->internal->RequestFavoritesServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
+  HServerListRequest  result = this->internal->RequestFavoritesServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
   return result;
@@ -535,7 +535,7 @@ HServerListRequest  ISteamMatchmakingServers_::RequestFavoritesServerList(AppId_
 HServerListRequest  ISteamMatchmakingServers_::RequestHistoryServerList(AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
   TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
-  auto result = this->internal->RequestHistoryServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
+  HServerListRequest  result = this->internal->RequestHistoryServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
   return result;
@@ -545,7 +545,7 @@ HServerListRequest  ISteamMatchmakingServers_::RequestHistoryServerList(AppId_t 
 HServerListRequest  ISteamMatchmakingServers_::RequestSpectatorServerList(AppId_t  iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32  nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
   TRACE("((ISteamMatchmakingServers *)%p, (AppId_t )%p, (MatchMakingKeyValuePair_t **)%p, (uint32 )%d, (ISteamMatchmakingServerListResponse *)%p)\n", this, iApp, ppchFilters, nFilters, pRequestServersResponse);
-  auto result = this->internal->RequestSpectatorServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
+  HServerListRequest  result = this->internal->RequestSpectatorServerList(iApp, ppchFilters, nFilters, pRequestServersResponse);
   TRACE("() = (HServerListRequest )%p\n", result);
 
   return result;
@@ -563,7 +563,7 @@ void  ISteamMatchmakingServers_::ReleaseRequest(HServerListRequest  hServerListR
 gameserveritem_t * ISteamMatchmakingServers_::GetServerDetails(HServerListRequest  hRequest, int  iServer)
 {
   TRACE("((ISteamMatchmakingServers *)%p, (HServerListRequest )%p, (int )%d)\n", this, hRequest, iServer);
-  auto result = this->internal->GetServerDetails(hRequest, iServer);
+  gameserveritem_t * result = this->internal->GetServerDetails(hRequest, iServer);
   TRACE("() = (gameserveritem_t *)%p\n", result);
 
   return result;
@@ -589,7 +589,7 @@ void  ISteamMatchmakingServers_::RefreshQuery(HServerListRequest  hRequest)
 bool  ISteamMatchmakingServers_::IsRefreshing(HServerListRequest  hRequest)
 {
   TRACE("((ISteamMatchmakingServers *)%p, (HServerListRequest )%p)\n", this, hRequest);
-  auto result = this->internal->IsRefreshing(hRequest);
+  bool  result = this->internal->IsRefreshing(hRequest);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -599,7 +599,7 @@ bool  ISteamMatchmakingServers_::IsRefreshing(HServerListRequest  hRequest)
 int  ISteamMatchmakingServers_::GetServerCount(HServerListRequest  hRequest)
 {
   TRACE("((ISteamMatchmakingServers *)%p, (HServerListRequest )%p)\n", this, hRequest);
-  auto result = this->internal->GetServerCount(hRequest);
+  int  result = this->internal->GetServerCount(hRequest);
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -617,7 +617,7 @@ void  ISteamMatchmakingServers_::RefreshServer(HServerListRequest  hRequest, int
 HServerQuery  ISteamMatchmakingServers_::PingServer(uint32  unIP, uint16  usPort, ISteamMatchmakingPingResponse * pRequestServersResponse)
 {
   TRACE("((ISteamMatchmakingServers *)%p, (uint32 )%d, (uint16 )%d, (ISteamMatchmakingPingResponse *)%p)\n", this, unIP, usPort, pRequestServersResponse);
-  auto result = this->internal->PingServer(unIP, usPort, pRequestServersResponse);
+  HServerQuery  result = this->internal->PingServer(unIP, usPort, pRequestServersResponse);
   TRACE("() = (HServerQuery )%p\n", result);
 
   return result;
@@ -627,7 +627,7 @@ HServerQuery  ISteamMatchmakingServers_::PingServer(uint32  unIP, uint16  usPort
 HServerQuery  ISteamMatchmakingServers_::PlayerDetails(uint32  unIP, uint16  usPort, ISteamMatchmakingPlayersResponse * pRequestServersResponse)
 {
   TRACE("((ISteamMatchmakingServers *)%p, (uint32 )%d, (uint16 )%d, (ISteamMatchmakingPlayersResponse *)%p)\n", this, unIP, usPort, pRequestServersResponse);
-  auto result = this->internal->PlayerDetails(unIP, usPort, pRequestServersResponse);
+  HServerQuery  result = this->internal->PlayerDetails(unIP, usPort, pRequestServersResponse);
   TRACE("() = (HServerQuery )%p\n", result);
 
   return result;
@@ -637,7 +637,7 @@ HServerQuery  ISteamMatchmakingServers_::PlayerDetails(uint32  unIP, uint16  usP
 HServerQuery  ISteamMatchmakingServers_::ServerRules(uint32  unIP, uint16  usPort, ISteamMatchmakingRulesResponse * pRequestServersResponse)
 {
   TRACE("((ISteamMatchmakingServers *)%p, (uint32 )%d, (uint16 )%d, (ISteamMatchmakingRulesResponse *)%p)\n", this, unIP, usPort, pRequestServersResponse);
-  auto result = this->internal->ServerRules(unIP, usPort, pRequestServersResponse);
+  HServerQuery  result = this->internal->ServerRules(unIP, usPort, pRequestServersResponse);
   TRACE("() = (HServerQuery )%p\n", result);
 
   return result;

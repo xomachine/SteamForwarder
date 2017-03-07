@@ -3,7 +3,7 @@
 bool  ISteamApps_::BIsSubscribed()
 {
   TRACE("((ISteamApps *)%p)\n", this);
-  auto result = this->internal->BIsSubscribed();
+  bool  result = this->internal->BIsSubscribed();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -13,7 +13,7 @@ bool  ISteamApps_::BIsSubscribed()
 bool  ISteamApps_::BIsLowViolence()
 {
   TRACE("((ISteamApps *)%p)\n", this);
-  auto result = this->internal->BIsLowViolence();
+  bool  result = this->internal->BIsLowViolence();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -23,7 +23,7 @@ bool  ISteamApps_::BIsLowViolence()
 bool  ISteamApps_::BIsCybercafe()
 {
   TRACE("((ISteamApps *)%p)\n", this);
-  auto result = this->internal->BIsCybercafe();
+  bool  result = this->internal->BIsCybercafe();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -33,7 +33,7 @@ bool  ISteamApps_::BIsCybercafe()
 bool  ISteamApps_::BIsVACBanned()
 {
   TRACE("((ISteamApps *)%p)\n", this);
-  auto result = this->internal->BIsVACBanned();
+  bool  result = this->internal->BIsVACBanned();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -43,7 +43,7 @@ bool  ISteamApps_::BIsVACBanned()
 char * ISteamApps_::GetCurrentGameLanguage()
 {
   TRACE("((ISteamApps *)%p)\n", this);
-  auto result = this->internal->GetCurrentGameLanguage();
+  char * result = this->internal->GetCurrentGameLanguage();
   TRACE("() = (char *)\"%s\"\n", result);
 
   return result;
@@ -53,7 +53,7 @@ char * ISteamApps_::GetCurrentGameLanguage()
 char * ISteamApps_::GetAvailableGameLanguages()
 {
   TRACE("((ISteamApps *)%p)\n", this);
-  auto result = this->internal->GetAvailableGameLanguages();
+  char * result = this->internal->GetAvailableGameLanguages();
   TRACE("() = (char *)\"%s\"\n", result);
 
   return result;
@@ -63,7 +63,7 @@ char * ISteamApps_::GetAvailableGameLanguages()
 bool  ISteamApps_::BIsSubscribedApp(AppId_t  appID)
 {
   TRACE("((ISteamApps *)%p, (AppId_t )%p)\n", this, appID);
-  auto result = this->internal->BIsSubscribedApp(appID);
+  bool  result = this->internal->BIsSubscribedApp(appID);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -73,7 +73,7 @@ bool  ISteamApps_::BIsSubscribedApp(AppId_t  appID)
 bool  ISteamApps_::BIsDlcInstalled(AppId_t  appID)
 {
   TRACE("((ISteamApps *)%p, (AppId_t )%p)\n", this, appID);
-  auto result = this->internal->BIsDlcInstalled(appID);
+  bool  result = this->internal->BIsDlcInstalled(appID);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -83,7 +83,7 @@ bool  ISteamApps_::BIsDlcInstalled(AppId_t  appID)
 uint32  ISteamApps_::GetEarliestPurchaseUnixTime(AppId_t  nAppID)
 {
   TRACE("((ISteamApps *)%p, (AppId_t )%p)\n", this, nAppID);
-  auto result = this->internal->GetEarliestPurchaseUnixTime(nAppID);
+  uint32  result = this->internal->GetEarliestPurchaseUnixTime(nAppID);
   TRACE("() = (uint32 )%d\n", result);
 
   return result;
@@ -93,7 +93,7 @@ uint32  ISteamApps_::GetEarliestPurchaseUnixTime(AppId_t  nAppID)
 bool  ISteamApps_::BIsSubscribedFromFreeWeekend()
 {
   TRACE("((ISteamApps *)%p)\n", this);
-  auto result = this->internal->BIsSubscribedFromFreeWeekend();
+  bool  result = this->internal->BIsSubscribedFromFreeWeekend();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -103,7 +103,7 @@ bool  ISteamApps_::BIsSubscribedFromFreeWeekend()
 int  ISteamApps_::GetDLCCount()
 {
   TRACE("((ISteamApps *)%p)\n", this);
-  auto result = this->internal->GetDLCCount();
+  int  result = this->internal->GetDLCCount();
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -113,7 +113,7 @@ int  ISteamApps_::GetDLCCount()
 bool  ISteamApps_::BGetDLCDataByIndex(int  iDLC, AppId_t * pAppID, bool * pbAvailable, char * pchName, int  cchNameBufferSize)
 {
   TRACE("((ISteamApps *)%p, (int )%d, (AppId_t *)%p, (bool *)%d, (char *)\"%s\", (int )%d)\n", this, iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
-  auto result = this->internal->BGetDLCDataByIndex(iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
+  bool  result = this->internal->BGetDLCDataByIndex(iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -147,7 +147,7 @@ void  ISteamApps_::RequestAppProofOfPurchaseKey(AppId_t  nAppID)
 bool  ISteamApps_::GetCurrentBetaName(char * pchName, int  cchNameBufferSize)
 {
   TRACE("((ISteamApps *)%p, (char *)\"%s\", (int )%d)\n", this, pchName, cchNameBufferSize);
-  auto result = this->internal->GetCurrentBetaName(pchName, cchNameBufferSize);
+  bool  result = this->internal->GetCurrentBetaName(pchName, cchNameBufferSize);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -157,7 +157,7 @@ bool  ISteamApps_::GetCurrentBetaName(char * pchName, int  cchNameBufferSize)
 bool  ISteamApps_::MarkContentCorrupt(bool  bMissingFilesOnly)
 {
   TRACE("((ISteamApps *)%p, (bool )%d)\n", this, bMissingFilesOnly);
-  auto result = this->internal->MarkContentCorrupt(bMissingFilesOnly);
+  bool  result = this->internal->MarkContentCorrupt(bMissingFilesOnly);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -167,7 +167,7 @@ bool  ISteamApps_::MarkContentCorrupt(bool  bMissingFilesOnly)
 uint32  ISteamApps_::GetInstalledDepots(AppId_t  appID, DepotId_t * pvecDepots, uint32  cMaxDepots)
 {
   TRACE("((ISteamApps *)%p, (AppId_t )%p, (DepotId_t *)%p, (uint32 )%d)\n", this, appID, pvecDepots, cMaxDepots);
-  auto result = this->internal->GetInstalledDepots(appID, pvecDepots, cMaxDepots);
+  uint32  result = this->internal->GetInstalledDepots(appID, pvecDepots, cMaxDepots);
   TRACE("() = (uint32 )%d\n", result);
 
   return result;
@@ -177,7 +177,7 @@ uint32  ISteamApps_::GetInstalledDepots(AppId_t  appID, DepotId_t * pvecDepots, 
 uint32  ISteamApps_::GetAppInstallDir(AppId_t  appID, char * pchFolder, uint32  cchFolderBufferSize)
 {
   TRACE("((ISteamApps *)%p, (AppId_t )%p, (char *)\"%s\", (uint32 )%d)\n", this, appID, pchFolder, cchFolderBufferSize);
-  auto result = this->internal->GetAppInstallDir(appID, pchFolder, cchFolderBufferSize);
+  uint32  result = this->internal->GetAppInstallDir(appID, pchFolder, cchFolderBufferSize);
   TRACE("() = (uint32 )%d\n", result);
 
   return result;
@@ -187,7 +187,7 @@ uint32  ISteamApps_::GetAppInstallDir(AppId_t  appID, char * pchFolder, uint32  
 bool  ISteamApps_::BIsAppInstalled(AppId_t  appID)
 {
   TRACE("((ISteamApps *)%p, (AppId_t )%p)\n", this, appID);
-  auto result = this->internal->BIsAppInstalled(appID);
+  bool  result = this->internal->BIsAppInstalled(appID);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -205,7 +205,7 @@ CSteamID * ISteamApps_::GetAppOwner(CSteamID * hidden)
 char * ISteamApps_::GetLaunchQueryParam(char * pchKey)
 {
   TRACE("((ISteamApps *)%p, (char *)\"%s\")\n", this, pchKey);
-  auto result = this->internal->GetLaunchQueryParam(pchKey);
+  char * result = this->internal->GetLaunchQueryParam(pchKey);
   TRACE("() = (char *)\"%s\"\n", result);
 
   return result;
@@ -215,7 +215,7 @@ char * ISteamApps_::GetLaunchQueryParam(char * pchKey)
 bool  ISteamApps_::GetDlcDownloadProgress(AppId_t  nAppID, uint64 * punBytesDownloaded, uint64 * punBytesTotal)
 {
   TRACE("((ISteamApps *)%p, (AppId_t )%p, (uint64 *)%d, (uint64 *)%d)\n", this, nAppID, punBytesDownloaded, punBytesTotal);
-  auto result = this->internal->GetDlcDownloadProgress(nAppID, punBytesDownloaded, punBytesTotal);
+  bool  result = this->internal->GetDlcDownloadProgress(nAppID, punBytesDownloaded, punBytesTotal);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -225,7 +225,7 @@ bool  ISteamApps_::GetDlcDownloadProgress(AppId_t  nAppID, uint64 * punBytesDown
 int  ISteamApps_::GetAppBuildId()
 {
   TRACE("((ISteamApps *)%p)\n", this);
-  auto result = this->internal->GetAppBuildId();
+  int  result = this->internal->GetAppBuildId();
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -243,7 +243,7 @@ void  ISteamApps_::RequestAllProofOfPurchaseKeys()
 SteamAPICall_t  ISteamApps_::GetFileDetails(char * pszFileName)
 {
   TRACE("((ISteamApps *)%p, (char *)\"%s\")\n", this, pszFileName);
-  auto result = this->internal->GetFileDetails(pszFileName);
+  SteamAPICall_t  result = this->internal->GetFileDetails(pszFileName);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
   return result;

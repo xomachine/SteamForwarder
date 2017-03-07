@@ -11,7 +11,7 @@ void  ISteamVideo_::GetVideoURL(AppId_t  unVideoAppID)
 bool  ISteamVideo_::IsBroadcasting(int * pnNumViewers)
 {
   TRACE("((ISteamVideo *)%p, (int *)%d)\n", this, pnNumViewers);
-  auto result = this->internal->IsBroadcasting(pnNumViewers);
+  bool  result = this->internal->IsBroadcasting(pnNumViewers);
   TRACE("() = (bool )%d\n", result);
 
   return result;

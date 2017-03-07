@@ -135,7 +135,7 @@ proc makeResult(self: CallInfo, test: bool = false): string =
     let realcall = if test: "NULL" else: self.makeRealCall()
     if self.inline and not test:
       """if (saved_$1 == NULL) {
-    auto internal = $2;
+    $1* internal = $2;
     if (internal == NULL) {
       TRACE("() = NULL!\n");
       return saved_$1;
@@ -147,17 +147,18 @@ proc makeResult(self: CallInfo, test: bool = false): string =
 """ % [self.returntype.base, realcall]
     elif self.inline:
       """
-  auto result = new $1_(NULL);
+  $1_* result = new $1_(NULL);
   $2
 """ % [self.returntype.base, self.makeTraceResult()]
     else:
-      """auto result = new $1_($2);
+      """$1_* result = new $1_($2);
   $3
 """ % [self.returntype.base, realcall, self.makeTraceResult()]
   else:
-    """auto result = $1;
+    """$3 result = $1;
   $2
-""" % [self.makeRealCall(), self.makeTraceResult()]
+""" % [self.makeRealCall(), self.makeTraceResult(),
+       self.returntype.toDeclaration()]
 
 let callbackre = re"""^SteamAPI_(Un)?[Rr]egisterCall(back|Result)$"""
 proc makeBody*(self: CallInfo): string {.procvar.} =

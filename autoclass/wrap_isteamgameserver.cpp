@@ -3,7 +3,7 @@
 bool  ISteamGameServer_::InitGameServer(uint32  unIP, uint16  usGamePort, uint16  usQueryPort, uint32  unFlags, AppId_t  nGameAppId, char * pchVersionString)
 {
   TRACE("((ISteamGameServer *)%p, (uint32 )%d, (uint16 )%d, (uint16 )%d, (uint32 )%d, (AppId_t )%p, (char *)\"%s\")\n", this, unIP, usGamePort, usQueryPort, unFlags, nGameAppId, pchVersionString);
-  auto result = this->internal->InitGameServer(unIP, usGamePort, usQueryPort, unFlags, nGameAppId, pchVersionString);
+  bool  result = this->internal->InitGameServer(unIP, usGamePort, usQueryPort, unFlags, nGameAppId, pchVersionString);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -69,7 +69,7 @@ void  ISteamGameServer_::LogOff()
 bool  ISteamGameServer_::BLoggedOn()
 {
   TRACE("((ISteamGameServer *)%p)\n", this);
-  auto result = this->internal->BLoggedOn();
+  bool  result = this->internal->BLoggedOn();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -79,7 +79,7 @@ bool  ISteamGameServer_::BLoggedOn()
 bool  ISteamGameServer_::BSecure()
 {
   TRACE("((ISteamGameServer *)%p)\n", this);
-  auto result = this->internal->BSecure();
+  bool  result = this->internal->BSecure();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -97,7 +97,7 @@ CSteamID * ISteamGameServer_::GetSteamID(CSteamID * hidden)
 bool  ISteamGameServer_::WasRestartRequested()
 {
   TRACE("((ISteamGameServer *)%p)\n", this);
-  auto result = this->internal->WasRestartRequested();
+  bool  result = this->internal->WasRestartRequested();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -203,7 +203,7 @@ void  ISteamGameServer_::SetRegion(char * pszRegion)
 bool  ISteamGameServer_::SendUserConnectAndAuthenticate(uint32  unIPClient, void * pvAuthBlob, uint32  cubAuthBlobSize, CSteamID * pSteamIDUser)
 {
   TRACE("((ISteamGameServer *)%p, (uint32 )%d, (void *)%p, (uint32 )%d, (CSteamID *)%p)\n", this, unIPClient, pvAuthBlob, cubAuthBlobSize, pSteamIDUser);
-  auto result = this->internal->SendUserConnectAndAuthenticate(unIPClient, pvAuthBlob, cubAuthBlobSize, pSteamIDUser);
+  bool  result = this->internal->SendUserConnectAndAuthenticate(unIPClient, pvAuthBlob, cubAuthBlobSize, pSteamIDUser);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -229,7 +229,7 @@ void  ISteamGameServer_::SendUserDisconnect(CSteamID  steamIDUser)
 bool  ISteamGameServer_::BUpdateUserData(CSteamID  steamIDUser, char * pchPlayerName, uint32  uScore)
 {
   TRACE("((ISteamGameServer *)%p, (CSteamID )%p, (char *)\"%s\", (uint32 )%d)\n", this, steamIDUser, pchPlayerName, uScore);
-  auto result = this->internal->BUpdateUserData(steamIDUser, pchPlayerName, uScore);
+  bool  result = this->internal->BUpdateUserData(steamIDUser, pchPlayerName, uScore);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -239,7 +239,7 @@ bool  ISteamGameServer_::BUpdateUserData(CSteamID  steamIDUser, char * pchPlayer
 HAuthTicket  ISteamGameServer_::GetAuthSessionTicket(void * pTicket, int  cbMaxTicket, uint32 * pcbTicket)
 {
   TRACE("((ISteamGameServer *)%p, (void *)%p, (int )%d, (uint32 *)%d)\n", this, pTicket, cbMaxTicket, pcbTicket);
-  auto result = this->internal->GetAuthSessionTicket(pTicket, cbMaxTicket, pcbTicket);
+  HAuthTicket  result = this->internal->GetAuthSessionTicket(pTicket, cbMaxTicket, pcbTicket);
   TRACE("() = (HAuthTicket )%p\n", result);
 
   return result;
@@ -249,7 +249,7 @@ HAuthTicket  ISteamGameServer_::GetAuthSessionTicket(void * pTicket, int  cbMaxT
 EBeginAuthSessionResult  ISteamGameServer_::BeginAuthSession(void * pAuthTicket, int  cbAuthTicket, CSteamID  steamID)
 {
   TRACE("((ISteamGameServer *)%p, (void *)%p, (int )%d, (CSteamID )%p)\n", this, pAuthTicket, cbAuthTicket, steamID);
-  auto result = this->internal->BeginAuthSession(pAuthTicket, cbAuthTicket, steamID);
+  EBeginAuthSessionResult  result = this->internal->BeginAuthSession(pAuthTicket, cbAuthTicket, steamID);
   TRACE("() = (EBeginAuthSessionResult )%p\n", result);
 
   return result;
@@ -275,7 +275,7 @@ void  ISteamGameServer_::CancelAuthTicket(HAuthTicket  hAuthTicket)
 EUserHasLicenseForAppResult  ISteamGameServer_::UserHasLicenseForApp(CSteamID  steamID, AppId_t  appID)
 {
   TRACE("((ISteamGameServer *)%p, (CSteamID )%p, (AppId_t )%p)\n", this, steamID, appID);
-  auto result = this->internal->UserHasLicenseForApp(steamID, appID);
+  EUserHasLicenseForAppResult  result = this->internal->UserHasLicenseForApp(steamID, appID);
   TRACE("() = (EUserHasLicenseForAppResult )%p\n", result);
 
   return result;
@@ -285,7 +285,7 @@ EUserHasLicenseForAppResult  ISteamGameServer_::UserHasLicenseForApp(CSteamID  s
 bool  ISteamGameServer_::RequestUserGroupStatus(CSteamID  steamIDUser, CSteamID  steamIDGroup)
 {
   TRACE("((ISteamGameServer *)%p, (CSteamID )%p, (CSteamID )%p)\n", this, steamIDUser, steamIDGroup);
-  auto result = this->internal->RequestUserGroupStatus(steamIDUser, steamIDGroup);
+  bool  result = this->internal->RequestUserGroupStatus(steamIDUser, steamIDGroup);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -303,7 +303,7 @@ void  ISteamGameServer_::GetGameplayStats()
 SteamAPICall_t  ISteamGameServer_::GetServerReputation()
 {
   TRACE("((ISteamGameServer *)%p)\n", this);
-  auto result = this->internal->GetServerReputation();
+  SteamAPICall_t  result = this->internal->GetServerReputation();
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
   return result;
@@ -313,7 +313,7 @@ SteamAPICall_t  ISteamGameServer_::GetServerReputation()
 uint32  ISteamGameServer_::GetPublicIP()
 {
   TRACE("((ISteamGameServer *)%p)\n", this);
-  auto result = this->internal->GetPublicIP();
+  uint32  result = this->internal->GetPublicIP();
   TRACE("() = (uint32 )%d\n", result);
 
   return result;
@@ -323,7 +323,7 @@ uint32  ISteamGameServer_::GetPublicIP()
 bool  ISteamGameServer_::HandleIncomingPacket(void * pData, int  cbData, uint32  srcIP, uint16  srcPort)
 {
   TRACE("((ISteamGameServer *)%p, (void *)%p, (int )%d, (uint32 )%d, (uint16 )%d)\n", this, pData, cbData, srcIP, srcPort);
-  auto result = this->internal->HandleIncomingPacket(pData, cbData, srcIP, srcPort);
+  bool  result = this->internal->HandleIncomingPacket(pData, cbData, srcIP, srcPort);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -333,7 +333,7 @@ bool  ISteamGameServer_::HandleIncomingPacket(void * pData, int  cbData, uint32 
 int  ISteamGameServer_::GetNextOutgoingPacket(void * pOut, int  cbMaxOut, uint32 * pNetAdr, uint16 * pPort)
 {
   TRACE("((ISteamGameServer *)%p, (void *)%p, (int )%d, (uint32 *)%d, (uint16 *)%d)\n", this, pOut, cbMaxOut, pNetAdr, pPort);
-  auto result = this->internal->GetNextOutgoingPacket(pOut, cbMaxOut, pNetAdr, pPort);
+  int  result = this->internal->GetNextOutgoingPacket(pOut, cbMaxOut, pNetAdr, pPort);
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -367,7 +367,7 @@ void  ISteamGameServer_::ForceHeartbeat()
 SteamAPICall_t  ISteamGameServer_::AssociateWithClan(CSteamID  steamIDClan)
 {
   TRACE("((ISteamGameServer *)%p, (CSteamID )%p)\n", this, steamIDClan);
-  auto result = this->internal->AssociateWithClan(steamIDClan);
+  SteamAPICall_t  result = this->internal->AssociateWithClan(steamIDClan);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
   return result;
@@ -377,7 +377,7 @@ SteamAPICall_t  ISteamGameServer_::AssociateWithClan(CSteamID  steamIDClan)
 SteamAPICall_t  ISteamGameServer_::ComputeNewPlayerCompatibility(CSteamID  steamIDNewPlayer)
 {
   TRACE("((ISteamGameServer *)%p, (CSteamID )%p)\n", this, steamIDNewPlayer);
-  auto result = this->internal->ComputeNewPlayerCompatibility(steamIDNewPlayer);
+  SteamAPICall_t  result = this->internal->ComputeNewPlayerCompatibility(steamIDNewPlayer);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
   return result;

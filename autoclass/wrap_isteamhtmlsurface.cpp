@@ -3,7 +3,7 @@
 bool  ISteamHTMLSurface_::Init()
 {
   TRACE("((ISteamHTMLSurface *)%p)\n", this);
-  auto result = this->internal->Init();
+  bool  result = this->internal->Init();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -13,7 +13,7 @@ bool  ISteamHTMLSurface_::Init()
 bool  ISteamHTMLSurface_::Shutdown()
 {
   TRACE("((ISteamHTMLSurface *)%p)\n", this);
-  auto result = this->internal->Shutdown();
+  bool  result = this->internal->Shutdown();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -23,7 +23,7 @@ bool  ISteamHTMLSurface_::Shutdown()
 SteamAPICall_t  ISteamHTMLSurface_::CreateBrowser(char * pchUserAgent, char * pchUserCSS)
 {
   TRACE("((ISteamHTMLSurface *)%p, (char *)\"%s\", (char *)\"%s\")\n", this, pchUserAgent, pchUserCSS);
-  auto result = this->internal->CreateBrowser(pchUserAgent, pchUserCSS);
+  SteamAPICall_t  result = this->internal->CreateBrowser(pchUserAgent, pchUserCSS);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
   return result;

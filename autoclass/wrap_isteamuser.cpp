@@ -3,7 +3,7 @@
 HSteamUser  ISteamUser_::GetHSteamUser()
 {
   TRACE("((ISteamUser *)%p)\n", this);
-  auto result = this->internal->GetHSteamUser();
+  HSteamUser  result = this->internal->GetHSteamUser();
   TRACE("() = (HSteamUser )%p\n", result);
 
   return result;
@@ -13,7 +13,7 @@ HSteamUser  ISteamUser_::GetHSteamUser()
 bool  ISteamUser_::BLoggedOn()
 {
   TRACE("((ISteamUser *)%p)\n", this);
-  auto result = this->internal->BLoggedOn();
+  bool  result = this->internal->BLoggedOn();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -31,7 +31,7 @@ CSteamID * ISteamUser_::GetSteamID(CSteamID * hidden)
 int  ISteamUser_::InitiateGameConnection(void * pAuthBlob, int  cbMaxAuthBlob, CSteamID  steamIDGameServer, uint32  unIPServer, uint16  usPortServer, bool  bSecure)
 {
   TRACE("((ISteamUser *)%p, (void *)%p, (int )%d, (CSteamID )%p, (uint32 )%d, (uint16 )%d, (bool )%d)\n", this, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
-  auto result = this->internal->InitiateGameConnection(pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+  int  result = this->internal->InitiateGameConnection(pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -57,7 +57,7 @@ void  ISteamUser_::TrackAppUsageEvent(CGameID  gameID, int  eAppUsageEvent, char
 bool  ISteamUser_::GetUserDataFolder(char * pchBuffer, int  cubBuffer)
 {
   TRACE("((ISteamUser *)%p, (char *)\"%s\", (int )%d)\n", this, pchBuffer, cubBuffer);
-  auto result = this->internal->GetUserDataFolder(pchBuffer, cubBuffer);
+  bool  result = this->internal->GetUserDataFolder(pchBuffer, cubBuffer);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -83,7 +83,7 @@ void  ISteamUser_::StopVoiceRecording()
 EVoiceResult  ISteamUser_::GetAvailableVoice(uint32 * pcbCompressed, uint32 * pcbUncompressed, uint32  nUncompressedVoiceDesiredSampleRate)
 {
   TRACE("((ISteamUser *)%p, (uint32 *)%d, (uint32 *)%d, (uint32 )%d)\n", this, pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
-  auto result = this->internal->GetAvailableVoice(pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
+  EVoiceResult  result = this->internal->GetAvailableVoice(pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
   TRACE("() = (EVoiceResult )%p\n", result);
 
   return result;
@@ -93,7 +93,7 @@ EVoiceResult  ISteamUser_::GetAvailableVoice(uint32 * pcbCompressed, uint32 * pc
 EVoiceResult  ISteamUser_::GetVoice(bool  bWantCompressed, void * pDestBuffer, uint32  cbDestBufferSize, uint32 * nBytesWritten, bool  bWantUncompressed, void * pUncompressedDestBuffer, uint32  cbUncompressedDestBufferSize, uint32 * nUncompressBytesWritten, uint32  nUncompressedVoiceDesiredSampleRate)
 {
   TRACE("((ISteamUser *)%p, (bool )%d, (void *)%p, (uint32 )%d, (uint32 *)%d, (bool )%d, (void *)%p, (uint32 )%d, (uint32 *)%d, (uint32 )%d)\n", this, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
-  auto result = this->internal->GetVoice(bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
+  EVoiceResult  result = this->internal->GetVoice(bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
   TRACE("() = (EVoiceResult )%p\n", result);
 
   return result;
@@ -103,7 +103,7 @@ EVoiceResult  ISteamUser_::GetVoice(bool  bWantCompressed, void * pDestBuffer, u
 EVoiceResult  ISteamUser_::DecompressVoice(void * pCompressed, uint32  cbCompressed, void * pDestBuffer, uint32  cbDestBufferSize, uint32 * nBytesWritten, uint32  nDesiredSampleRate)
 {
   TRACE("((ISteamUser *)%p, (void *)%p, (uint32 )%d, (void *)%p, (uint32 )%d, (uint32 *)%d, (uint32 )%d)\n", this, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
-  auto result = this->internal->DecompressVoice(pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+  EVoiceResult  result = this->internal->DecompressVoice(pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
   TRACE("() = (EVoiceResult )%p\n", result);
 
   return result;
@@ -113,7 +113,7 @@ EVoiceResult  ISteamUser_::DecompressVoice(void * pCompressed, uint32  cbCompres
 uint32  ISteamUser_::GetVoiceOptimalSampleRate()
 {
   TRACE("((ISteamUser *)%p)\n", this);
-  auto result = this->internal->GetVoiceOptimalSampleRate();
+  uint32  result = this->internal->GetVoiceOptimalSampleRate();
   TRACE("() = (uint32 )%d\n", result);
 
   return result;
@@ -123,7 +123,7 @@ uint32  ISteamUser_::GetVoiceOptimalSampleRate()
 HAuthTicket  ISteamUser_::GetAuthSessionTicket(void * pTicket, int  cbMaxTicket, uint32 * pcbTicket)
 {
   TRACE("((ISteamUser *)%p, (void *)%p, (int )%d, (uint32 *)%d)\n", this, pTicket, cbMaxTicket, pcbTicket);
-  auto result = this->internal->GetAuthSessionTicket(pTicket, cbMaxTicket, pcbTicket);
+  HAuthTicket  result = this->internal->GetAuthSessionTicket(pTicket, cbMaxTicket, pcbTicket);
   TRACE("() = (HAuthTicket )%p\n", result);
 
   return result;
@@ -133,7 +133,7 @@ HAuthTicket  ISteamUser_::GetAuthSessionTicket(void * pTicket, int  cbMaxTicket,
 EBeginAuthSessionResult  ISteamUser_::BeginAuthSession(void * pAuthTicket, int  cbAuthTicket, CSteamID  steamID)
 {
   TRACE("((ISteamUser *)%p, (void *)%p, (int )%d, (CSteamID )%p)\n", this, pAuthTicket, cbAuthTicket, steamID);
-  auto result = this->internal->BeginAuthSession(pAuthTicket, cbAuthTicket, steamID);
+  EBeginAuthSessionResult  result = this->internal->BeginAuthSession(pAuthTicket, cbAuthTicket, steamID);
   TRACE("() = (EBeginAuthSessionResult )%p\n", result);
 
   return result;
@@ -159,7 +159,7 @@ void  ISteamUser_::CancelAuthTicket(HAuthTicket  hAuthTicket)
 EUserHasLicenseForAppResult  ISteamUser_::UserHasLicenseForApp(CSteamID  steamID, AppId_t  appID)
 {
   TRACE("((ISteamUser *)%p, (CSteamID )%p, (AppId_t )%p)\n", this, steamID, appID);
-  auto result = this->internal->UserHasLicenseForApp(steamID, appID);
+  EUserHasLicenseForAppResult  result = this->internal->UserHasLicenseForApp(steamID, appID);
   TRACE("() = (EUserHasLicenseForAppResult )%p\n", result);
 
   return result;
@@ -169,7 +169,7 @@ EUserHasLicenseForAppResult  ISteamUser_::UserHasLicenseForApp(CSteamID  steamID
 bool  ISteamUser_::BIsBehindNAT()
 {
   TRACE("((ISteamUser *)%p)\n", this);
-  auto result = this->internal->BIsBehindNAT();
+  bool  result = this->internal->BIsBehindNAT();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -187,7 +187,7 @@ void  ISteamUser_::AdvertiseGame(CSteamID  steamIDGameServer, uint32  unIPServer
 SteamAPICall_t  ISteamUser_::RequestEncryptedAppTicket(void * pDataToInclude, int  cbDataToInclude)
 {
   TRACE("((ISteamUser *)%p, (void *)%p, (int )%d)\n", this, pDataToInclude, cbDataToInclude);
-  auto result = this->internal->RequestEncryptedAppTicket(pDataToInclude, cbDataToInclude);
+  SteamAPICall_t  result = this->internal->RequestEncryptedAppTicket(pDataToInclude, cbDataToInclude);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
   return result;
@@ -197,7 +197,7 @@ SteamAPICall_t  ISteamUser_::RequestEncryptedAppTicket(void * pDataToInclude, in
 bool  ISteamUser_::GetEncryptedAppTicket(void * pTicket, int  cbMaxTicket, uint32 * pcbTicket)
 {
   TRACE("((ISteamUser *)%p, (void *)%p, (int )%d, (uint32 *)%d)\n", this, pTicket, cbMaxTicket, pcbTicket);
-  auto result = this->internal->GetEncryptedAppTicket(pTicket, cbMaxTicket, pcbTicket);
+  bool  result = this->internal->GetEncryptedAppTicket(pTicket, cbMaxTicket, pcbTicket);
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -207,7 +207,7 @@ bool  ISteamUser_::GetEncryptedAppTicket(void * pTicket, int  cbMaxTicket, uint3
 int  ISteamUser_::GetGameBadgeLevel(int  nSeries, bool  bFoil)
 {
   TRACE("((ISteamUser *)%p, (int )%d, (bool )%d)\n", this, nSeries, bFoil);
-  auto result = this->internal->GetGameBadgeLevel(nSeries, bFoil);
+  int  result = this->internal->GetGameBadgeLevel(nSeries, bFoil);
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -217,7 +217,7 @@ int  ISteamUser_::GetGameBadgeLevel(int  nSeries, bool  bFoil)
 int  ISteamUser_::GetPlayerSteamLevel()
 {
   TRACE("((ISteamUser *)%p)\n", this);
-  auto result = this->internal->GetPlayerSteamLevel();
+  int  result = this->internal->GetPlayerSteamLevel();
   TRACE("() = (int )%d\n", result);
 
   return result;
@@ -227,7 +227,7 @@ int  ISteamUser_::GetPlayerSteamLevel()
 SteamAPICall_t  ISteamUser_::RequestStoreAuthURL(char * pchRedirectURL)
 {
   TRACE("((ISteamUser *)%p, (char *)\"%s\")\n", this, pchRedirectURL);
-  auto result = this->internal->RequestStoreAuthURL(pchRedirectURL);
+  SteamAPICall_t  result = this->internal->RequestStoreAuthURL(pchRedirectURL);
   TRACE("() = (SteamAPICall_t )%p\n", result);
 
   return result;
@@ -237,7 +237,7 @@ SteamAPICall_t  ISteamUser_::RequestStoreAuthURL(char * pchRedirectURL)
 bool  ISteamUser_::BIsPhoneVerified()
 {
   TRACE("((ISteamUser *)%p)\n", this);
-  auto result = this->internal->BIsPhoneVerified();
+  bool  result = this->internal->BIsPhoneVerified();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -247,7 +247,7 @@ bool  ISteamUser_::BIsPhoneVerified()
 bool  ISteamUser_::BIsTwoFactorEnabled()
 {
   TRACE("((ISteamUser *)%p)\n", this);
-  auto result = this->internal->BIsTwoFactorEnabled();
+  bool  result = this->internal->BIsTwoFactorEnabled();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -257,7 +257,7 @@ bool  ISteamUser_::BIsTwoFactorEnabled()
 bool  ISteamUser_::BIsPhoneIdentifying()
 {
   TRACE("((ISteamUser *)%p)\n", this);
-  auto result = this->internal->BIsPhoneIdentifying();
+  bool  result = this->internal->BIsPhoneIdentifying();
   TRACE("() = (bool )%d\n", result);
 
   return result;
@@ -267,7 +267,7 @@ bool  ISteamUser_::BIsPhoneIdentifying()
 bool  ISteamUser_::BIsPhoneRequiringVerification()
 {
   TRACE("((ISteamUser *)%p)\n", this);
-  auto result = this->internal->BIsPhoneRequiringVerification();
+  bool  result = this->internal->BIsPhoneRequiringVerification();
   TRACE("() = (bool )%d\n", result);
 
   return result;
