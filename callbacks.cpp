@@ -27,7 +27,7 @@ void WrappedCallback::Run(void *pvParams, bool onIOFailure, SteamAPICall_t hStea
 int WrappedCallback::GetCallbackSizeBytes()
 {
   TRACE("((WrappedCallback)%p)\n", this);
-  auto result = this->internal->GetCallbackSizeBytes();
+  int result = this->internal->GetCallbackSizeBytes();
   TRACE("() = %d\n", result);
   return result;
 }
