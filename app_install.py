@@ -1,7 +1,9 @@
 #!/bin/env python3
 
 from urllib.request import urlopen, Request
-from json import load, dump
+from json import load, dump, loads
+import subprocess
+import tempfile
 import re
 import argparse
 import os
@@ -26,8 +28,7 @@ installdirre = re.compile("""<tr>[\n\s]*
                           """, re.X)
 
 class LaunchInfo:
-  def __init__(self, match, install_dir):
-    match_dict = match.groupdict()
+  def __init__(self, match_dict, install_dir):
     self.executable = install_dir + '/' + re.sub(r'\\', r'/', match_dict['executable'])
     self.arguments = match_dict["arguments"]
     self.description = match_dict["description"]
@@ -35,7 +36,31 @@ class LaunchInfo:
     return "(LaunchInfo: {0} {1} # {2})".format(self.executable,
                                                 self.arguments, self.description)
 
+colonre = re.compile(r'^(\s*"[^"]+")', re.MULTILINE)
+commare = re.compile(r'("|})(\s*$\s*")', re.MULTILINE)
 def get_app_config(appid):
+  result = subprocess.check_output(["steamcmd", "+app_info_print", str(appid),
+                           "+quit"]).decode('utf-8')
+  json_begin = re.search(colonre, result).start()
+  steam_json = result[json_begin:]
+  steam_json = re.sub(colonre, r'\1:', steam_json)
+  steam_json = re.sub(commare, r'\1,\2', steam_json)
+  appinfo = loads('{' + steam_json + '}')[str(appid)]
+  appinfos = dict()
+  appinfos['infos'] = dict()
+  appinfos['id'] = appid
+  installdir = appinfo['config']['installdir']
+  appinfos['installdir'] = installdir
+  appinfos['name'] = appinfo['common']['name']
+  for k, v in appinfo['config']['launch'].items():
+    if v['config']['oslist'] == 'windows':
+      name = v['description']
+      if name == "":
+        name = appinfos['name']
+      appinfos['infos'][name] = LaunchInfo(v, installdir)
+  return appinfos
+
+def get_app_config_http(appid):
   configurl = "http://steamdb.info/app/" + str(appid) + "/config/"
   print(configurl)
   hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)'}
@@ -48,7 +73,8 @@ def get_app_config(appid):
   installdir = installdirre.search(content).groupdict()["installdir"]
   startinfos["installdir"] = installdir
   for startinfo_m in startinfore.finditer(content):
-    startinfo = LaunchInfo(startinfo_m, installdir)
+    match_dict = startinfo_m.groupdict()
+    startinfo = LaunchInfo(match_dict, installdir)
     name = startinfo.description
     if '<' in name or name == "":
       name = startinfos["name"]
@@ -139,7 +165,11 @@ appid = config_args.appid
 config['appid'] = appid
   
 print("Obtaining app info...")
-appinfos = get_app_config(appid)
+try:
+  appinfos = get_app_config(appid)
+except:
+  print("Failed to get appinfo via steamcmd, falling back to http method...")
+  appinfos = get_app_config_http(appid)
 manifest = generate_manifest(appinfos)
 manifest_location = config["steamapps"] + '/appmanifest_' + str(appid) + '.acf'
 print("Generating manifest...")
@@ -147,9 +177,19 @@ with open(manifest_location, "w") as f:
   f.write(manifest)
 
 print("Downloading " + appinfos["name"] + " via steamcmd...")
-os.spawnlp(os.P_WAIT, "steamcmd", "steamcmd",  "+login", config["login"],
-           config['password'], "+@sSteamCmdForcePlatformType", "windows",
-           "+app_update", str(appid), "validate", "+quit")
+steam_script = """
+login {0} {1}
+@sSteamCmdForcePlatformType windows
+app_update {2} validate
+quit
+""".format(config['login'], config['password'], str(appid))
+with tempfile.NamedTemporaryFile('w') as f:
+  f.write(steam_script)
+  f.flush()
+  subprocess.run(["steamcmd", "+runscript", f.name])
+#os.spawnlp(os.P_WAIT, "steamcmd", "steamcmd",  "+login", config["login"],
+#           config['password'], "+@sSteamCmdForcePlatformType", "windows",
+#           "+app_update", str(appid), "validate", "+quit")
 print("Generating runscripts...")
 rs_location = config["steamapps"] + '/common/' + appinfos["installdir"] + '/'
 for name, appinfo in appinfos["infos"].items():
