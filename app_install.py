@@ -30,7 +30,10 @@ installdirre = re.compile("""<tr>[\n\s]*
 class LaunchInfo:
   def __init__(self, match_dict, install_dir):
     self.executable = install_dir + '/' + re.sub(r'\\', r'/', match_dict['executable'])
-    self.arguments = match_dict["arguments"]
+    if 'arguments' in match_dict:
+      self.arguments = match_dict["arguments"]
+    else:
+      self.arguments = ""
     self.description = match_dict["description"]
   def __repr__(self):
     return "(LaunchInfo: {0} {1} # {2})".format(self.executable,
@@ -41,7 +44,11 @@ commare = re.compile(r'("|})(\s*$\s*")', re.MULTILINE)
 def get_app_config(appid):
   result = subprocess.check_output(["steamcmd", "+app_info_print", str(appid),
                            "+quit"]).decode('utf-8')
-  json_begin = re.search(colonre, result).start()
+  json_begin = re.search(colonre, result)
+  if json_begin is None:
+    print(result)
+    raise
+  json_begin = json_begin.start()
   steam_json = result[json_begin:]
   steam_json = re.sub(colonre, r'\1:', steam_json)
   steam_json = re.sub(commare, r'\1,\2', steam_json)
@@ -58,6 +65,12 @@ def get_app_config(appid):
       if name == "":
         name = appinfos['name']
       appinfos['infos'][name] = LaunchInfo(v, installdir)
+  for k, v in appinfo['depots'].items():
+    if not 'config' in v:
+      continue
+    if v['config']['oslist'] == 'windows':
+      appinfos['depot'] = v
+      appinfos['depot']['id'] = k
   return appinfos
 
 def get_app_config_http(appid):
@@ -176,22 +189,35 @@ print("Generating manifest...")
 with open(manifest_location, "w") as f:
   f.write(manifest)
 
+rs_location = config["steamapps"] + '/common/' + appinfos["installdir"] + '/'
 print("Downloading " + appinfos["name"] + " via steamcmd...")
 steam_script = """
 login {0} {1}
 @sSteamCmdForcePlatformType windows
+app_license_request {2}
 app_update {2} validate
 quit
 """.format(config['login'], config['password'], str(appid))
+# These scripts might be useful for future
+#steam_depot_script = """
+#login {0} {1}
+#@sSteamCmdForcePlatformType windows
+#force_install_dir "{4}"
+#app_license_request {2}
+#download_depot {2} {3}
+#quit
+#""".format(config['login'], config['password'], str(appid),
+#           appinfos['depot']['id'], rs_location)
+#steam_nocmd_script = """
+#@sSteamCmdForcePlatformType windows
+#app_license_request {0}
+#download_depot {0} {1}
+#""".format(str(appid), appinfos['depot']['id'])
 with tempfile.NamedTemporaryFile('w') as f:
   f.write(steam_script)
   f.flush()
   subprocess.run(["steamcmd", "+runscript", f.name])
-#os.spawnlp(os.P_WAIT, "steamcmd", "steamcmd",  "+login", config["login"],
-#           config['password'], "+@sSteamCmdForcePlatformType", "windows",
-#           "+app_update", str(appid), "validate", "+quit")
 print("Generating runscripts...")
-rs_location = config["steamapps"] + '/common/' + appinfos["installdir"] + '/'
 for name, appinfo in appinfos["infos"].items():
   runscript = generate_runscript(appinfo, config)
   runscript_location = (rs_location + name + '.sh')
