@@ -15,6 +15,7 @@ SteamForwarder are NOT able to download:
 
 * Everything that steamcmd are not able to download (mostly paid games with protection)
 
+SteamForwarder may encounter problems with any games, except ones built with latest steam api. (The version on Releases page is not built againist latest steam api, it includes api for one of wide spread versions). The **Hard way** might solve the problem but not in all cases. In most complicated case the steam api headers for particular version are required. For pre-2014 steam api it's recomended to use [SteamBrige](https://github.com/sirnuke/steambridge)
 
 ## Usage dependences
 * steamcmd
@@ -66,6 +67,6 @@ Arch:
 
 ## Hard way
 1. Install the [Nim compiler](https://nim-lang.org/download.html) of version 0.15+ (probably, it can be found in your distro repo). PS: Yes, I know, that code generator could be implemented in some popular language like python, but I wanted to write it in Nim just because I like this language and want to make it popular =P
-2. Put **steam_api.dll** from your game or steam sdk into repo root.
+2. Put **steam_api.dll** from your game into repo root.
 3. Regenerate code by `make generate-code`.
 4. Compile SteamForwarder using `make` command.
