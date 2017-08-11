@@ -19,6 +19,7 @@ proc getFileContent(filename: string, includes: seq[string] = @[]): string =
   let exceptions = includes & basename
   let preprocessed = execProcess("gcc -DUSE_BREAKPAD_HANDLER " &
                                  "-DVERSION_SAFE_STEAM_API_INTERFACES " &
+                                 "-DVALVE_CALLBACK_PACK_SMALL " &
                                  "-I$2 -E $1" %
                                  [filename, filename.parentDir()])
   var matches = newSeq[string](3)
