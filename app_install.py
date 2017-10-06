@@ -7,6 +7,7 @@ import tempfile
 import re
 import argparse
 import os
+import shutil
 
 namere = re.compile("""<td itemprop="name">(?P<name>[^<>]+)</td>""")
 startinfore = re.compile("""<tr>[\n\s]*
@@ -55,22 +56,22 @@ def get_app_config(appid):
   appinfo = loads('{' + steam_json + '}')[str(appid)]
   appinfos = dict()
   appinfos['infos'] = dict()
+  appinfos['depots'] = dict()
   appinfos['id'] = appid
   installdir = appinfo['config']['installdir']
   appinfos['installdir'] = installdir
   appinfos['name'] = appinfo['common']['name']
   for k, v in appinfo['config']['launch'].items():
-    if v['config']['oslist'] == 'windows':
+    if (not 'config' in v) or (not 'oslist' in v['config']) or v['config']['oslist'] == 'windows':
+      if not 'description' in v:
+        v['description'] = appinfos['name']
       name = v['description']
-      if name == "":
-        name = appinfos['name']
       appinfos['infos'][name] = LaunchInfo(v, installdir)
   for k, v in appinfo['depots'].items():
     if not 'config' in v:
       continue
-    if v['config']['oslist'] == 'windows':
-      appinfos['depot'] = v
-      appinfos['depot']['id'] = k
+    elif v['config']['oslist'] == 'windows':
+      appinfos['depots'][k] = v
   return appinfos
 
 def get_app_config_http(appid):
@@ -141,21 +142,33 @@ except:
   print("Configuration file not found! Using default values... You may change them at steamforwarder.json")
   config['overlaypath'] = os.getenv("HOME") + "/.local/share/Steam/ubuntu12_32/"
   config['dllpath'] = os.getenv("PWD")
+
   steamfolder = os.getenv('HOME') + '/.local/share/Steam'
-  print(steamfolder)
+  #print(steamfolder)
   if os.path.isdir(steamfolder):
-    print("is dir")
+    #print("is dir")
     for d in os.listdir(steamfolder):
-      print(d)
+      #print(d)
       if not re.match("[sS]team[aA]pps", d) is None:
         config['steamapps'] = steamfolder + '/' + d
   config['login'] = 'anonymous'
   with open("steamforwarder.json", "w") as f:
     dump(config, f, indent=2)
-  if not 'steamapps' in config:
-    config['steamapps'] = ""
+if not 'steamapps' in config:
+  config['steamapps'] = ""
+if not 'depotpath' in config:
+  config['depotpath'] = ""
+if not 'steamcmdclient' in config:
+  tmpsteamcmd = '/usr/share/steamcmd/linux32/steamclient.so'
+  if os.path.isfile(tmpsteamcmd):
+    config['steamcmdclient'] = tmpsteamcmd
+  else:
+    config['steamcmdclient'] = ''
 
 aparser.add_argument('-l', '--login', help='your login at steam', type=str, dest='login', default=config['login'])
+aparser.add_argument('--depot', help='download from steam depot directly', dest='depot', default=False, action='store_true')
+aparser.add_argument('--depot-path', help='path where temporary data will be stored while depot downloading (A LOT of space should be available', dest='depotpath', default=config["depotpath"], type=str)
+aparser.add_argument('--steamcmdclient', help='path to steamclient.so related to steamcmd', dest='steamclient', default=config["steamcmdclient"], type=str)
 aparser.add_argument('-s', '--steamapps-dir', help='path to the steamapps dir', type=str, dest='steamapps', default=config["steamapps"])
 aparser.add_argument('-d', '--dll-dir', help='path to the steam_api.dll.so and libsteam_api.so', type=str, dest='dllpath', default=config["dllpath"])
 aparser.add_argument('-o', '--overlay-dir', help='path to the gameoverlayrenderer.so and other steam libs', type=str, dest='overlaypath', default=config["overlaypath"])
@@ -166,9 +179,16 @@ config['login'] = config_args.login
 config['wineprefix'] = config_args.wineprefix
 config['dllpath'] = config_args.dllpath
 config['overlaypath'] = config_args.overlaypath
+config['steamcmdclient'] = config_args.steamclient
+config['depotpath'] = config_args.depotpath
 if config_args.steamapps == "":
   print('Can not find steam location... Please specify it using -s key')
   quit(1)
+if config['steamcmdclient'] == "":
+  print('Can not find steamcmd\'s steamclient.so location. Please specify it using --steamcmdclient option to unlock --depot option.')
+  if config_args.depot:
+    config_args.depot = False
+    print("Depot downloading disabled. Falling back to default method.")
 config['steamapps'] = config_args.steamapps
 if config_args.store:
   with open("steamforwarder.json", "w") as f:
@@ -180,9 +200,13 @@ config['appid'] = appid
 print("Obtaining app info...")
 try:
   appinfos = get_app_config(appid)
-except:
+except Exception as e:
+  print(e)
   print("Failed to get appinfo via steamcmd, falling back to http method...")
   appinfos = get_app_config_http(appid)
+  if config_args.depot:
+    print("Depot downloading is not available with http method!")
+    config_args.depot = False
 manifest = generate_manifest(appinfos)
 manifest_location = config["steamapps"] + '/appmanifest_' + str(appid) + '.acf'
 print("Generating manifest...")
@@ -195,28 +219,35 @@ steam_script = """
 login {0} {1}
 @sSteamCmdForcePlatformType windows
 app_license_request {2}
-app_update {2} validate
-quit
 """.format(config['login'], config['password'], str(appid))
-# These scripts might be useful for future
-#steam_depot_script = """
-#login {0} {1}
-#@sSteamCmdForcePlatformType windows
-#force_install_dir "{4}"
-#app_license_request {2}
-#download_depot {2} {3}
-#quit
-#""".format(config['login'], config['password'], str(appid),
-#           appinfos['depot']['id'], rs_location)
-#steam_nocmd_script = """
-#@sSteamCmdForcePlatformType windows
-#app_license_request {0}
+if config_args.depot:
+  print('Preparing depot downloader...')
+  os.environ['LD_PRELOAD'] = config['depotpath'] + '/steamclient.so'
+  os.symlink(config['steamcmdclient'], os.environ['LD_PRELOAD'], True)
+  for k, v in appinfos['depots'].items():
+    print('Adding depot ' + str(k) + ' to schedule...')
+#    steam_script += """
 #download_depot {0} {1}
-#""".format(str(appid), appinfos['depot']['id'])
+#""".format(str(appid), str(k))
+else:
+  print('Preparing classic downloader...')
+  steam_script += """
+app_update {0} validate
+""".format(str(appid))
+steam_script += "quit"
 with tempfile.NamedTemporaryFile('w') as f:
   f.write(steam_script)
   f.flush()
   subprocess.run(["steamcmd", "+runscript", f.name])
+if config_args.depot:
+  # Cleanup and data moving after depot downloading
+  os.environ['LD_PRELOAD'] = ""
+  os.remove(config['depotpath'] + '/steamclient.so')
+  os.makedirs(rs_location, exist_ok=True)
+  for k, v in appinfos['depots'].items():
+    path = config['depotpath'] + '/steamapps/content/app_{0}/depot_{1}/'.format(str(appid), str(k))
+    for sub in os.listdir(path):
+      shutil.move(path + sub, rs_location)
 print("Generating runscripts...")
 for name, appinfo in appinfos["infos"].items():
   runscript = generate_runscript(appinfo, config)
