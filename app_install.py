@@ -226,9 +226,9 @@ if config_args.depot:
   os.symlink(config['steamcmdclient'], os.environ['LD_PRELOAD'], True)
   for k, v in appinfos['depots'].items():
     print('Adding depot ' + str(k) + ' to schedule...')
-#    steam_script += """
-#download_depot {0} {1}
-#""".format(str(appid), str(k))
+    steam_script += """
+download_depot {0} {1}
+""".format(str(appid), str(k))
 else:
   print('Preparing classic downloader...')
   steam_script += """
