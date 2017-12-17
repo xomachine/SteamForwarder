@@ -131,7 +131,7 @@ LD_PRELOAD="gameoverlayrenderer.so" wine "{1}/common/{2}" {3} &> "$(dirname "$0"
            config['appid'], config['login'])
   return runscript
 
-aparser = argparse.ArgumentParser(description="Steam windows game installation script")
+aparser = argparse.ArgumentParser(description="The windows steam games installation script")
 aparser.add_argument('appid', type=int, help="appid of the game to be installed", metavar='appID')
 aparser.add_argument('-w', '--wineprefix', help='path to wineprefix to be used to launch this app', type=str, dest='wineprefix', default=os.getenv('HOME') + '/.wine')
 
