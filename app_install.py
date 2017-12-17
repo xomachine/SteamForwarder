@@ -2,6 +2,7 @@
 
 from urllib.request import urlopen, Request
 from json import load, dump, loads
+from getpass import getpass
 import subprocess
 import tempfile
 import re
@@ -172,7 +173,7 @@ aparser.add_argument('--steamcmdclient', help='path to steamclient.so related to
 aparser.add_argument('-s', '--steamapps-dir', help='path to the steamapps dir', type=str, dest='steamapps', default=config["steamapps"])
 aparser.add_argument('-d', '--dll-dir', help='path to the steam_api.dll.so and libsteam_api.so', type=str, dest='dllpath', default=config["dllpath"])
 aparser.add_argument('-o', '--overlay-dir', help='path to the gameoverlayrenderer.so and other steam libs', type=str, dest='overlaypath', default=config["overlaypath"])
-aparser.add_argument('-p', '--password', help='password of your steam account (may be necessary for non-free apps). Note: password will not be saved anywhere including configuration file', type=str, dest='password', default="")
+aparser.add_argument('-p', '--password', help='ask password of your steam account (may be necessary for non-free apps). Note: password will not be saved anywhere including configuration file', dest='askPassword', default=False, action='store_true')
 aparser.add_argument('--store', help='save configuration for futher use as default', dest='store', default=False, action='store_true')
 config_args = aparser.parse_args()
 config['login'] = config_args.login
@@ -193,7 +194,10 @@ config['steamapps'] = config_args.steamapps
 if config_args.store:
   with open("steamforwarder.json", "w") as f:
     dump(config, f, indent=2)
-config['password'] = config_args.password
+if config_args.askPassword:
+  config['password'] = getpass()
+else:
+  config['password'] = ""
 appid = config_args.appid
 config['appid'] = appid
   
