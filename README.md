@@ -10,6 +10,7 @@ There are a few known problems with this tool. Some of them will be solved in fu
 SteamForwarder is NOT able to run by design:
 
 * DRM-protected games
+* Games with statically linked steam\_api.dll
 
 SteamForwarder is NOT able to download:
 
