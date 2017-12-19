@@ -125,14 +125,18 @@ proc makeRealCall(self: CallInfo): string =
     """$1($2)""" % [self.name, arglist]
 
 proc makeResult(self: CallInfo, test: bool = false): string =
+  const exceptions = ["SteamInternal_CreateInterface"]
   if self.private:
     ""
   elif self.returntype.isVoid():
     """$1;""" % self.makeRealCall()
   elif self.returntype.isException():
     """*hidden = $1;""" % self.makeRealCall()
-  elif self.returntype.isClass():
+  elif self.returntype.isClass() or self.name in exceptions:
     let realcall = if test: "NULL" else: self.makeRealCall()
+    let classname =
+      if self.returntype.base == "void": "ISteamClient"
+      else: self.returntype.base
     if self.inline and not test:
       """if (saved_$1 == NULL) {
     $1* internal = $2;
@@ -144,16 +148,16 @@ proc makeResult(self: CallInfo, test: bool = false): string =
     TRACE("(): ($1 *)%p wrapped as ($1_ *)%p\n", internal, saved_$1);
   }
   TRACE("() = ($1_ *)%p\n", saved_$1);
-""" % [self.returntype.base, realcall]
+""" % [classname, realcall]
     elif self.inline:
       """
   $1_* result = new $1_(NULL);
   $2
-""" % [self.returntype.base, self.makeTraceResult()]
+""" % [classname, self.makeTraceResult()]
     else:
       """$1_* result = new $1_($2);
   $3
-""" % [self.returntype.base, realcall, self.makeTraceResult()]
+""" % [classname, realcall, self.makeTraceResult()]
   else:
     """$3 result = $1;
   $2
