@@ -10,9 +10,7 @@ from tables import initTable, `[]`, `[]=`, contains, del, `$`
 proc addr2Pattern(address: Natural): string =
   var a: uint32 = address.uint32
   let cs = cast[cstring](a.addr)
-  result = newString(4)
-  for i in 0..<4:
-    result[i] = cs[i]
+  result = $cs
 
 proc parseEA(s: string): tuple[register: string, offset: int] =
   let splitted = s.split({'(', ')'})
