@@ -28,7 +28,7 @@ type
     pending: Instruction
 
 proc disassembler*(b: BFD): Disassembler =
-  {.emit: ["return disassembler(bfd_get_arch(", b, "), 0, " &
+  {.emit: [result, "= disassembler(bfd_get_arch(", b, "), 0, " &
            "bfd_get_mach(", b, "), ", b, ");"].}
 proc initDInfo*(pipe: pointer, p: Printer): DisasmInfo =
   {.emit: ["init_disassemble_info(", result.addr, ", ", pipe, ", ", p, ");"].}
