@@ -91,14 +91,14 @@ proc initDisasm*(b: BFD, s: Section, buffer: pointer): Disasmer =
   disassemble_init_for_target(result.dinfo.addr)
 
 
-iterator parseInstructions*(d: var Disasmer, start: uint32): Instruction =
+iterator parseInstructions*(d: var Disasmer, start: uint32): tuple[a: uint32, i:Instruction] =
   var lastlen = 0
   var shift = 0'u32
   d.pending.reset
   d.waiting = instruction
   while (lastlen = d.disass(start+shift, d.dinfo.unsafeAddr);
          lastlen > 0):
-    yield d.pending
+    yield (start+shift, d.pending)
     d.pending.reset
     d.waiting = instruction
     shift += lastlen.uint32

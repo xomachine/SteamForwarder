@@ -1,10 +1,11 @@
 from strutils import split, parseHexInt, strip, toHex
+from sets import HashSet, initSet, incl, contains
 from tables import `[]`, `[]=`, initTable, contains, del, Table
 from libs.disasm import parseInstructions, Disasmer
 
 
 proc interpretStack(disasmer: var Disasmer, madr: uint32,
-                    regs: Table[string, int]): int
+                    regs: Table[string, int], visited: var HashSet[uint32]): int
 
 proc parseEA(s: string): tuple[register: string, offset: int] =
   let splitted = s.split({'(', ')'})
@@ -21,12 +22,18 @@ proc parseEA(s: string): tuple[register: string, offset: int] =
 proc readProcedure*(disasmer: var Disasmer, madr: uint32): int =
   var registers = initTable[string, int]()
   registers["%esp"] = 0
-  disasmer.interpretStack(madr, registers)
+  var visited = initSet[uint32](256)
+  disasmer.interpretStack(madr, registers, visited)
 
 proc interpretStack(disasmer: var Disasmer, madr: uint32,
-                    regs: Table[string, int]): int =
+                  regs: Table[string, int], visited: var HashSet[uint32]): int =
   var registers = regs
-  for instr in parseInstructions(disasmer, madr):
+  for address, instr in parseInstructions(disasmer, madr):
+    if address in visited:
+#      echo address.toHex(), " is already visited! Stopping"
+      break
+    visited.incl(address)
+#    echo address.toHex, ": ", instr.name, " ", instr.src, "->", instr.dst, (if instr.address > 0'u32: instr.address.toHex() else: "")
     case instr.name
     of "push":
       registers["%esp"] -= 4
@@ -51,13 +58,18 @@ proc interpretStack(disasmer: var Disasmer, madr: uint32,
         registers[instr.dst] = registers[instr.src]
       elif instr.dst in registers and not (instr.src in registers):
         registers.del(instr.dst)
-    # Commented out because of cycles
-    #of "je", "jz", "jne", "jnz":
-    #  result = max(result, disasmer.interpretStack(instr.address, registers))
-    of "jmpq":
-      return max(disasmer.interpretStack(instr.address, registers), result)
+
+    of "jmpq", "jmp":
+      return max(disasmer.interpretStack(instr.address, registers, visited),
+                 result)
     of "retq":
       break
+    elif instr.name[0] == 'j' and (instr.address notin visited):
+#      echo "Conditional jump to ", instr.address.toHex
+      #visited.incl(instr.address)
+      result = max(disasmer.interpretStack(instr.address, registers, visited),
+                   result)
+#      echo "Returned back to main flow at ", address.toHex()
     else:
       discard
     if not(instr.src.isNil or instr.src[^1] != ')') or
