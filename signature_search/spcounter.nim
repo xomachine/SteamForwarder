@@ -1,6 +1,10 @@
-from strutils import split, parseHexInt, strip
-from tables import `[]`, `[]=`, initTable, contains, del
+from strutils import split, parseHexInt, strip, toHex
+from tables import `[]`, `[]=`, initTable, contains, del, Table
 from libs.disasm import parseInstructions, Disasmer
+
+
+proc interpretStack(disasmer: var Disasmer, madr: uint32,
+                    regs: Table[string, int]): int
 
 proc parseEA(s: string): tuple[register: string, offset: int] =
   let splitted = s.split({'(', ')'})
@@ -14,12 +18,15 @@ proc parseEA(s: string): tuple[register: string, offset: int] =
       parseHexInt(splitted[0].strip(true, true, {'*'}))
     else: parseHexInt(splitted[0])
 
-
 proc readProcedure*(disasmer: var Disasmer, madr: uint32): int =
   var registers = initTable[string, int]()
   registers["%esp"] = 0
+  disasmer.interpretStack(madr, registers)
+
+proc interpretStack(disasmer: var Disasmer, madr: uint32,
+                    regs: Table[string, int]): int =
+  var registers = regs
   for instr in parseInstructions(disasmer, madr):
-    #echo instr.name, ": ", instr.src, " -> ", instr.dst
     case instr.name
     of "push":
       registers["%esp"] -= 4
@@ -44,7 +51,12 @@ proc readProcedure*(disasmer: var Disasmer, madr: uint32): int =
         registers[instr.dst] = registers[instr.src]
       elif instr.dst in registers and not (instr.src in registers):
         registers.del(instr.dst)
-    of "retq", "jmpq":
+    # Commented out because of cycles
+    #of "je", "jz", "jne", "jnz":
+    #  result = max(result, disasmer.interpretStack(instr.address, registers))
+    of "jmpq":
+      return max(disasmer.interpretStack(instr.address, registers), result)
+    of "retq":
       break
     else:
       discard

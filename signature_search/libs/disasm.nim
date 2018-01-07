@@ -3,7 +3,11 @@ from bfd import BFD, Section
 from strutils import count, `%`, replace, contains, strip
 
 type
+  Printer* = proc(dest: pointer, fmtstr: cstring)
+               {.cdecl, varargs.}
   DisasmInfo* {.header: "<dis-asm.h>", importc:"disassemble_info".} = object
+    fprintf_func: Printer
+    stream*: pointer
     buffer*: pointer
     buffer_vma*: cuint
     buffer_length*: cuint
@@ -11,8 +15,6 @@ type
     print_address_func: proc(a: cuint, di: ptr DisasmInfo) {.cdecl.}
   DInfo* = ptr DisasmInfo
   Disassembler* = proc(vma: cuint, di: DInfo): cint {.cdecl.}
-  Printer* = proc(dest: pointer, fmtstr: cstring)
-               {.cdecl, varargs.}
   WaitFor = enum
     instruction
     dst
@@ -21,6 +23,7 @@ type
     name: string
     dst: string
     src: string
+    address: uint32
   Disasmer* = object
     disass: Disassembler
     dinfo: DisasmInfo
@@ -42,6 +45,11 @@ proc printer(dest: pointer, fmtstr: cstring) {.cdecl, varargs.} =
   let formattedStr = $fmtstr
   if formattedStr == ",":
     mo.waiting = dst
+  elif formattedStr == "%x":
+    # address available
+    var t: cuint
+    {.emit: [t," = va_arg(ptr, unsigned int);"].}
+    mo.pending.address = t
   elif formattedStr == "%s":
     var t: cstring
     {.emit: [t," = va_arg(ptr, char*);"].}
@@ -79,7 +87,7 @@ proc initDisasm*(b: BFD, s: Section, buffer: pointer): Disasmer =
   result.dinfo.buffer_vma = s.vma
   result.dinfo.buffer = buffer
   result.dinfo.print_address_func = proc(a: cuint, di: DInfo){.cdecl.} =
-    discard
+    di.stream.printer("%x", a)
   disassemble_init_for_target(result.dinfo.addr)
 
 
