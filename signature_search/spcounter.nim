@@ -33,7 +33,7 @@ proc interpretStack(disasmer: var Disasmer, madr: uint32,
 #      echo address.toHex(), " is already visited! Stopping"
       break
     visited.incl(address)
-#    echo address.toHex, ": ", instr.name, " ", instr.src, "->", instr.dst, (if instr.address > 0'u32: instr.address.toHex() else: "")
+    #echo address.toHex, ": ", instr.name, " ", instr.src, "->", instr.dst, (if instr.address > 0'u32: instr.address.toHex() else: "")
     case instr.name
     of "push":
       registers["%esp"] -= 4

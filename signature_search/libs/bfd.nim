@@ -2,6 +2,8 @@
 {.passL: "-lbfd".}
 {.passC: "-DPACKAGE".}
 
+const BFS_GLOBAL* = (1 shl 1)
+
 type
   BFDBool* = cint
   BFDImpl* {.importc: "bfd", header: "<bfd.h>", incompleteStruct.} = object
@@ -11,7 +13,11 @@ type
     size*: cuint
     rawsize*: cuint
     filepos*: cuint
-
+  SymbolImpl {.importc: "asymbol", header: "<bfd.h>", incompleteStruct.} = object
+    name*: cstring
+    value*: cuint
+    flags*: cint
+  Symbol* = ptr SymbolImpl
     
   Section* = ptr SectionImpl
   SectionInfo* = tuple
@@ -33,6 +39,22 @@ proc bfd_get_section_by_name*(b: BFD, name: cstring): Section
 proc bfd_get_section_contents*(b: BFD, asec: Section, location: pointer,
                                offset: cuint, count: cuint): BFDBool
   {.importc, header: "<bfd.h>".}
+proc readSymbolTable*(b: BFD): seq[Symbol] =
+  let tablesize: clong = 0
+  {.emit: [tablesize, " = bfd_get_symtab_upper_bound(", b, ");"].}
+  let archsize: cint = 32
+  {.emit: [archsize, " = bfd_get_arch_size(", b, ");"].}
+#  echo "Required to allocate ", tablesize, " in ", archsize, " arch"
+  if tablesize < 0:
+    return nil
+  elif tablesize == 0:
+    return @[]
+  result = newSeq[Symbol](tablesize div (archsize div 8))
+  let readsize: clong = 0
+  {.emit: [readsize, " = bfd_canonicalize_symtab(", b, ", ", result[0].addr,
+           ");"].}
+#  echo "Read ", readsize, " symbols"
+  result.setLen(readsize)
 proc getContent*(b: BFD, s: Section, start: cuint = 0, size: cuint = 0): string =
   let realsize = if size == 0: s.size else: size
   result = newString(realsize)
@@ -41,7 +63,7 @@ proc getContent*(b: BFD, s: Section, start: cuint = 0, size: cuint = 0): string 
 
 proc bfd_count_sections*(b: BFD): cuint {.importc, header:"<bfd.h>".}
 proc init*(b: BFD): bool =
-  var res: BFDBool
+  let res: BFDBool = 0
   {.emit: [res, " = bfd_check_format(", b, ", bfd_object);"].}
   if res == 0:
     discard b.bfd_close()
