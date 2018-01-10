@@ -13,11 +13,11 @@ proc addr2Pattern(address: Natural): string =
   let cs = cast[cstring](a.addr)
   result = $cs
 
-iterator methods(start: ptr char): uint32 =
+iterator methods(start: ptr char, lowerbound: uint32): uint32 =
   let reinterpreted = cast[ptr array[0, uint32]](start)
   var shift = 0
   var offset = 0'u32
-  while(offset = reinterpreted[shift]; offset > 10'u32):
+  while(offset = reinterpreted[shift]; offset >= lowerbound):
     yield offset
     shift += 1
 
@@ -43,15 +43,15 @@ while (offset = strSegmentData.find(classPattern, offset+1); offset >= 0):
   let realoffset = offset + strSegment.vma.int - 2
   let classname = $cast[cstring](strSegmentData[offset].unsafeAddr)
   stderr.writeLine(classname & " found at " & realoffset.toHex())
-  echo "!" & classname
   let strPattern = realoffset.addr2Pattern()
   let tinfo = vtableSegmentData.find(strPattern) + vtableSegment.vma.int - 4
   stderr.writeLine("Found TInfo at: " & tinfo.toHex())
   let vtPattern = tinfo.addr2Pattern()
   let vtable = vtableSegmentData.find(vtPattern) + 4
+  echo "!", classname, ":", toHex(vtable-4)
   stderr.writeLine("Found VTable at: " &
                    (vtable + vtableSegment.filepos.int).toHex())
-  for madr in methods(vtableSegmentData[vtable].unsafeAddr):
+  for madr in methods(vtableSegmentData[vtable].unsafeAddr, textSegment.vma):
     let depth = readProcedure(disasmer, madr)
     stderr.writeLine("Method at: " & madr.toHex() &
                      " dives into stack on depth: " & $depth)
