@@ -37,25 +37,31 @@ let textSegmentData = file.getContent(textSegment)
 let vtableSegmentData = file.getContent(vtableSegment)
 let strSegmentData = file.getContent(strSegment)
 var disasmer = file.initDisasm(textSegment, textSegmentData[0].unsafeAddr)
+proc searchPattern(pattern: string) =
+  var offset = -1
+  while (offset = strSegmentData.find(pattern, offset+1); offset >= 0):
+    let realoffset = offset + strSegment.vma.int - 2
+    let classname = $cast[cstring](strSegmentData[offset].unsafeAddr)
+    if not classname[^1].isDigit:
+      continue
+    stderr.writeLine(classname & " found at " & realoffset.toHex())
+    let strPattern = realoffset.addr2Pattern()
+    let tinfo = vtableSegmentData.find(strPattern) + vtableSegment.vma.int - 4
+    stderr.writeLine("Found TInfo at: " & tinfo.toHex())
+    let vtPattern = tinfo.addr2Pattern()
+    let vtable = vtableSegmentData.find(vtPattern) + 4
+    stderr.writeLine("Found VTable at: " &
+                     (vtable + vtableSegment.filepos.int).toHex())
+    echo "!", classname, ":", toHex(vtable-4)
+    for madr in methods(vtableSegmentData[vtable].unsafeAddr, textSegment.vma):
+      let depth = readProcedure(disasmer, madr)
+      stderr.writeLine("Method at: " & madr.toHex() &
+                       " dives into stack on depth: " & $depth)
+      echo $max(depth, 4)
+      # 4 is minimal depth because even an empty method receives its object as
+      # the first argument
 const classPattern = "CAdapterSteam"
-var offset = -1
-while (offset = strSegmentData.find(classPattern, offset+1); offset >= 0):
-  let realoffset = offset + strSegment.vma.int - 2
-  let classname = $cast[cstring](strSegmentData[offset].unsafeAddr)
-  stderr.writeLine(classname & " found at " & realoffset.toHex())
-  let strPattern = realoffset.addr2Pattern()
-  let tinfo = vtableSegmentData.find(strPattern) + vtableSegment.vma.int - 4
-  stderr.writeLine("Found TInfo at: " & tinfo.toHex())
-  let vtPattern = tinfo.addr2Pattern()
-  let vtable = vtableSegmentData.find(vtPattern) + 4
-  echo "!", classname, ":", toHex(vtable-4)
-  stderr.writeLine("Found VTable at: " &
-                   (vtable + vtableSegment.filepos.int).toHex())
-  for madr in methods(vtableSegmentData[vtable].unsafeAddr, textSegment.vma):
-    let depth = readProcedure(disasmer, madr)
-    stderr.writeLine("Method at: " & madr.toHex() &
-                     " dives into stack on depth: " & $depth)
-    echo $max(depth, 4)
-    # 4 is minimal depth because even an empty method receives its object as
-    # the first argument
+const classPattern2 = "CSteam"
+searchPattern(classPattern)
+searchPattern(classPattern2)
 discard bfd_close(file)
