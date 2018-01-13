@@ -41,10 +41,16 @@ proc interpretStack(disasmer: var Disasmer, madr: uint32,
       registers["%esp"] += 4
     of "add":
       if instr.dst in registers:
-        registers[instr.dst] += parseHexInt(instr.src)
+        #if instr.src in registers:
+        #  registers[instr.dst] += registers[instr.src]
+        if instr.src[0] != '%':
+          registers[instr.dst] += parseHexInt(instr.src)
     of "sub":
       if instr.dst in registers:
-        registers[instr.dst] -= parseHexInt(instr.src)
+        #if instr.src in registers:
+        #  registers[instr.dst] -= registers[instr.src]
+        if instr.src[0] != '%':
+          registers[instr.dst] -= parseHexInt(instr.src)
     of "lea":
       let parsed = parseEA(instr.src)
       if parsed.register in registers:
@@ -79,5 +85,9 @@ proc interpretStack(disasmer: var Disasmer, madr: uint32,
         else:parseEA(instr.dst)
       if parsed.register in registers:
         result = max(result, parsed.offset + registers[parsed.register])
+    if "%esp" notin registers:
+      return 0
     result = max(registers["%esp"], result)
+    if result > 42: # just a sanity check
+      return 0
 
