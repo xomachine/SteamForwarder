@@ -6,7 +6,7 @@ from strutils import split, parseHexInt, repeat
 from tables import initTable, `[]`, `[]=`, contains, values
 from wine import trace, moduleByAddress, ModInfo, checkAddr
 from classparser import readClasses
-from vtables import wrapClass
+from vtables import wrapClass, fastWrap
 
 let cls = readClasses()
 
@@ -44,6 +44,10 @@ proc wrapIfClass(address: uint32, m: Slice[uint32]): uint32 =
   wrapIfClass(address, checker)
 
 proc wrapIfNecessary(address: uint32): uint32 =
+  let already = fastWrap(address)
+  if already > 0'u32:
+    trace("Translating: %p -> %p\n", address, already)
+    return already
   if address > 0x10000'u32:
     let m = moduleByAddress(address)
     let endaddr = m.baseOfImage + m.imageSize

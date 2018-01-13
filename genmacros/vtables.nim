@@ -7,6 +7,7 @@ type
   MethodProc = proc() {.cdecl.}
 
 proc wrapClass*(name: string, address: uint32): uint32
+proc fastWrap*(address: uint32): uint32
 
 from strutils import toHex, `%`
 from utils import strToAsm
@@ -98,6 +99,12 @@ macro eachTable(sink: untyped): untyped =
 var vtables: Table[string, seq[MethodProc]]
 eachTable(vtables)
 var classAssociations = initTable[uint32, WrappedClass]()
+
+proc fastWrap(address: uint32): uint32 =
+  if address in classAssociations:
+    cast[uint32](classAssociations[address].addr)
+  else:
+    0
 
 proc wrapClass(name: string, address: uint32): uint32 =
   trace("Wrapping %p as %s...", address, name.cstring)
