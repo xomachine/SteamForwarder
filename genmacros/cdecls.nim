@@ -62,8 +62,7 @@ macro generateWineDecls*(specs: static[SpecFile]): untyped =
       decl.body = quote do:
         #`tracecall`
         #trace(" - skipped\n")
-        discard `call`
-        return
+        `call`
     else:
       decl.body = quote do:
         `tracecall`
