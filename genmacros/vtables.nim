@@ -29,10 +29,10 @@ proc makePseudoMethod(stack: uint8): NimNode {.compileTime.} =
   let justargs = genArgs(nargs)
   let rmethod = newIdentNode("rmethod")
   var mcall = genCall("rmethod", nargs)
-  let wclass = newIdentNode("wclass")
-  mcall.insert(1, newDotExpr(wclass, newIdentNode("origin")))
+  let origin = newIdentNode("origin")
+  mcall.insert(1, origin)
   var callargs = justargs
-  callargs.insert(newIdentDefs(newIdentNode("obj"), newIdentNode("pointer")), 1)
+  callargs.insert(newIdentDefs(newIdentNode("obj"), newIdentNode("uint32")), 1)
   let procty = newTree(nnkProcTy, newTree(nnkFormalParams, callargs),
                        newTree(nnkPragma, newIdentNode("cdecl")))
   var argseq = justargs
@@ -48,17 +48,40 @@ proc makePseudoMethod(stack: uint8): NimNode {.compileTime.} =
           shift, obj, raddr)
     `tracecall`
     trace("\nPrevious ebp = %p\n", prebp)
-    let `wclass` = cast[ptr WrappedClass](obj)
-    trace("Origin = %p\n", `wclass`.origin)
-    let vtableaddr = `wclass`.origin.vtable
+    let wclass = cast[ptr WrappedClass](obj)
+    let `origin` = cast[uint32](wclass.origin)
+    trace("Origin = %p\n", `origin`)
+    let vtableaddr = wclass.origin.vtable
     trace("Origins VTable = %p\n", vtableaddr)
     let maddr = cast[ptr `procty`](cast[uint32](vtableaddr) + shift*4)
     trace("Method address to call: %p\n", maddr)
     let `rmethod` = maddr[]
     trace("Method to call: %p\n", `rmethod`)
-    let res = `mcall`
-    trace("Result = %p\n", res)
-    return wrapIfNecessary(res)
+  if nargs > 0:
+    var remcall = genCall("rmethod", nargs)
+    remcall.insert(2, origin)
+    result.body.add quote do:
+      var espkeep: uint32
+      asm """
+        mov %%esp, %[espkeep]
+        :[espkeep]"=g"(`espkeep`)
+      """
+      trace("prebp(%p) > argument1(%p) > espkeep(%p)\n", prebp, argument1,
+            espkeep)
+      if prebp > argument1 and argument1 > espkeep:
+        let res = `remcall`
+        if res != argument1:
+          trace("Whoooops! I've assumed that the first argument is a CSteamID, but it was not! Everything will be crashed soon... Result = %p\n", res)
+        return res
+      else:
+        let res = `mcall`
+        trace("Result = %p\n", res)
+        return wrapIfNecessary(res)
+  else:
+    result.body.add quote do:
+      let res = `mcall`
+      trace("Result = %p\n", res)
+      return wrapIfNecessary(res)
 #  hint result.repr
 
 proc eachInt(k: string, a: seq[int], sink: NimNode): NimNode {.compileTime.} =
