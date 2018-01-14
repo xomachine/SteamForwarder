@@ -58,5 +58,7 @@ proc wrapIfNecessary(address: uint32): uint32 =
       if not (Flags.read in af.permissions and af.name == "steamclient.so"):
         trace("invalid address permissions: %p %s (related to \"%s\")\n", a,
               af.permissions.repr.cstring, af.name.cstring)
+        return false
+      return true
     return wrapIfClass(address, checker)
   return address
