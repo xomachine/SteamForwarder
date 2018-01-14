@@ -7,9 +7,9 @@ from tables import initTable, `[]`, `[]=`, contains, values
 from wine import trace, moduleByAddress, ModInfo, checkAddr
 from classparser import readClasses
 from vtables import wrapClass, fastWrap
+from maps import getMMap, checkAddress, Flags
 
 let cls = readClasses()
-
 proc wrapIfClass(address: uint32, checker: proc(a: uint32): bool): uint32 =
   let vtableaddr = cast[ptr uint32](address)[]
   trace("Walking through the class...")
@@ -32,34 +32,31 @@ proc wrapIfClass(address: uint32, checker: proc(a: uint32): bool): uint32 =
   let descstr = $cast[cstring](strptraddr[]+2)
   trace("class name (%s)\n", strptraddr[])
   if descstr in cls:
-    wrapClass(descstr, address)
+    return wrapClass(descstr, address)
   else:
-#    trace("FIXME: %s is unknown signature! You should definetely report it!\n",
-#          strptraddr[])
-    address
+#    trace("Unknown class %s! This should be reported!\n", descstr[0].unsafeAddr)
+    return address
 
 proc wrapIfClass(address: uint32, m: Slice[uint32]): uint32 =
   proc checker(a: uint32): bool =
     a in m
   wrapIfClass(address, checker)
 
+
 proc wrapIfNecessary(address: uint32): uint32 =
   let already = fastWrap(address)
   if already > 0'u32:
     trace("Translating: %p -> %p\n", address, already)
     return already
-  if address > 0x10000'u32:
-    let m = moduleByAddress(address)
-    let endaddr = m.baseOfImage + m.imageSize
-    let name = cast[cstring](m.moduleName.unsafeAddr)
-    if name.len > 0:
-      trace("Found module %s at address %p in range %p-%p(%p)\n", name, address,
-            m.baseOfImage, endaddr, m.imageSize)
-    if name == "steamclient.so":
-      let slice = Slice[uint32](a: m.baseOfImage, b: endaddr)
-      return wrapIfClass(address, slice)
-    if checkAddr(address, 4):
-      proc checker(a: uint32): bool =
-        checkAddr(a, 4)
-      return wrapIfClass(address, checker)
+  let curMap = getMMap()
+  let affinity = curMap.checkAddress(address)
+  if Flags.read in affinity.permissions:
+    trace("Looks like %p - is valid address with %s at \"%s\"\n", address,
+          affinity.permissions.repr.cstring, affinity.name.cstring)
+    proc checker(a: uint32): bool =
+      let af = curMap.checkAddress(a)
+      if not (Flags.read in af.permissions and af.name == "steamclient.so"):
+        trace("invalid address permissions: %p %s (related to \"%s\")\n", a,
+              af.permissions.repr.cstring, af.name.cstring)
+    return wrapIfClass(address, checker)
   return address
