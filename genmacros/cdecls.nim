@@ -69,6 +69,9 @@ macro generateWineDecls*(specs: static[SpecFile]): untyped =
         let res = `call`
         trace(" = %p\n", res)
         let finalres = wrapIfNecessary(res)
+        GC_enable()
+        GC_fullcollect()
+        GC_disable()
         return finalres
     result.add(decl)
   when defined(debug):

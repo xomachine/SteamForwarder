@@ -69,6 +69,8 @@ proc initModInfo(): ModInfo =
 
 proc checkAddr*(address: uint32, size: uint32): bool {.importc: "IsBadReadPtr".}
 
+GC_disable()
+
 proc moduleByAddress*(address: uint32): ModInfo =
   result = initModInfo()
   #let pid = 0
