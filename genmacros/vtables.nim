@@ -139,7 +139,7 @@ proc wrapClass(name: string, address: uint32): uint32 =
     while true:
       let maddr = cast[ptr uint32](cast[uint32](origin.vtable) + shift)[]
       trace("Method: %p\n", maddr)
-      if maddr < 0x10000'u32:
+      if maddr < 0x10000'u32 or maddr > 0xffff0000'u32:
         break
       shift += 4
     #for a in vtables[name]:
