@@ -11,7 +11,7 @@ proc genClasses*(c: Classes): NimNode
 
 const classes* = readClasses()
 
-from strutils import splitLines, split, parseHexInt
+from strutils import splitLines, split, parseInt
 from tables import initTable, `[]`, `[]=`, pairs
 
 proc genClasses(c: Classes): NimNode =
@@ -32,10 +32,9 @@ proc readClasses(): Classes =
       let splitted = line.split({'!', ':'})
       assert splitted.len == 3
       curstr = splitted[1]
-      #curaddr = parseHexInt(splitted[2]).uint32
       #result[curaddr] = newSeq[int]()
       result[curstr] = newSeq[int]()
     else:
-      let depth = parseHexInt(line)
+      let depth = parseInt(line)
       #result[curaddr].add(depth)
       result[curstr].add(depth)
