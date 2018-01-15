@@ -1,25 +1,28 @@
 
 type
-  VTable = array[3, pointer]
   WinCallback = object
-    vtable: ptr VTable
+    vtable: ptr array[3, pointer]
     flags: uint8
     icallback: int32
   WrappedCallback = object
-    vtable: ptr VTable
+    vtable: pointer
     flags: uint8
     icallback: int32
     origin: ptr WinCallback
 
 proc wrap*(address: uint32): uint32
 proc unwrap*(address: uint32)
+proc wrapToOrigin*(address: uint32)
+proc sync_back*()
+proc sync*()
 
 
 from wine import trace
-from tables import initTable, `[]`, `[]=`, contains, del
+from tables import initTable, `[]`, `[]=`, contains, del, mvalues
+from maps import getMMap, checkAddress, MemMaps, Flags
+from strutils import repeat
+from utils import `+`, `-`, dumpMemoryRefs
 
-proc `+`(a: ptr VTable, b: int): ptr proc() =
-  cast[ptr proc()](cast[int](a) + b)
 
 proc run(obj: ptr WrappedCallback, p: pointer) {.cdecl.} =
   trace("Callback %p run (%p)\n", obj, p)

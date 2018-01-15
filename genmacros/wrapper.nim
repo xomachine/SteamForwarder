@@ -4,7 +4,7 @@ proc wrapIfNecessary*(address: uint32): uint32 {.cdecl.}
 
 from strutils import split, parseHexInt, repeat
 from tables import initTable, `[]`, `[]=`, contains, values
-from wine import trace, moduleByAddress, ModInfo, checkAddr
+from wine import trace
 from classparser import readClasses
 from vtables import wrapClass, fastWrap
 from maps import getMMap, checkAddress, Flags

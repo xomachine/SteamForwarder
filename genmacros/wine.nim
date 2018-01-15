@@ -9,15 +9,13 @@
 {.emit: """#include "windef.h"""".}
 {.emit: """#include "winbase.h"""".}
 {.emit: """#include "wine/debug.h"""".}
-{.emit: """#include "tlhelp32.h"""".}
-#{.emit: "WINE_DEFAULT_DEBUG_CHANNEL(steam_api);".}
-{.passL:"-ldbghelp".}
-{.passL:"-lpsapi".}
+{.emit: "WINE_DEFAULT_DEBUG_CHANNEL(steam_api);".}
 {.passC:"-I.".}
 proc trace*(format: cstring)
   {.varargs, noDecl, importc: "TRACE", header: "debug.h".}
 
-from winlean import Handle, getCurrentProcess, getLastError, openProcess
+
+#from winlean import Handle, getCurrentProcess, getLastError, openProcess
 
 const MAXFN = 260
 
@@ -67,27 +65,25 @@ type
 proc initModInfo(): ModInfo =
   result.structSize = ModInfo.sizeof.uint32
 
-proc checkAddr*(address: uint32, size: uint32): bool {.importc: "IsBadReadPtr".}
+#proc checkAddr*(address: uint32, size: uint32): bool {.importc: "IsBadReadPtr".}
 
-GC_disable()
-
-proc moduleByAddress*(address: uint32): ModInfo =
-  result = initModInfo()
-  #let pid = 0
-  #{.emit: [pid, " = GetCurrentProcessId();"].}
-  {.emit: "long opt = SymGetOptions();".}
-  {.emit: "SymSetOptions(opt | 0x40000000);".}
-  #let phandle = openProcess(0x6, false, pid)
-  let phandle = getCurrentProcess()
-  let status = false
-  {.emit: [status, " = SymInitialize(", phandle, ", NULL, FALSE);"].}
-  if not status:
-    trace("SymInitialize failed with %p\n", getLastError())
-  {.emit: [status, " = SymGetModuleInfo64(", phandle, ", ", address.uint64, ", ",
-           result.addr, ");"].}
-  if not status:
-    trace("SymGetModuleInfo64 failed with %p\n", getLastError())
-  {.emit: "SymSetOptions(opt);".}
+#proc moduleByAddress*(address: uint32): ModInfo =
+#  result = initModInfo()
+#  #let pid = 0
+#  #{.emit: [pid, " = GetCurrentProcessId();"].}
+#  {.emit: "long opt = SymGetOptions();".}
+#  {.emit: "SymSetOptions(opt | 0x40000000);".}
+#  #let phandle = openProcess(0x6, false, pid)
+#  let phandle = getCurrentProcess()
+#  let status = false
+#  {.emit: [status, " = SymInitialize(", phandle, ", NULL, FALSE);"].}
+#  if not status:
+#    trace("SymInitialize failed with %p\n", getLastError())
+#  {.emit: [status, " = SymGetModuleInfo64(", phandle, ", ", address.uint64, ", ",
+#           result.addr, ");"].}
+#  if not status:
+#    trace("SymGetModuleInfo64 failed with %p\n", getLastError())
+#  {.emit: "SymSetOptions(opt);".}
 
 {.emit:"""
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)

@@ -69,6 +69,7 @@ proc makePseudoMethod(stack: uint8): NimNode {.compileTime.} =
       trace("prebp(%p) > argument1(%p) > espkeep(%p)\n", prebp, argument1,
             espkeep)
       if prebp > argument1 and argument1 > espkeep:
+        trace("Looks like it is CSteamID reference, swapping...\n")
         let res = `remcall`
         if res != argument1:
           trace("Whoooops! I've assumed that the first argument is a CSteamID, but it was not! Everything will be crashed soon... Result = %p\n", res)
@@ -88,7 +89,7 @@ proc eachInt(k: string, a: seq[int], sink: NimNode): NimNode {.compileTime.} =
   result = newStmtList()
   let klit = newStrLitNode(k)
   result.add quote do:
-    `sink`[`klit`] = newSeq[MethodProc](1)
+    `sink`[`klit`] = newSeq[MethodProc](2)
   for i, v in a.pairs():
     declared.incl(v.uint8)
     let asmcode = """
@@ -145,9 +146,9 @@ proc wrapClass(name: string, address: uint32): uint32 =
     #for a in vtables[name]:
     #  trace("Wrapped method: %p\n", a)
     trace("Type info located at %p and equals %p\n", tinfoaddr, tinfoaddr[])
-    vtables[name][0] = tinfoaddr[]
-    trace("Type info placed at %p and equals %p\n", vtables[name][0].addr, vtables[name][0])
-    let vtableptr = vtables[name][1].addr
+    vtables[name][1] = tinfoaddr[]
+    trace("Type info placed at %p and equals %p\n", vtables[name][1].addr, vtables[name][1])
+    let vtableptr = vtables[name][2].addr
     trace("Setting vtableptr to %p\n", vtableptr)
     classAssociations[address] = WrappedClass(vtable: vtableptr, origin: origin)
   else:
