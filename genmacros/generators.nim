@@ -8,7 +8,7 @@ from algorithm import reversed
 
 proc genArgs*(n: int): seq[NimNode] =
   result = newSeq[NimNode](n+1)
-  result[0] = newIdentNode("uint32")
+  result[0] = newIdentNode("uint64")
   for i in 1..n:
     result[i] = newIdentDefs(newIdentNode("argument" & $i),
                              newIdentNode("uint32"))

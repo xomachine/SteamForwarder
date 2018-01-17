@@ -61,13 +61,12 @@ macro generateWineDecls*(specs: static[SpecFile]): untyped =
         trace("\n")
         let `warg1` = wrap(`arg1`)
         trace("= %p\n", `call`)
+        wrapToOrigin(`warg1`)
       if s.name in unregcallback:
         decl.body.add quote do:
           unwrap(`arg1`)
     elif s.name in toskip:
       decl.body = quote do:
-        #`tracecall`
-        #trace(" - skipped\n")
         `call`
     else:
       let resultidt = newIdentNode("result")
@@ -76,7 +75,7 @@ macro generateWineDecls*(specs: static[SpecFile]): untyped =
         `resultidt` = `call`
         trace(" = %p\n", `resultidt`)
       if not s.swap:
-        decl.body = quote do:
+        decl.body.add quote do:
           `resultidt` = wrapIfNecessary(`resultidt`)
     result.add(decl)
   when defined(debug):
