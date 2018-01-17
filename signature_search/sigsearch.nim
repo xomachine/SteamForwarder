@@ -49,8 +49,10 @@ proc searchPattern(pattern: string) =
       continue
     var size = $cast[cstring](strSegmentData[offset-2].unsafeAddr)
     size.setLen(2)
-    stderr.writeLine("Size: " & size)
     classname.setLen(size.parseInt)
+    if not classname[^1].isDigit:
+      continue
+    stderr.writeLine("Size: " & size)
     stderr.writeLine(classname & " found at " & realoffset.toHex())
     let strPattern = realoffset.addr2Pattern()
     let tinfo = vtableSegmentData.find(strPattern) + vtableSegment.vma.int - 4
@@ -62,16 +64,18 @@ proc searchPattern(pattern: string) =
     stderr.writeLine("Found VTable at: " &
                      (vtable + vtableSegment.filepos.int).toHex())
     echo "!", classname, ":", toHex(vtable-4)
+    var i = 0
     for madr in methods(vtableSegmentData[vtable].unsafeAddr, textBounds):
-      let depth = readProcedure(disasmer, madr)
-      if depth > 42:
-        echo depth
-        return
-      stderr.writeLine("Method at: " & madr.toHex() &
-                       " dives into stack on depth: " & $depth)
-      echo $max(depth, 4)
+      let stack = readProcedure(disasmer, madr)
+      stderr.writeLine("Method " & $i & " at: " & madr.toHex() &
+                       " dives into stack on depth: " & $stack.depth &
+                       " and retStruct: " & $stack.retStruct)
+      # + should be correctly parsed by parseInt and will be indicator of
+      # hidden argument
+      echo (if stack.retStruct: "+" else: ""), max(stack.depth, 4)
       # 4 is minimal depth because even an empty method receives its object as
       # the first argument
+      i += 1
 const classPattern = "CAdapterSteam"
 const classPattern2 = "CSteam"
 searchPattern(classPattern)

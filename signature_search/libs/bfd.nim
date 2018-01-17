@@ -3,6 +3,7 @@
 {.passC: "-DPACKAGE".}
 
 const BFS_GLOBAL* = (1 shl 1)
+const BFS_DEBUGGING* = (1 shl 3)
 
 type
   BFDBool* = cint

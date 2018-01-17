@@ -4,11 +4,11 @@ from tables import OrderedTable, `[]`, contains, len, `$`, initTable, `[]=`,
 from spec import readSpecFile, SpecFile
 from strutils import toHex, join
 from sequtils import repeat
-from spcounter import readProcedure
+from spcounter import readProcedure, StackStatus
 from libs.disasm import initDisasm
 from libs.bfd import bfd_init, init, bfd_open, bfd_close, readSymbolTable,
-                     BFS_GLOBAL, Symbol, BFD, bfd_get_start_address,
-                     bfd_get_section_by_name, getContent
+                     BFS_DEBUGGING, Symbol, BFD, bfd_get_start_address,
+                     bfd_get_section_by_name, getContent, BFS_GLOBAL
 
 type
   MatchingLib = tuple
@@ -24,7 +24,7 @@ proc findBestSOLib(verfolder: string, specdata: SpecFile): MatchingLib =
     let symbols = bfile.readSymbolTable()
     var counter = 0
     for s in symbols:
-      if (s.flags and BFS_GLOBAL) != 0 and s.value > 0'u32 and
+      if (s.flags and BFS_GLOBAL) > 0 and s.value > 0'u32 and
          $s.name in specdata:
         counter += 1
     if counter < maxcount:
@@ -53,23 +53,22 @@ let textSectionData = bfile.getContent(textSection)
 var disasmer = initDisasm(bfile, textSection,
                           textSectionData[0].unsafeAddr)
 stderr.writeLine("Read " & $symbols.len & " symbols from library")
-var resolved = initTable[string, int]()
+var resolved = initTable[string, StackStatus]()
 echo "# ", libpath
 for sym in symbols:
   let name = $sym.name
-  if sym.value != 0 and (sym.flags and BFS_GLOBAL) > 0 and
+  if sym.value != 0 and (sym.flags and BFS_DEBUGGING) > 0 and
      name in specdata:
     let address = sym.value + startAddress
-    let depth = disasmer.readProcedure(address)
-    resolved[name] = depth
-    #echo name, ":", depth
+    resolved[name] = disasmer.readProcedure(address)
 for entry in specdata.values:
   let tail =
     if entry.name in resolved:
-      let nargs = resolved[entry.name] div 4
+      let stack = resolved[entry.name]
+      let nargs = stack.depth div 4
       let arguments = repeat("ptr", nargs).join(" ")
       "cdecl " & entry.name & "(" & arguments & ") " & entry.name &
-        "_" & " #" & $nargs
+        "_" & " #" & (if stack.retStruct: "+" else: "") & $nargs
     else:
       entry.callconv & " " & entry.name
   echo entry.idx, " ", tail
