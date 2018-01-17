@@ -1,3 +1,4 @@
+from classparser import StackState
 type
   Class* = tuple
     vtable: pointer
@@ -8,6 +9,8 @@ type
 
 proc wrapClass*(name: string, address: uint32): uint32
 proc fastWrap*(address: uint32): uint32
+proc eachInt(k: string, a: seq[StackState], sink: NimNode): NimNode
+  {.compileTime.}
 
 from strutils import toHex, `%`
 from utils import strToAsm
@@ -15,32 +18,42 @@ from wrapper import wrapIfNecessary
 from classparser import Classes, classes, readClasses
 from tables import Table, initTable, pairs, `[]=`, `[]`, contains, keys
 from wine import trace
-from generators import genTraceCall, genArgs, genCall
+from generators import genTraceCall, genArgs, genCall, genAsmHiddenCall
 import macros
 
 const pseudoMethodPrefix = "pMethod"
 static:
   var declared: set[uint8] = {}
+  var swpdeclared: set[uint8] = {}
 
-proc makePseudoMethod(stack: uint8): NimNode {.compileTime.} =
-  result = newProc(newIdentNode(pseudoMethodPrefix & $stack))
+proc makePseudoMethod(stack: uint8, swp: bool): NimNode {.compileTime.} =
+  result = newProc(newIdentNode(pseudoMethodPrefix & $stack &
+                                (if swp:"S" else: "")))
   result.addPragma(newIdentNode("cdecl"))
-  let nargs = int(stack div 4) - 1
+  let nargs = max(int(stack div 4) - 1 - int(swp), 0)
   let justargs = genArgs(nargs)
+  let origin = newIdentNode("origin")
   let rmethod = newIdentNode("rmethod")
   var mcall = genCall("rmethod", nargs)
-  let origin = newIdentNode("origin")
   mcall.insert(1, origin)
-  var callargs = justargs
-  callargs.insert(newIdentDefs(newIdentNode("obj"), newIdentNode("uint32")), 1)
+  var argseq = @[
+    newIdentNode("uint64"),
+    newIdentDefs(newIdentNode("shift"), newIdentNode("uint32")),
+    newIdentDefs(newIdentNode("obj"), newIdentNode("uint32")),
+    newIdentDefs(newIdentNode("prebp"), newIdentNode("uint32")),
+    newIdentDefs(newIdentNode("raddr"), newIdentNode("uint32")),
+  ]
+  if swp:
+    argseq.add(newIdentDefs(newIdentNode("hidden"), newIdentNode("pointer")))
+  argseq &= justargs[1..^1]
+  var callargs = @[
+    newIdentNode("uint64"),
+    newIdentDefs(newIdentNode("obj"), newIdentNode("uint32")),
+  ] & justargs[1..^1]
   let procty = newTree(nnkProcTy, newTree(nnkFormalParams, callargs),
                        newTree(nnkPragma, newIdentNode("cdecl")))
-  var argseq = justargs
-  argseq.insert(newIdentDefs(newIdentNode("raddr"), newIdentNode("uint32")), 1)
-  argseq.insert(newIdentDefs(newIdentNode("prebp"), newIdentNode("uint32")), 1)
-  argseq.insert(newIdentDefs(newIdentNode("obj"), newIdentNode("uint32")), 1)
-  argseq.insert(newIdentDefs(newIdentNode("shift"), newIdentNode("uint32")), 1)
-  var args = newTree(nnkFormalParams, argseq)
+
+  let args = newTree(nnkFormalParams, argseq)
   result[3] = args
   let tracecall = genTraceCall(nargs)
   result.body = quote do:
@@ -57,49 +70,38 @@ proc makePseudoMethod(stack: uint8): NimNode {.compileTime.} =
     trace("Method address to call: %p\n", maddr)
     let `rmethod` = maddr[]
     trace("Method to call: %p\n", `rmethod`)
-  if nargs > 0:
-    var remcall = genCall("rmethod", nargs)
-    remcall.insert(2, origin)
+  if swp:
+    let asmcall = genAsmHiddenCall("rmethod", "origin", nargs)
     result.body.add quote do:
-      var espkeep: uint32
-      asm """
-        mov %%esp, %[espkeep]
-        :[espkeep]"=g"(`espkeep`)
-      """
-      trace("prebp(%p) > argument1(%p) > espkeep(%p)\n", prebp, argument1,
-            espkeep)
-      if prebp > argument1 and argument1 > espkeep:
-        trace("Looks like it is CSteamID reference, swapping...\n")
-        let res = `remcall`
-        if res != argument1:
-          trace("Whoooops! I've assumed that the first argument is a CSteamID, but it was not! Everything will be crashed soon... Result = %p\n", res)
-        return res
-      else:
-        let res = `mcall`
-        trace("Result = %p\n", res)
-        return wrapIfNecessary(res)
+      trace("Hidden before = %p (%p) \n", hidden, cast[ptr cint](hidden)[])
+      `asmcall`
+      trace("Hidden result = %p (%p) \n", hidden, cast[ptr cint](hidden)[])
+      return cast[uint64](hidden)
   else:
     result.body.add quote do:
       let res = `mcall`
       trace("Result = %p\n", res)
       return wrapIfNecessary(res)
-#  hint result.repr
 
-proc eachInt(k: string, a: seq[int], sink: NimNode): NimNode {.compileTime.} =
+proc eachInt(k: string, a: seq[StackState], sink: NimNode): NimNode =
   result = newStmtList()
   let klit = newStrLitNode(k)
   result.add quote do:
     `sink`[`klit`] = newSeq[MethodProc](2)
   for i, v in a.pairs():
-    declared.incl(v.uint8)
+    if v.swap:
+      swpdeclared.incl(v.depth.uint8)
+    else:
+      declared.incl(v.depth.uint8)
     let asmcode = """
     push %ecx # push object reference
     push $0x""" & i.toHex & """ # push number of method inside the vtable
-    call `""" & pseudoMethodPrefix & $v & """` # call the related pseudomethod
+    call `""" & pseudoMethodPrefix & $v.depth & (if v.swap: "S" else: "") &
+      """` # call the related pseudomethod
     add $0x4, %esp # remove number of method from the stack
     pop %ecx # pop object reference back
     pop %ebp # well compiller stores ebp regardless, so we need to pop it back
-    ret $""" & $(v-4) &  """ # pop all args except the object itself(in ecx)
+    ret $""" & $(v.depth-4) &  """ # pop all args except the object itself(in ecx)
 """
     var tstr = newNimNode(nnkTripleStrLit)
     tstr.strVal = asmcode
@@ -118,7 +120,9 @@ macro eachTable(sink: untyped): untyped =
   for k, v in cc.pairs:
     result.add(eachInt(k, v, sink))
   for i in declared:
-    result.insert(0, makePseudoMethod(i))
+    result.insert(0, makePseudoMethod(i, false))
+  for i in swpdeclared:
+    result.insert(0, makePseudoMethod(i, true))
 
 var vtables: Table[string, seq[MethodProc]]
 eachTable(vtables)

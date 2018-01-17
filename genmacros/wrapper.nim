@@ -1,15 +1,16 @@
 from tables import Table
 
 proc wrapIfNecessary*(address: uint32): uint32 {.cdecl.}
+proc wrapIfNecessary*(value: uint64): uint64 {.cdecl.}
 
 from strutils import split, parseHexInt, repeat
 from tables import initTable, `[]`, `[]=`, contains, values
 from wine import trace
 from classparser import readClasses
 from vtables import wrapClass, fastWrap
-from maps import getMMap, checkAddress, Flags
+from maps import getMMap, checkAddress, Flags, MemMaps
 
-let cls = readClasses()
+const cls = readClasses()
 proc wrapIfClass(address: uint32, checker: proc(a: uint32): bool): uint32 =
   let vtableaddr = cast[ptr uint32](address)[]
   trace("Walking through the class...")
@@ -42,13 +43,20 @@ proc wrapIfClass(address: uint32, m: Slice[uint32]): uint32 =
     a in m
   wrapIfClass(address, checker)
 
+var curMap: MemMaps
 
+proc wrapIfNecessary(value: uint64): uint64 =
+  let potencialAddress = cast[uint32](value)
+  let potencialWrap = wrapIfNecessary(potencialAddress)
+  if potencialAddress != potencialWrap:
+    return potencialWrap
+  return value
 proc wrapIfNecessary(address: uint32): uint32 =
   let already = fastWrap(address)
   if already > 0'u32:
     trace("Translating: %p -> %p\n", address, already)
     return already
-  let curMap = getMMap()
+  getMMap(curMap)
   let affinity = curMap.checkAddress(address)
   if Flags.read in affinity.permissions:
     trace("Looks like %p - is valid address with %s at \"%s\"\n", address,
@@ -56,8 +64,8 @@ proc wrapIfNecessary(address: uint32): uint32 =
     proc checker(a: uint32): bool =
       let af = curMap.checkAddress(a)
       if not (Flags.read in af.permissions and af.name == "steamclient.so"):
-        trace("invalid address permissions: %p %s (related to \"%s\")\n", a,
-              af.permissions.repr.cstring, af.name.cstring)
+        #trace("invalid address permissions: %p %p (related to \"%s\")\n", a,
+        #      af.permissions, af.name.cstring)
         return false
       return true
     return wrapIfClass(address, checker)

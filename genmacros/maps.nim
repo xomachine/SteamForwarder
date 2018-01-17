@@ -11,26 +11,28 @@ type
     mrange: Slice[uint32]
     permissions: set[Flags]
     name: string
-  MemMaps* = seq[ModuleEntry]
+  MemMaps* = tuple
+    upper: int
+    d: array[1024, ModuleEntry]
 {.push cdecl.}
-proc getRealPid*(): Pid
-proc getMMap*(): MemMaps
+proc getRealPid*(): string
+proc getMMap*(old: var MemMaps)
 proc checkAddress*(m: MemMaps, address: uint32): ModuleEntry
-proc parseFlags(f: string): set[Flags]
+#proc parseFlags(f: string): set[Flags]
 proc getCurWPath(): string
 proc getWPath(p: string): string
 {.pop.}
 
 from posix import getppid, Pid, getcwd, readlink
-from strutils import parseInt, format, strip, rsplit, split, parseHexInt
+from strutils import parseInt, format, strip, rsplit, split, parseHexInt,
+                     IdentChars, IdentStartChars, HexDigits
 from wine import trace
+import strscans
 
 proc getCurWPath(): string =
   ## Obtains current executable working dir
-  var buffer = newString(256)
-  discard getcwd(buffer[0].addr, 255)
-  trace("ResultSetLen: %s\n", buffer.cstring)
-  $(buffer.cstring)
+  var buffer: array[256, char]
+  $getcwd(buffer[0].addr, 255)
 
 proc getWPath(p: string): string =
   ## Obtains current working dir of `p`
@@ -38,49 +40,66 @@ proc getWPath(p: string): string =
   let read = readlink("/proc/" & $p & "/cwd", result[0].addr, 255)
   result.setLen(read)
 
-proc parseFlags(f: string): set[Flags] =
-  if f[0] == 'r': result.incl(Flags.read)
-  if f[1] == 'w': result.incl(Flags.write)
-  if f[2] == 'x': result.incl(Flags.execute)
-  if f[3] == 'p': result.incl(Flags.private)
+proc flags(f: string, res: var set[Flags], start: int): int =
+  let leters = "rwxp"
+  if start + 4 >= f.len: return 0
+  var outp: set[Flags]
+  for fl in Flags:
+    let i = fl.ord + start
+    if f[i] == leters[fl.ord]: outp.incl(fl)
+    elif f[i] == '-': outp.excl(fl)
+    else: return 0
+  res = outp
+  return 4
 
-proc getMMap(): MemMaps =
+proc hex(input: string, intval: var uint32, start: int): int =
+  var i = start
+  while i < input.len and input[i] in HexDigits: i.inc
+  if i != start: intval = parseHexInt(input[start..<i]).uint32
+  return i - start
+
+proc modname(input: string, name: var string, start: int): int =
+  var i = input.len - 1
+  let addition = {'[', ']', '.'}
+  let valid = IdentChars + addition
+  while i >= start and input[i] notin valid: i.dec
+  var fin = max(i, start)
+  while i >= start and input[i] in valid: i.dec
+  name = input[max(i+1, start)..fin]
+  return input.len - start
+
+proc contains(o: MemMaps, s: string): bool =
+  for i in 0..<o.upper:
+    if o.d[i].name == s:
+      return true
+  return false
+
+proc getMMap(old: var MemMaps) =
   ## Obtains content of /proc/$$/maps and parses it to get real module mapping
   ## The real mappings are needed to check correctness memory references
+  if "steamclient.so" in old:
+    return
   let realPid {.global.} = getRealPid()
-  let mapfile {.global.} = "/proc/" & $realPid & "/maps"
-  result = newSeq[ModuleEntry]()
+  let mapfile {.global.} = "/proc/" & realPid & "/maps"
+  var i = 0
   for line in mapfile.lines():
-    let splitted = line.split()
-    if splitted.len < 3:
-      # illformed line, may be blank
-      continue
-    let bounds = splitted[0].split({'-'})
-    if bounds[0].len > 8:
-      # 64-bit address should be skipped while we are in 32-bit space
-      continue
-    let perms = parseFlags(splitted[1])
-    let name = splitted[^1].rsplit('/', 1)[^1]
-    let mrange = Slice[uint32](a: bounds[0].parseHexInt.uint32,
-                               b: bounds[1].parseHexInt.uint32)
-    result.add((mrange: mrange, permissions: perms, name: name))
+    if line.scanf("${hex}-${hex} ${flags} ${modname}", old.d[i].mrange.a,
+                  old.d[i].mrange.b, old.d[i].permissions, old.d[i].name):
+      i.inc
+  old.upper = i
 
-
-proc getRealPid(): posix.Pid =
+proc getRealPid(): string =
   ## Some workaround to get current PID in linux terms instead of windows PID
   let ppid = getppid()
-  trace("PPID = %d\n", ppid)
   let curPath = getCurWPath()
-  trace("WinExe = %s\n", curPath.cstring)
   for line in "/proc/$1/task/$1/children".format(ppid).lines():
-    trace("Read line: %s\n", line.cstring)
     let stripped = line.strip()
     let pPath = getWPath(stripped)
-    trace("exeName: %s\n", pPath.cstring)
     if curPath == pPath:
-      return stripped.parseInt().Pid
+      trace("Real PID = %s\n", stripped.cstring)
+      return stripped
 
 proc checkAddress(m: MemMaps, address: uint32): ModuleEntry =
-  for entry in m:
-    if address in entry.mrange:
-      return entry
+  for i in 0..<m.upper:
+    if address in m.d[i].mrange:
+      return m.d[i]
