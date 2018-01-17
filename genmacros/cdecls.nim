@@ -3,8 +3,10 @@ from utils import parseFullSpec, SpecFile
 from wrapper import wrapIfNecessary
 from generators import genTraceCall, genCall, genArgs
 from wine import trace
-from callback import wrap, unwrap
+from callback import wrap, unwrap, wrapToOrigin, sync, sync_back
 import macros
+
+type Dummy = tuple
 
 macro generateLinuxDecls*(specs: static[SpecFile]): untyped =
   result = newStmtList()
@@ -17,7 +19,9 @@ macro generateLinuxDecls*(specs: static[SpecFile]): untyped =
   for s in specs.symbols:
     let name = newIdentNode(s.realname)
     let actualname = newStrLitNode(s.realname)
-    let params = newTree(nnkFormalParams, genArgs(s.nargs))
+    var params = newTree(nnkFormalParams, genArgs(s.nargs))
+    if s.swap:
+      params[0] = bindSym("Dummy")
     var decl = quote do:
       proc `name`() {.cdecl, importc: `actualname`.}
     decl[3] = params
@@ -40,7 +44,9 @@ macro generateWineDecls*(specs: static[SpecFile]): untyped =
   for s in specs.symbols:
     let name = newIdentNode(s.name & "Lin")
     let exportname = newStrLitNode(s.name)
-    let params = newTree(nnkFormalParams, genArgs(s.nargs))
+    var params = newTree(nnkFormalParams, genArgs(s.nargs))
+    if s.swap:
+      params[0] = bindSym("Dummy")
     var decl = quote do:
       proc `name`*() {.cdecl, exportc: `exportname`.}
     decl[3] = params
@@ -64,15 +70,14 @@ macro generateWineDecls*(specs: static[SpecFile]): untyped =
         #trace(" - skipped\n")
         `call`
     else:
+      let resultidt = newIdentNode("result")
       decl.body = quote do:
         `tracecall`
-        let res = `call`
-        trace(" = %p\n", res)
-        let finalres = wrapIfNecessary(res)
-        GC_enable()
-        GC_fullcollect()
-        GC_disable()
-        return finalres
+        `resultidt` = `call`
+        trace(" = %p\n", `resultidt`)
+      if not s.swap:
+        decl.body = quote do:
+          `resultidt` = wrapIfNecessary(`resultidt`)
     result.add(decl)
   when defined(debug):
     echo(result.repr)

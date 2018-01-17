@@ -6,6 +6,7 @@ type
     name: string
     realname: string
     nargs: int
+    swap: bool
   SpecFile* = tuple
     libpath: string
     symbols: seq[Symbol]
@@ -32,10 +33,12 @@ proc parseFullSpec*(filename: string): SpecFile {.compileTime.} =
     #let idx = bySpace[0]
     let conv = bySpace[1]
     if conv == "cdecl":
-      let nargs = bySpace[^1].strip(true, true, {'#', ' '}).parseInt()
+      let nargsStr = bySpace[^1].strip(true, true, {'#', ' '})
+      let nargs = nargsStr.parseInt()
+      let swap = nargsStr[0] == '+'
       let name = bySpace[^2]
       result.symbols.add((name: name, realname: name.strip(false, true, {'_'}),
-                  nargs: nargs))
+                  nargs: nargs, swap: swap))
 
 proc `+`*(a: pointer, b: int): ptr pointer =
   cast[ptr pointer](cast[int](a) + b)
