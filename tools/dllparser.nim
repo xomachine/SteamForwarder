@@ -66,6 +66,8 @@ for sym in symbols:
   if sym.value != 0 and (sym.flags and BFS_DEBUGGING) > 0 and
      name in specdata:
     let address = sym.value + startAddress
+    when defined(debug):
+      stderr.writeLine("Procedure: " & name & " with flags " & $sym.flags)
     resolved[name] = disasmer.readProcedure(address)
 for entry in specdata.values:
   let tail =
