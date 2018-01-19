@@ -128,7 +128,12 @@ proc interpretStack(disasmer: var Disasmer, madr: uint32,
       of -4:
         result.retStruct = true
         break
-      else: quit("Stack corruption!")
+      else:
+        stderr.writeLine("WARNING! Stack corruption detected! This message " &
+                         "may be harmless if caused by indirect no-return " &
+                         "call in code. Anyway, the result of this branch " &
+                         "will be abandoned.")
+        return (depth: 0, retStruct: false)
     elif instr.name[0] == 'j' and (instr.address notin visited):
       when defined(debug):
         echo "Conditional jump to ", instr.address.toHex
