@@ -83,7 +83,7 @@ proc interpretStack(disasmer: var Disasmer, madr: uint32,
         #  registers[instr.dst] -= registers[instr.src]
         if instr.src[0] != '%':
           registers[instr.dst] -= parseHexInt(instr.src)
-    of "leaveq":
+    of "leaveq", "leave":
       registers["%esp"] = registers["%ebp"] + 4
       registers.del("%ebp")
     of "lea":
@@ -116,7 +116,7 @@ proc interpretStack(disasmer: var Disasmer, madr: uint32,
         # call without return
         stackprotector = couldbenoreturn
         break
-    of "retq":
+    of "retq", "ret":
       if not instr.src.isNil:
         let stackpop = parseHexInt(instr.src)
         if stackpop > 4:
@@ -139,7 +139,7 @@ proc interpretStack(disasmer: var Disasmer, madr: uint32,
         echo "Returned back to main flow at ", address.toHex()
     else:
       discard
-    if instr.name ==  "callq":
+    if instr.name in ["callq", "call"]:
       if stackprotector == 0:
         # trying to detect stack protector. if nop will be encountered after
         # this call - this call is a stack protector call

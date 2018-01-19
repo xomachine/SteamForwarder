@@ -12,6 +12,7 @@ type
     buffer_vma*: cuint
     buffer_length*: cuint
     section*: Section
+    disassembler_options: cstring
     print_address_func: proc(a: cuint, di: ptr DisasmInfo) {.cdecl.}
   DInfo* = ptr DisasmInfo
   Disassembler* = proc(vma: cuint, di: DInfo): cint {.cdecl.}
@@ -86,6 +87,8 @@ proc initDisasm*(b: BFD, s: Section, buffer: pointer): Disasmer =
   result.dinfo.buffer_length = s.size
   result.dinfo.buffer_vma = s.vma
   result.dinfo.buffer = buffer
+  when not defined(with64):
+    result.dinfo.disassembler_options = "i386,addr32,data32"
   result.dinfo.print_address_func = proc(a: cuint, di: DInfo){.cdecl.} =
     di.stream.printer("%x", a)
   disassemble_init_for_target(result.dinfo.addr)
