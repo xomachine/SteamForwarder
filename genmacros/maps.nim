@@ -40,7 +40,11 @@ proc getCurWPath(): string =
 proc getWPath(p: string): string =
   ## Obtains current working dir of process with pid `p`
   result = newString(256)
+  trace("PID to check: %s\n", p.cstring)
   let read = readlink("/proc/" & $p & "/cwd", result[0].addr, 255)
+  if read notin 0..255:
+    trace("Incorrect read value %d!\n", read)
+    return ""
   result.setLen(read)
 
 proc flags(f: string, res: var set[Flags], start: int): int =
@@ -101,11 +105,14 @@ proc getRealPid(): string =
   let ppid = getppid()
   let curPath = getCurWPath()
   for line in "/proc/$1/task/$1/children".format(ppid).lines():
-    let stripped = line.strip()
-    let pPath = getWPath(stripped)
-    if curPath == pPath:
-      trace("Real PID = %s\n", stripped.cstring)
-      return stripped
+    for pid in line.split():
+      if pid.len == 0:
+        continue
+      let stripped = pid.strip()
+      let pPath = getWPath(stripped)
+      if curPath == pPath:
+        trace("Real PID = %s\n", stripped.cstring)
+        return stripped
 
 proc checkAddress(m: MemMaps, address: uint32): ModuleEntry =
   ## Checks if given `address` belongs to the linux process described by `m`
