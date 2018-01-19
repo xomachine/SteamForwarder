@@ -9,6 +9,7 @@ type
   SpecFile* = OrderedTable[string, Symbol]
 
 proc readSpecFile*(file: File): SpecFile =
+  ## Reads the spec `file` provided by winedump and creates symbol table
   result = initOrderedTable[string, Symbol]()
   for line in file.lines():
     if line.len == 0 or line[0] == '#':

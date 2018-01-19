@@ -16,6 +16,9 @@ type
     handle: BFD
 
 proc findBestSOLib(verfolder: string, specdata: SpecFile): MatchingLib =
+  ## Iterates over all subfolder in `verfolder` and parses symbols from
+  ## libsteam_api.so located there. Then compares the parsed symbols with
+  ## given `specdata` and returns best libsteam_api.so matching.
   var maxcount = 0
   for filename in walkFiles(verfolder & "/*/libsteam_api.so"):
     let bfile = bfd_open(filename, nil)
@@ -40,7 +43,10 @@ proc findBestSOLib(verfolder: string, specdata: SpecFile): MatchingLib =
         result = (path: filename, handle: bfile)
 
 
-assert(paramCount() == 1)
+assert(paramCount() == 1, "This program requires one and only one parameter: " &
+                          "versions folder with various versions of " &
+                          "libsteam_api.so in subfolders. It also reads spec " &
+                          "file from stdin.")
 let specdata = stdin.readSpecFile()
 stderr.writeLine("Spec file: loaded " & $specdata.len & " entries")
 let versionfolder = paramStr(1)

@@ -17,9 +17,11 @@ from sets import initSet, incl, contains
 from tables import `[]`, `[]=`, initTable, contains, del
 from libs.disasm import parseInstructions
 
-var stackprotector = 0'u32
+var stackprotector = 0'u32 # address of stack protector procedure
 
 proc parseEA(s: string): tuple[register: string, offset: int] =
+  ## Parses the effective address in format "0x[value]([register])" to
+  ## the pair of register and value
   let splitted = s.split({'(', ')'})
   result.register = splitted[1]
   result.offset =
@@ -32,18 +34,27 @@ proc parseEA(s: string): tuple[register: string, offset: int] =
     else: parseHexInt(splitted[0])
 
 proc readProcedure(disasmer: var Disasmer, madr: uint32): StackStatus =
+  ## Emulates the stack of procedure located in `madr` using the
+  ## disassembler instance `disasmer`. Returns the stack information
+  ## including stack depth procedure accessing to and inmemory return indicator.
   var registers = initTable[string, int]()
   registers["%esp"] = 0
   var visited = initSet[uint32](256)
   disasmer.interpretStack(madr, registers, visited)
 
 proc merge(a, b: StackStatus): StackStatus =
+  ## Compares stack informations and selects one with deepest stack access and
+  ## inmemory return indicator set.
   result.depth = max(a.depth, b.depth)
   result.retStruct = a.retStruct or b.retStruct
 
 proc interpretStack(disasmer: var Disasmer, madr: uint32,
                   regs: Table[string, int],
                   visited: var HashSet[uint32]): StackStatus =
+  ## Interprets assembler code of the procedure given in `madr` via disassembler
+  ## instance `disasmer` with given initial registers table `regs`.
+  ## If address from `visited` encountered - returns
+  ## The result of this proc is the stack information
   var registers = regs
   var couldbenoreturn = 0'u32
   for address, instr in parseInstructions(disasmer, madr):

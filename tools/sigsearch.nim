@@ -9,11 +9,14 @@ from libs.bfd import bfd_open, bfd_close, bfd_init, bfd_get_section_by_name,
 from libs.disasm import initDisasm
 
 proc addr2Pattern(address: Natural): string =
+  ## Converts given `address` to its representation in the memory as a string
   var a: uint32 = address.uint32
   let cs = cast[cstring](a.addr)
   result = $cs
 
 iterator methods(start: ptr char, bounds: Slice[uint32]): uint32 =
+  ## Iterates over methods until address behind the `bounds` will be encountered
+  ## `start` should point to the vtable
   let reinterpreted = cast[ptr array[0, uint32]](start)
   var shift = 0
   var offset = 0'u32
@@ -21,7 +24,8 @@ iterator methods(start: ptr char, bounds: Slice[uint32]): uint32 =
     yield offset.uint32
     shift += 1
 
-assert(paramCount() > 0)
+assert(paramCount() == 1, "This program requires one and only one argument: " &
+                          "steamclient.so path")
 bfd_init()
 let filename = paramStr(1)
 let file = bfd_open(filename, nil)
@@ -40,6 +44,7 @@ var disasmer = file.initDisasm(textSegment, textSegmentData[0].unsafeAddr)
 let textBounds = Slice[uint32](a: textSegment.vma,
                                b: textSegment.vma+textSegment.size)
 proc searchPattern(pattern: string) =
+  ## Performs search of classes which names starts with `pattern`
   var offset = -1
   while (offset = strSegmentData.find(pattern, offset+1); offset >= 0):
     let realoffset = offset + strSegment.vma.int - 2
