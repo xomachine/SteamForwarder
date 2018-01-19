@@ -4,8 +4,10 @@ from tables import Table
 
 type
   StackState* = tuple
-    depth: int
-    swap: bool
+    ## The stack information about particular method.
+    depth: int ## The stack depth method diving to.
+               ## It helps to figure out number of the arguments of the method.
+    swap: bool ## Indicator of in-memory return
   Classes* = Table[string, seq[StackState]]
 
 proc readClasses*(): Classes
@@ -17,8 +19,11 @@ from strutils import splitLines, split, parseInt
 from tables import initTable, `[]`, `[]=`, pairs
 
 const cdfile {.strdefine.} = ""
+  ## File name of classes info container. Being passed as the compiler option.
 
 proc readClasses(): Classes =
+  ## Reads the classes information from given file (defined via -d:cdfile=<>
+  ## compiler option).
   result = initTable[string, seq[StackState]]()
   #var curaddr = 0'u32
   var curstr = ""

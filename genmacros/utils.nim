@@ -3,15 +3,18 @@ from macros import newTree, newNimNode, `strVal=`, nnkAsmStmt, newEmptyNode,
 
 type
   Symbol* = tuple
+    ## The symbol from spec file description
     name: string
     realname: string
     nargs: int
     swap: bool
   SpecFile* = tuple
+    ## The spec file content
     libpath: string
     symbols: seq[Symbol]
 
 macro strToAsm*(a: static[string]): untyped =
+  ## Generates the assembler statement from given string `a`
   var str = newNimNode(nnkTripleStrLit)
   str.strVal = a
   newTree(nnkAsmStmt, newEmptyNode(), str)
@@ -21,6 +24,8 @@ from maps import MemMaps, checkAddress, Flags
 from wine import trace
 
 proc parseFullSpec*(filename: string): SpecFile {.compileTime.} =
+  ## Parses the spec file with name `filename` and returns its content in
+  ## appropriate form. All the parsing is being performed at compile time.
   let file = slurp(filename)
   result.symbols = newSeq[Symbol]()
   for line in file.splitLines:
@@ -40,6 +45,7 @@ proc parseFullSpec*(filename: string): SpecFile {.compileTime.} =
       result.symbols.add((name: name, realname: name.strip(false, true, {'_'}),
                   nargs: nargs, swap: swap))
 
+## Operators for pointer arithmetics
 proc `+`*(a: pointer, b: int): ptr pointer =
   cast[ptr pointer](cast[int](a) + b)
 proc `-`*(a: pointer, b: int): ptr pointer =
@@ -47,9 +53,13 @@ proc `-`*(a: pointer, b: int): ptr pointer =
 
 
 proc check*(m: MemMaps, p: pointer): auto =
+  ## Just a helper to avoid type conversion in checkAddress
   m.checkAddress(cast[uint32](p))
 
 proc dumpMemoryRefs*(m: MemMaps, p: ptr pointer, level: string = "") =
+  ## Prints memory around the given pointer `p`. If the memory contains
+  ## the valid address, also prints memory around it. And so on until the
+  ## third memory reference. Needed for debuging and ABI investigation.
   if level.len > 6:
     return
   #if Flags.read notin m.check(p).permissions:

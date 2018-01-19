@@ -3,15 +3,18 @@ from posix import Pid
 
 type
   Flags* {.pure.} = enum
+    ## Attributes of memory region
     read
     write
     execute
     private
   ModuleEntry* = tuple
+    ## The memory region related to file descriptor
     mrange: Slice[uint32]
     permissions: set[Flags]
     name: string
   MemMaps* = tuple
+    ## The array of all memory regions related to process in linux
     upper: int
     d: array[1024, ModuleEntry]
 {.push cdecl.}
@@ -35,12 +38,13 @@ proc getCurWPath(): string =
   $getcwd(buffer[0].addr, 255)
 
 proc getWPath(p: string): string =
-  ## Obtains current working dir of `p`
+  ## Obtains current working dir of process with pid `p`
   result = newString(256)
   let read = readlink("/proc/" & $p & "/cwd", result[0].addr, 255)
   result.setLen(read)
 
 proc flags(f: string, res: var set[Flags], start: int): int =
+  ## Flags reader for scanf
   let leters = "rwxp"
   if start + 4 >= f.len: return 0
   var outp: set[Flags]
@@ -53,12 +57,14 @@ proc flags(f: string, res: var set[Flags], start: int): int =
   return 4
 
 proc hex(input: string, intval: var uint32, start: int): int =
+  ## Hex number reader for scanf
   var i = start
   while i < input.len and input[i] in HexDigits: i.inc
   if i != start: intval = parseHexInt(input[start..<i]).uint32
   return i - start
 
 proc modname(input: string, name: var string, start: int): int =
+  ## Module name reader for scanf (skips all unnecessary information)
   var i = input.len - 1
   let addition = {'[', ']', '.'}
   let valid = IdentChars + addition
@@ -69,6 +75,8 @@ proc modname(input: string, name: var string, start: int): int =
   return input.len - start
 
 proc contains(o: MemMaps, s: string): bool =
+  ## Checks if module with name `s` has a region in the linux process memory
+  ## described by `o`
   for i in 0..<o.upper:
     if o.d[i].name == s:
       return true
@@ -100,6 +108,8 @@ proc getRealPid(): string =
       return stripped
 
 proc checkAddress(m: MemMaps, address: uint32): ModuleEntry =
+  ## Checks if given `address` belongs to the linux process described by `m`
+  ## and returns the region description which the `address` is related to
   for i in 0..<m.upper:
     if address in m.d[i].mrange:
       return m.d[i]
