@@ -6,8 +6,10 @@ RM                    ?= rm
 MAKE                  ?= make
 STEAMCLIENT           ?= $(SRCDIR)/steamclient.so
 SIGNATURESFILE        ?= $(SRCDIR)/signatures.txt
-ORIGINAL_SPECFILE     ?= $(SRCDIR)/steam_api.spec
-SPECFILE              ?= $(SRCDIR)/steam_api.fixed.spec
+SPECDIR               ?= $(SRCDIR)
+ORIGINAL_SPECFILE     ?= steam_api_orig.spec
+ORIGINAL_SPECPATH     ?= $(SPECDIR)/$(ORIGINAL_SPECFILE)
+SPECFILE              ?= $(SPECDIR)/steam_api.spec
 DLLPARSER             ?= $(SRCDIR)/tools/dllparser
 SIGSEARCH             ?= $(SRCDIR)/tools/sigsearch
 VERSIONSDIR           ?= $(SRCDIR)/versions
@@ -21,8 +23,10 @@ else
   LIB_POSTFIX =
   NIMARCH = i386
 endif
-DLL                    = steam_api$(LIB_POSTFIX).dll
-OUTPUTDLL              = $(DLL).so
+DLL                    ?= $(SRCDIR)/steam_api$(LIB_POSTFIX).dll
+OUTPUTDLL               = $(DLL).so
+
+.PHONY: all tools clean fullclean
 
 all: $(OUTPUTDLL)
 
@@ -43,8 +47,10 @@ $(SPECFILE): $(ORIGINAL_SPECFILE) $(DLLPARSER)
 	$(DLLPARSER) $(VERSIONSDIR) < $(ORIGINAL_SPECFILE) > $(SPECFILE)
 
 $(ORIGINAL_SPECFILE): tools
-	$(WINEDUMP) spec $(DLL)
-	$(RM) $(SRCDIR)/steam_api_main.c
+	cd $(SPECDIR)
+	$(WINEDUMP) spec $(DLL) -o$(ORIGINAL_SPECFILE:.spec=.dll)
+	$(RM) $(ORIGINAL_SPECFILE:%.spec=%_main.c) Makefile.in
+	cd $(SRCDIR)
 
 $(SIGNATURESFILE): $(SIGSEARCH)
 	$(SIGSEARCH) $(STEAMCLIENT) > $(SIGNATURESFILE)

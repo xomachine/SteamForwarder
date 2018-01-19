@@ -75,6 +75,14 @@ def get_app_config(appid):
       appinfos['depots'][k] = v
   return appinfos
 
+def find_steamapi_dll(installdir):
+  for root, dirs, files in os.walk(installdir):
+    if "steam_api.dll" in files:
+      return os.path.join(root, "steam_api.dll")
+  print("Can not find steam_api.dll inside the game directory! Probably, " +
+        "the game is incompatible with SteamForwarder")
+  exit(1)
+
 def get_app_config_http(appid):
   configurl = "http://steamdb.info/app/" + str(appid) + "/config/"
   print(configurl)
@@ -110,13 +118,13 @@ def generate_manifest(appinfos):
 """ % (appinfos["id"], appinfos["name"], appinfos["installdir"])
   return manifest
 
-def generate_runscript(appinfo: LaunchInfo, config):
+def generate_runscript(appinfo: LaunchInfo, config, libsteamapi, installpath):
   print("...for " + appinfo.executable)
   runscript = """
 #!/bin/bash
 export WINEPREFIX="{0}"
 export WINEDLLPATH+=":{4}"
-export LD_LIBRARY_PATH+=":{5}:{4}"
+export LD_LIBRARY_PATH+=":{5}:{8}"
 export WINEDEBUG="trace+steam_api"
 export WINEARCH="win32"
 export WINEDLLOVERRIDES="*steam_api=b"
@@ -127,8 +135,8 @@ export SteamUser="{7}"
 export SteamAppUser="{7}"
 LD_PRELOAD="gameoverlayrenderer.so" wine "{1}/common/{2}" {3} &> "$(dirname "$0")/lastrun.log"
 """.format(config['wineprefix'], config['steamapps'], appinfo.executable,
-           appinfo.arguments, config['dllpath'], config['overlaypath'],
-           config['appid'], config['login'])
+           appinfo.arguments, installpath, config['overlaypath'],
+           config['appid'], config['login'], libsteamapi)
   return runscript
 
 aparser = argparse.ArgumentParser(description="The windows steam games installation script")
@@ -252,9 +260,20 @@ if config_args.depot:
     path = config['depotpath'] + '/steamapps/content/app_{0}/depot_{1}/'.format(str(appid), str(k))
     for sub in os.listdir(path):
       shutil.move(path + sub, rs_location)
+print("Generating the steam_api.dll wrapper just for this game...")
+steamapidll = find_steamapi_dll(rs_location)
+subprocess.run(["make", "clean"])
+fixedspec = rs_location.replace(" ", "\\ ")+"steam_api.spec"
+fixedspecfp = rs_location+"steam_api.spec"
+subprocess.run(["make", "DLL="+steamapidll.replace(" ", "\\ ")+"",
+                "SPECDIR="+rs_location.replace(" ", "\\ "),
+                "SPECFILE="+fixedspec])
+with open(fixedspecfp, 'r') as f:
+  thefirstline = f.readline()
+libsteamapi = os.path.dirname(thefirstline.strip('# \n'))
 print("Generating runscripts...")
 for name, appinfo in appinfos["infos"].items():
-  runscript = generate_runscript(appinfo, config)
+  runscript = generate_runscript(appinfo, config, libsteamapi, rs_location)
   runscript_location = (rs_location + name + '.sh')
   with open(runscript_location, "w") as f:
     f.write(runscript)
