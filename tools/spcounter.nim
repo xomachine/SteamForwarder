@@ -23,6 +23,8 @@ proc parseEA(s: string): tuple[register: string, offset: int] =
   ## Parses the effective address in format "0x[value]([register])" to
   ## the pair of register and value
   let splitted = s.split({'(', ')'})
+  if splitted.len == 1:
+    return (register: "", offset: parseHexInt(s))
   result.register = splitted[1]
   result.offset =
     if splitted[0].len == 0 or splitted[0][0] == '%':
