@@ -1,5 +1,5 @@
 
-SRCDIR                ?= $(PWD)
+SRCDIR                ?= $(CURDIR)
 NIMC                  ?= nim
 WINEDUMP              ?= winedump
 RM                    ?= rm
@@ -30,6 +30,9 @@ endif
 DLL                    ?= $(SRCDIR)/steam_api$(LIB_POSTFIX).dll
 OUTPUTDLL               = $(DLL).so
 NIMSRCS                 = $(wildcard $(SRCDIR)/genmacros/*.nim)
+VERFILES                = $(wildcard $(SRCDIR)/versions/*/libsteam_api.so)
+VERENDS                 = $(notdir $(VERFILES:%/libsteam_api.so=%))
+INSTALLVERLIBS          = $(foreach sf, $(VERENDS), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/libsteam_api.so $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/libsteam_api.so;)
 
 .PHONY: all tools clean fullclean install
 
@@ -40,6 +43,7 @@ tools: $(SIGSEARCH) $(DLLPARSER)
 install: tools $(SIGNATURESFILE)
 	$(INSTALL) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder/tools $(SIGSEARCH) \
 	              $(DLLPARSER)
+	$(INSTALLVERLIBS)
 	$(INSTALL) $(SRCDIR)/app_install.py $(DESTDIR)$(PREFIX)/bin/app_install
 	$(INSTALLDATA) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder $(SIGNATURESFILE) \
 	                  $(SRCDIR)/steam_api.nim \
