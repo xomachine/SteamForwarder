@@ -290,7 +290,9 @@ steamapidll = find_steamapi_dll(rs_location)
 fixedspec = rs_location.replace(" ", "\\ ")+"steam_api.spec"
 fixedspecfp = rs_location+"steam_api.spec"
 filepath = os.path.dirname(os.path.abspath(__file__))
-if not os.path.isfile(filepath + "Makefile"):
+if os.path.isfile(filepath + "/Makefile"):
+  makedir = filepath
+else:
   makedir = os.path.dirname(filepath) + "/share/SteamForwarder/"
 subprocess.run(["make", "clean", "-C", makedir])
 with tempfile.TemporaryDirectory() as tmpdir:
