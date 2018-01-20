@@ -150,7 +150,6 @@ try:
 except:
   print("Configuration file not found! Using default values... You may change them at steamforwarder.json")
   config['overlaypath'] = os.getenv("HOME") + "/.local/share/Steam/ubuntu12_32/"
-  config['dllpath'] = os.getenv("PWD")
 
   steamfolder = os.getenv('HOME') + '/.local/share/Steam'
   #print(steamfolder)
@@ -188,9 +187,6 @@ aparser.add_argument('--steamcmdclient', dest='steamclient', type=str,
 aparser.add_argument('-s', '--steamapps-dir', type=str, dest='steamapps',
                       help='path to the steamapps dir',
                       default=config["steamapps"])
-aparser.add_argument('-d', '--dll-dir', type=str, dest='dllpath',
-                      help='path to the steam_api.dll.so and libsteam_api.so',
-                      default=config["dllpath"])
 aparser.add_argument('-o', '--overlay-dir', dest='overlaypath', type=str,
                       help='path to the gameoverlayrenderer.so and other ' +
                       'steam libs', default=config["overlaypath"])
@@ -205,7 +201,6 @@ aparser.add_argument('--store', default=False, dest='store',
 config_args = aparser.parse_args()
 config['login'] = config_args.login
 config['wineprefix'] = config_args.wineprefix
-config['dllpath'] = config_args.dllpath
 config['overlaypath'] = config_args.overlaypath
 config['steamcmdclient'] = config_args.steamclient
 config['depotpath'] = config_args.depotpath
