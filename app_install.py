@@ -195,6 +195,9 @@ aparser.add_argument('-p', '--password', dest='askPassword', default=False,
                       'necessary for non-free apps). Note: password will ' +
                       'not be saved anywhere including configuration file',
                       action='store_true')
+aparser.add_argument('--no-download', default=False, dest='nodl',
+                      help='just generate steam_api.dll.so for existing game',
+                      action='store_true')
 aparser.add_argument('--store', default=False, dest='store',
                       help='save configuration for futher use as default',
                       action='store_true')
@@ -261,10 +264,11 @@ else:
 app_update {0} validate
 """.format(str(appid))
 steam_script += "quit"
-with tempfile.NamedTemporaryFile('w') as f:
-  f.write(steam_script)
-  f.flush()
-  subprocess.run(["steamcmd", "+runscript", f.name])
+if not config_args.nodl:
+  with tempfile.NamedTemporaryFile('w') as f:
+    f.write(steam_script)
+    f.flush()
+    subprocess.run(["steamcmd", "+runscript", f.name])
 if config_args.depot:
   # Cleanup and data moving after depot downloading
   os.environ['LD_PRELOAD'] = ""
