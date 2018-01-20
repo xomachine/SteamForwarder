@@ -174,15 +174,34 @@ if not 'steamcmdclient' in config:
   else:
     config['steamcmdclient'] = ''
 
-aparser.add_argument('-l', '--login', help='your login at steam', type=str, dest='login', default=config['login'])
-aparser.add_argument('--depot', help='download from steam depot directly', dest='depot', default=False, action='store_true')
-aparser.add_argument('--depot-path', help='path where temporary data will be stored while depot downloading (A LOT of space should be available', dest='depotpath', default=config["depotpath"], type=str)
-aparser.add_argument('--steamcmdclient', help='path to steamclient.so related to steamcmd', dest='steamclient', default=config["steamcmdclient"], type=str)
-aparser.add_argument('-s', '--steamapps-dir', help='path to the steamapps dir', type=str, dest='steamapps', default=config["steamapps"])
-aparser.add_argument('-d', '--dll-dir', help='path to the steam_api.dll.so and libsteam_api.so', type=str, dest='dllpath', default=config["dllpath"])
-aparser.add_argument('-o', '--overlay-dir', help='path to the gameoverlayrenderer.so and other steam libs', type=str, dest='overlaypath', default=config["overlaypath"])
-aparser.add_argument('-p', '--password', help='ask password of your steam account (may be necessary for non-free apps). Note: password will not be saved anywhere including configuration file', dest='askPassword', default=False, action='store_true')
-aparser.add_argument('--store', help='save configuration for futher use as default', dest='store', default=False, action='store_true')
+aparser.add_argument('-l', '--login', help='your login at steam', type=str,
+                     dest='login', default=config['login'])
+aparser.add_argument('--depot', help='download directly from steam depot',
+                     dest='depot', default=False, action='store_true')
+aparser.add_argument('--depot-path', type=str, default=config["depotpath"],
+                      help='path where temporary data will be stored while ' +
+                      'depot downloading (A LOT of space should be available',
+                      dest='depotpath')
+aparser.add_argument('--steamcmdclient', dest='steamclient', type=str,
+                     help='path to steamclient.so related to steamcmd',
+                     default=config["steamcmdclient"])
+aparser.add_argument('-s', '--steamapps-dir', type=str, dest='steamapps',
+                      help='path to the steamapps dir',
+                      default=config["steamapps"])
+aparser.add_argument('-d', '--dll-dir', type=str, dest='dllpath',
+                      help='path to the steam_api.dll.so and libsteam_api.so',
+                      default=config["dllpath"])
+aparser.add_argument('-o', '--overlay-dir', dest='overlaypath', type=str,
+                      help='path to the gameoverlayrenderer.so and other ' +
+                      'steam libs', default=config["overlaypath"])
+aparser.add_argument('-p', '--password', dest='askPassword', default=False,
+                      help='ask password of your steam account (may be ' +
+                      'necessary for non-free apps). Note: password will ' +
+                      'not be saved anywhere including configuration file',
+                      action='store_true')
+aparser.add_argument('--store', default=False, dest='store',
+                      help='save configuration for futher use as default',
+                      action='store_true')
 config_args = aparser.parse_args()
 config['login'] = config_args.login
 config['wineprefix'] = config_args.wineprefix
