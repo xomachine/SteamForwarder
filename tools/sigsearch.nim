@@ -11,8 +11,11 @@ from libs.disasm import initDisasm
 proc addr2Pattern(address: Natural): string =
   ## Converts given `address` to its representation in the memory as a string
   var a: uint32 = address.uint32
-  let cs = cast[cstring](a.addr)
-  result = $cs
+  let cs = cast[ptr array[4, char]](a.addr)
+  result = newString(4)
+  # copying chars one by one to avoid truncating by \0 char
+  for i in 0..<4:
+    result[i] = cs[i]
 
 iterator methods(start: ptr char, bounds: Slice[uint32]): uint32 =
   ## Iterates over methods until address behind the `bounds` will be encountered
