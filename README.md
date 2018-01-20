@@ -48,7 +48,7 @@ The SteamForwarder may be represented as two almost independent parts:
 steam\_api.dll.so and service tools. Service tools may also be
 devided to user tools and developer tools.
 
-For a moment there is only one user tool - `app\_install.py`. This script
+For a moment there is only one user tool - `app_install.py`. This script
 performs downloading of the game and prepares SteamForwarder to work with
 this game, including the run scripts creation and steam\_api.dll.so building.
 It has arbitary user-friendly interface with many settings managed by command
