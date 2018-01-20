@@ -3,6 +3,7 @@
 from urllib.request import urlopen, Request
 from json import load, dump, loads
 from getpass import getpass
+from collections import defaultdict
 import subprocess
 import tempfile
 import re
@@ -139,17 +140,18 @@ LD_PRELOAD="gameoverlayrenderer.so" wine "{1}/common/{2}" {3} &> "$(dirname "$0"
            config['appid'], config['login'], libsteamapi)
   return runscript
 
-aparser = argparse.ArgumentParser(description="The windows steam games installation script")
-aparser.add_argument('appid', type=int, help="appid of the game to be installed", metavar='appID')
-aparser.add_argument('-w', '--wineprefix', help='path to wineprefix to be used to launch this app', type=str, dest='wineprefix', default=os.getenv('HOME') + '/.wine')
 
-config = dict()
+config = defaultdict(str)
+configdir = os.getenv("HOME") + '/.config/SteamForwarder/'
 try:
-  with open("steamforwarder.json", "r") as f:
-    config = load(f)
+  with open(configdir + "config.json", "r") as f:
+    newconfig = load(f)
+    for k, v in newconfig.items():
+      config[k] = v
 except:
-  print("Configuration file not found! Using default values... You may change them at steamforwarder.json")
-  config['overlaypath'] = os.getenv("HOME") + "/.local/share/Steam/ubuntu12_32/"
+  print("Configuration file not found! Using default values... " +
+        "You may change them at " + configdir)
+  config['overlaypath'] = os.getenv("HOME")+"/.local/share/Steam/ubuntu12_32/"
 
   steamfolder = os.getenv('HOME') + '/.local/share/Steam'
   #print(steamfolder)
@@ -160,12 +162,8 @@ except:
       if not re.match("[sS]team[aA]pps", d) is None:
         config['steamapps'] = steamfolder + '/' + d
   config['login'] = 'anonymous'
-  with open("steamforwarder.json", "w") as f:
+  with open(configdir + "config.json", "w") as f:
     dump(config, f, indent=2)
-if not 'steamapps' in config:
-  config['steamapps'] = ""
-if not 'depotpath' in config:
-  config['depotpath'] = ""
 if not 'steamcmdclient' in config:
   tmpsteamcmd = '/usr/share/steamcmd/linux32/steamclient.so'
   if os.path.isfile(tmpsteamcmd):
@@ -173,6 +171,13 @@ if not 'steamcmdclient' in config:
   else:
     config['steamcmdclient'] = ''
 
+aparser = argparse.ArgumentParser(description="The windows steam games " +
+                                  "installation script")
+aparser.add_argument('appid', type=int, metavar='appID',
+                     help="appid of the game to be installed")
+aparser.add_argument('-w', '--wineprefix', type=str, dest='wineprefix',
+                     help='path to wineprefix to be used to launch this app',
+                     default=os.getenv('HOME') + '/.wine')
 aparser.add_argument('-l', '--login', help='your login at steam', type=str,
                      dest='login', default=config['login'])
 aparser.add_argument('--depot', help='download directly from steam depot',
@@ -211,13 +216,15 @@ if config_args.steamapps == "":
   print('Can not find steam location... Please specify it using -s key')
   quit(1)
 if config['steamcmdclient'] == "":
-  print('Can not find steamcmd\'s steamclient.so location. Please specify it using --steamcmdclient option to unlock --depot option.')
+  print('Can not find steamcmd\'s steamclient.so location. Please specify ' +
+        'it using --steamcmdclient option to unlock --depot option.')
   if config_args.depot:
     config_args.depot = False
     print("Depot downloading disabled. Falling back to default method.")
 config['steamapps'] = config_args.steamapps
 if config_args.store:
-  with open("steamforwarder.json", "w") as f:
+  os.makedirs(configdir, exist_ok=True)
+  with open(configdir + "config.json", "w") as f:
     dump(config, f, indent=2)
 if config_args.askPassword:
   config['password'] = getpass()
@@ -280,12 +287,18 @@ if config_args.depot:
       shutil.move(path + sub, rs_location)
 print("Generating the steam_api.dll wrapper just for this game...")
 steamapidll = find_steamapi_dll(rs_location)
-subprocess.run(["make", "clean"])
 fixedspec = rs_location.replace(" ", "\\ ")+"steam_api.spec"
 fixedspecfp = rs_location+"steam_api.spec"
-subprocess.run(["make", "DLL="+steamapidll.replace(" ", "\\ ")+"",
-                "SPECDIR="+rs_location.replace(" ", "\\ "),
-                "SPECFILE="+fixedspec])
+filepath = os.path.dirname(os.path.abspath(__file__))
+if not os.path.isfile(filepath + "Makefile"):
+  makedir = os.path.dirname(filepath) + "/share/SteamForwarder/"
+subprocess.run(["make", "clean", "-C", makedir])
+with tempfile.TemporaryDirectory() as tmpdir:
+  subprocess.run(["make", "DLL="+steamapidll.replace(" ", "\\ ")+"",
+                  "SPECDIR="+rs_location.replace(" ", "\\ "),
+                  "SPECFILE="+fixedspec,
+                  "CACHEDIR="+tmpdir.replace(" ", "\\ "),
+                  "-C", makedir])
 with open(fixedspecfp, 'r') as f:
   thefirstline = f.readline()
 libsteamapi = os.path.dirname(thefirstline.strip('# \n'))
