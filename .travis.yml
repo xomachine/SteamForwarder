@@ -37,9 +37,10 @@ install:
     cd ..
 before_script:
     - export PATH="nim-$BRANCH/bin${PATH:+:$PATH}"
+    - export PATH="nim-$BRANCH/compiler${PATH:+:$PATH}"
 script:
-    - make NIMC="$(realpath "nim-$BRANCH/bin/nim")" tools
-    - make NIMC="$(realpath "nim-$BRANCH/bin/nim")" tests
+    - make tools
+    - make tests
     # Replace uppercase strings!
     #- nim c --cc:$CC --verbosity:0 -r MYFILE.nim
     # Optional: build docs.
