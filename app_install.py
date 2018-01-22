@@ -206,11 +206,12 @@ else:
     config['password'] = getpass()
   else:
     config['password'] = ""
+  steaminterface = SteamCmdInterface(config)
 if config_args.store:
   os.makedirs(configdir, exist_ok=True)
   with open(configdir + "config.json", "w") as f:
     dump(config, f, indent=2)
-  steaminterface = SteamCmdInterface(config)
+
 
 
 print("Obtaining app info...")
