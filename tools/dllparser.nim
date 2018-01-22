@@ -23,7 +23,7 @@ proc findBestSOLib(verfolder: string, specdata: SpecFile): MatchingLib =
   for filename in walkFiles(verfolder & "/*/libsteam_api.so"):
     let bfile = bfd_open(filename, nil)
     if not bfile.init():
-      quit "Can not open " & filename
+      quit("Can not open " & filename)
     let symbols = bfile.readSymbolTable()
     var counter = 0
     for s in symbols:
@@ -60,7 +60,7 @@ var disasmer = initDisasm(bfile, textSection,
                           textSectionData[0].unsafeAddr)
 stderr.writeLine("Read " & $symbols.len & " symbols from library")
 var resolved = initTable[string, StackStatus]()
-echo "# ", libpath
+echo("# ", libpath)
 for sym in symbols:
   let name = $sym.name
   if sym.value != 0 and (sym.flags and BFS_DEBUGGING) > 0 and
@@ -79,5 +79,5 @@ for entry in specdata.values:
         "_" & " #" & (if stack.retStruct: "+" else: "") & $nargs
     else:
       entry.callconv & " " & entry.name
-  echo entry.idx, " ", tail
+  echo(entry.idx, " ", tail)
 

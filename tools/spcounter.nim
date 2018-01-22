@@ -65,9 +65,9 @@ proc interpretStack(disasmer: var Disasmer, madr: uint32,
       break
     visited.incl(address)
     when defined(debug):
-      echo address.toHex, ": ", $registers["%esp"], ":", instr.name, " ",
+      echo(address.toHex, ": ", $registers["%esp"], ":", instr.name, " ",
            instr.src, "->", instr.dst,
-           (if instr.address > 0'u32: instr.address.toHex() else: "")
+           (if instr.address > 0'u32: instr.address.toHex() else: ""))
     case instr.name
     of "push":
       registers["%esp"] -= 4
@@ -122,8 +122,8 @@ proc interpretStack(disasmer: var Disasmer, madr: uint32,
       if not instr.src.isNil:
         let stackpop = parseHexInt(instr.src)
         if stackpop > 4:
-          quit "Stack pop when returning structure by value is bigger than " &
-               "expected! stackpop = " & $stackpop
+          quit("Stack pop when returning structure by value is bigger than " &
+               "expected! stackpop = " & $stackpop)
         result.retStruct = stackpop > 0
       case registers["%esp"]
       of 0: break
@@ -138,12 +138,12 @@ proc interpretStack(disasmer: var Disasmer, madr: uint32,
         return (depth: 0, retStruct: false)
     elif instr.name[0] == 'j' and (instr.address notin visited):
       when defined(debug):
-        echo "Conditional jump to ", instr.address.toHex
+        echo("Conditional jump to ", instr.address.toHex)
       #visited.incl(instr.address)
       result = merge(disasmer.interpretStack(instr.address, registers, visited),
                      result)
       when defined(debug):
-        echo "Returned back to main flow at ", address.toHex()
+        echo("Returned back to main flow at ", address.toHex())
     else:
       discard
     if instr.name in ["callq", "call"]:
