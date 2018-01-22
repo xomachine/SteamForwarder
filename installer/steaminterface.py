@@ -1,5 +1,24 @@
 from json import loads
+from shutil import move, rmtree
+from os.path import join, isdir, isfile
+from os import remove, listdir
 import re
+
+def move_over(src, dst):
+  print("Moving ", src, "to", dst)
+  if isdir(dst) and isdir(src):
+    print("Both dirs, recursing...")
+    for p in listdir(src):
+      dstdir = join(dst, p)
+      srcdir = join(src, p)
+      move_over(srcdir, dstdir)
+    return
+  if isdir(dst):
+    rmtree(dst)
+  elif isfile(dst):
+    remove(dst)
+  move(src, dst)
+
 class LaunchInfo:
   def __init__(self, match_dict, install_dir):
     self.executable = install_dir + '/' + re.sub(r'\\', r'/',

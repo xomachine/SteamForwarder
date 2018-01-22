@@ -1,8 +1,7 @@
-from installer.steaminterface import SteamInterface,  parse_app_info
+from installer.steaminterface import SteamInterface,  parse_app_info, move_over
 from contextlib import contextmanager
 from signal import SIGSTOP, SIGCONT
 from glob import iglob
-from shutil import move
 from select import select
 import subprocess
 import os
@@ -142,5 +141,5 @@ class SteamNativeInterface(SteamInterface):
           print(read)
     os.makedirs(rs_location, exist_ok=True)
     for path in paths:
-      for sub in os.listdir(path):
-        move(path + "/" + sub, rs_location)
+      #for sub in os.listdir(path):
+      move_over(path, rs_location)

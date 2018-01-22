@@ -1,9 +1,8 @@
-from installer.steaminterface import SteamInterface,  parse_app_info
+from installer.steaminterface import SteamInterface,  parse_app_info, move_over
 import subprocess
 import tempfile
 import re
 import os
-import shutil
 
 colonre = re.compile(r'^(\s*"[^"]+")', re.MULTILINE)
 
@@ -55,8 +54,8 @@ download_depot {0} {1}
     os.makedirs(rs_location, exist_ok=True)
     for k, v in self.appinfo['depots'].items():
       path = self.config['depotpath'] + '/steamapps/content/app_{0}/depot_{1}/'.format(str(self.appid), str(k))
-      for sub in os.listdir(path):
-        shutil.move(path + sub, rs_location)
+      #for sub in os.listdir(path):
+      move_over(path, rs_location)
 
 def do_script(steam_script):
   with tempfile.NamedTemporaryFile('w') as f:
