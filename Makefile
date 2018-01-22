@@ -34,11 +34,15 @@ VERFILES                = $(wildcard $(SRCDIR)/versions/*/libsteam_api.so)
 VERENDS                 = $(notdir $(VERFILES:%/libsteam_api.so=%))
 INSTALLVERLIBS          = $(foreach sf, $(VERENDS), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/libsteam_api.so $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/libsteam_api.so;)
 
-.PHONY: all tools clean fullclean install
+.PHONY: all tools clean fullclean install tests
 
 all: $(OUTPUTDLL)
 
 tools: $(SIGSEARCH) $(DLLPARSER)
+
+tests:
+	cp tests/testspec.spec $(ORIGINAL_SPECPATH)
+	$(MAKE) -C $(SRCDIR) ORIGINAL_SPECPATH=$(ORIGINAL_SPECPATH) $(OUTPUTDLL)
 
 install: tools $(SIGNATURESFILE)
 	$(INSTALL) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder/tools $(SIGSEARCH) \
@@ -66,7 +70,7 @@ $(OUTPUTDLL): $(SPECFILE) $(SIGNATURESFILE)
 $(SPECFILE): $(ORIGINAL_SPECFILE) $(DLLPARSER)
 	$(DLLPARSER) $(VERSIONSDIR) < $(ORIGINAL_SPECFILE) > $(SPECFILE)
 
-$(ORIGINAL_SPECFILE): tools
+$(ORIGINAL_SPECPATH): tools
 	cd $(SPECDIR)
 	$(WINEDUMP) spec $(DLL) -o$(ORIGINAL_SPECFILE:.spec=.dll)
 	$(RM) $(ORIGINAL_SPECFILE:%.spec=%_main.c) Makefile.in
