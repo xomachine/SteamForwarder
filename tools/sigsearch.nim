@@ -33,13 +33,13 @@ bfd_init()
 let filename = paramStr(1)
 let file = bfd_open(filename, nil)
 if not file.init():
-  quit "Failed to open!"
+  quit("Failed to open!")
 let strSegment = file.bfd_get_section_by_name(".rodata")
 let textSegment = file.bfd_get_section_by_name(".text")
 let vtableSegment = file.bfd_get_section_by_name(".data.rel.ro")
 if strSegment.isNil or vtableSegment.isNil:
   discard file.bfd_close()
-  quit "Failed to find section!"
+  quit("Failed to find section!")
 let textSegmentData = file.getContent(textSegment)
 let vtableSegmentData = file.getContent(vtableSegment)
 let strSegmentData = file.getContent(strSegment)
@@ -71,7 +71,7 @@ proc searchPattern(pattern: string) =
       continue
     stderr.writeLine("Found VTable at: " &
                      (vtable + vtableSegment.filepos.int).toHex())
-    echo "!", classname, ":", toHex(vtable-4)
+    echo("!", classname, ":", toHex(vtable-4))
     var i = 0
     for madr in methods(vtableSegmentData[vtable].unsafeAddr, textBounds):
       let stack = readProcedure(disasmer, madr)
@@ -80,7 +80,7 @@ proc searchPattern(pattern: string) =
                        " and retStruct: " & $stack.retStruct)
       # + should be correctly parsed by parseInt and will be indicator of
       # hidden argument
-      echo (if stack.retStruct: "+" else: ""), max(stack.depth, 4)
+      echo((if stack.retStruct: "+" else: ""), max(stack.depth, 4))
       # 4 is minimal depth because even an empty method receives its object as
       # the first argument
       i += 1
