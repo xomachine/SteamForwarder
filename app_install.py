@@ -117,6 +117,7 @@ except:
       if not re.match("[sS]team[aA]pps", d) is None:
         config['steamapps'] = steamfolder + '/' + d
   config['login'] = 'anonymous'
+  os.makedirs(configdir, exist_ok=True)
   with open(configdir + "config.json", "w") as f:
     dump(config, f, indent=2)
 if not 'steamcmdclient' in config:
