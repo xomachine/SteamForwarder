@@ -1,80 +1,17 @@
 #!/bin/env python3
 
 from urllib.request import urlopen, Request
-from json import load, dump, loads
 from getpass import getpass
 from collections import defaultdict
+from installer.steamcmd import SteamCmdInterface
+from installer.steaminterface import LaunchInfo
+from installer.steam import SteamNativeInterface
+from json import load, dump
 import subprocess
 import tempfile
 import re
 import argparse
 import os
-import shutil
-
-namere = re.compile("""<td itemprop="name">(?P<name>[^<>]+)</td>""")
-startinfore = re.compile("""<tr>[\n\s]*
-                         <td>(?P<description>.*?)</td>[\n\s]*
-                         <td>(?P<executable>[^<>]*)</td>[\n\s]*
-                         <td>(?P<arguments>[^<>]*)</td>[\n\s]*
-                         <td>(?P<type>.*?)</td>[\n\s]*
-                         <td\ class="nowrap">[\n\s]*
-                         (?P<os><i\ class="[^"]+"\ aria-label="Windows">[\n\s]*
-                         </i>[\n\s]*)?
-                         </td>[\n\s]*
-                         <td>(?P<extra>[^<>]*)</td>[\n\s]*
-                         </tr>""", re.X)
-
-installdirre = re.compile("""<tr>[\n\s]*
-                          <td>installdir</td>[\n\s]*
-                          <td>(?P<installdir>[^<>]+)</td>[\n\s]*
-                          </tr>[\n\s]*
-                          """, re.X)
-
-class LaunchInfo:
-  def __init__(self, match_dict, install_dir):
-    self.executable = install_dir + '/' + re.sub(r'\\', r'/', match_dict['executable'])
-    if 'arguments' in match_dict:
-      self.arguments = match_dict["arguments"]
-    else:
-      self.arguments = ""
-    self.description = match_dict["description"]
-  def __repr__(self):
-    return "(LaunchInfo: {0} {1} # {2})".format(self.executable,
-                                                self.arguments, self.description)
-
-colonre = re.compile(r'^(\s*"[^"]+")', re.MULTILINE)
-commare = re.compile(r'("|})(\s*$\s*")', re.MULTILINE)
-def get_app_config(appid):
-  result = subprocess.check_output(["steamcmd", "+app_info_print", str(appid),
-                           "+quit"]).decode('utf-8')
-  json_begin = re.search(colonre, result)
-  if json_begin is None:
-    print(result)
-    raise
-  json_begin = json_begin.start()
-  steam_json = result[json_begin:]
-  steam_json = re.sub(colonre, r'\1:', steam_json)
-  steam_json = re.sub(commare, r'\1,\2', steam_json)
-  appinfo = loads('{' + steam_json + '}')[str(appid)]
-  appinfos = dict()
-  appinfos['infos'] = dict()
-  appinfos['depots'] = dict()
-  appinfos['id'] = appid
-  installdir = appinfo['config']['installdir']
-  appinfos['installdir'] = installdir
-  appinfos['name'] = appinfo['common']['name']
-  for k, v in appinfo['config']['launch'].items():
-    if (not 'config' in v) or (not 'oslist' in v['config']) or v['config']['oslist'] == 'windows':
-      if not 'description' in v:
-        v['description'] = appinfos['name']
-      name = v['description']
-      appinfos['infos'][name] = LaunchInfo(v, installdir)
-  for k, v in appinfo['depots'].items():
-    if not 'config' in v:
-      continue
-    elif v['config']['oslist'] == 'windows':
-      appinfos['depots'][k] = v
-  return appinfos
 
 def find_steamapi_dll(installdir):
   for root, dirs, files in os.walk(installdir):
@@ -85,8 +22,26 @@ def find_steamapi_dll(installdir):
   exit(1)
 
 def get_app_config_http(appid):
+  namere = re.compile("""<td itemprop="name">(?P<name>[^<>]+)</td>""")
+  startinfore = re.compile("""<tr>[\n\s]*
+                           <td>(?P<description>.*?)</td>[\n\s]*
+                           <td>(?P<executable>[^<>]*)</td>[\n\s]*
+                           <td>(?P<arguments>[^<>]*)</td>[\n\s]*
+                           <td>(?P<type>.*?)</td>[\n\s]*
+                           <td\ class="nowrap">[\n\s]*
+                           (?P<os>
+                           <i\ class="[^"]+"\ aria-label="Windows">[\n\s]*
+                           </i>[\n\s]*)?
+                           </td>[\n\s]*
+                           <td>(?P<extra>[^<>]*)</td>[\n\s]*
+                           </tr>""", re.X)
+
+  installdirre = re.compile("""<tr>[\n\s]*
+                          <td>installdir</td>[\n\s]*
+                          <td>(?P<installdir>[^<>]+)</td>[\n\s]*
+                          </tr>[\n\s]*
+                          """, re.X)
   configurl = "http://steamdb.info/app/" + str(appid) + "/config/"
-  print(configurl)
   hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)'}
   req = Request(configurl, headers = hdr)
   content = urlopen(req).read().decode('utf-8')
@@ -171,8 +126,18 @@ if not 'steamcmdclient' in config:
   else:
     config['steamcmdclient'] = ''
 
+class printvollist(argparse.Action):
+  def __call__(self, parser, ns, values, ostring):
+    steaminterface = SteamNativeInterface(config)
+    for p in steaminterface.vollist:
+      print(p)
+    quit(0)
+
 aparser = argparse.ArgumentParser(description="The windows steam games " +
                                   "installation script")
+aparser.add_argument('--volumelist', nargs=0,
+                      help='print the list of available volumes in your steam',
+                      action=printvollist)
 aparser.add_argument('appid', type=int, metavar='appID',
                      help="appid of the game to be installed")
 aparser.add_argument('-w', '--wineprefix', type=str, dest='wineprefix',
@@ -184,7 +149,7 @@ aparser.add_argument('--depot', help='download directly from steam depot',
                      dest='depot', default=False, action='store_true')
 aparser.add_argument('--depot-path', type=str, default=config["depotpath"],
                       help='path where temporary data will be stored while ' +
-                      'depot downloading (A LOT of space should be available',
+                      'depot downloading (omited when --steamnative)',
                       dest='depotpath')
 aparser.add_argument('--steamcmdclient', dest='steamclient', type=str,
                      help='path to steamclient.so related to steamcmd',
@@ -206,36 +171,51 @@ aparser.add_argument('--no-download', default=False, dest='nodl',
 aparser.add_argument('--store', default=False, dest='store',
                       help='save configuration for futher use as default',
                       action='store_true')
+aparser.add_argument('--steamnative', default=False, dest='steamnative',
+                      help='use native steam instead of steamcmd (experimental)',
+                      action='store_true')
+aparser.add_argument('-v', '--volume', type=int, dest='volume',
+                      help='select steam volume index for game to download into (works only with --steamnative)' +
+                      ' use --volumelist to get list of volumes',
+                      default=int(config["volume"] or 0))
+
 config_args = aparser.parse_args()
 config['login'] = config_args.login
 config['wineprefix'] = config_args.wineprefix
 config['overlaypath'] = config_args.overlaypath
 config['steamcmdclient'] = config_args.steamclient
 config['depotpath'] = config_args.depotpath
-if config_args.steamapps == "":
-  print('Can not find steam location... Please specify it using -s key')
-  quit(1)
-if config['steamcmdclient'] == "":
-  print('Can not find steamcmd\'s steamclient.so location. Please specify ' +
-        'it using --steamcmdclient option to unlock --depot option.')
-  if config_args.depot:
-    config_args.depot = False
-    print("Depot downloading disabled. Falling back to default method.")
-config['steamapps'] = config_args.steamapps
+config['volume'] = config_args.volume
+appid = config_args.appid
+config['appid'] = appid
+
+if config_args.steamnative:
+  steaminterface = SteamNativeInterface(config)
+else:
+  if config_args.steamapps == "":
+    print('Can not find steam location... Please specify it using -s key')
+    quit(1)
+  if config['steamcmdclient'] == "" and not config_args.steamnative:
+    print('Can not find steamcmd\'s steamclient.so location. Please specify ' +
+          'it using --steamcmdclient option to unlock --depot option.')
+    if config_args.depot:
+      config_args.depot = False
+      print("Depot downloading disabled. Falling back to default method.")
+  config['steamapps'] = config_args.steamapps
+  if config_args.askPassword:
+    config['password'] = getpass()
+  else:
+    config['password'] = ""
 if config_args.store:
   os.makedirs(configdir, exist_ok=True)
   with open(configdir + "config.json", "w") as f:
     dump(config, f, indent=2)
-if config_args.askPassword:
-  config['password'] = getpass()
-else:
-  config['password'] = ""
-appid = config_args.appid
-config['appid'] = appid
-  
+  steaminterface = SteamCmdInterface(config)
+
+
 print("Obtaining app info...")
 try:
-  appinfos = get_app_config(appid)
+  appinfos = steaminterface.getAppInfo()
 except Exception as e:
   print(e)
   print("Failed to get appinfo via steamcmd, falling back to http method...")
@@ -250,41 +230,13 @@ with open(manifest_location, "w") as f:
   f.write(manifest)
 
 rs_location = config["steamapps"] + '/common/' + appinfos["installdir"] + '/'
-print("Downloading " + appinfos["name"] + " via steamcmd...")
-steam_script = """
-login {0} {1}
-@sSteamCmdForcePlatformType windows
-app_license_request {2}
-""".format(config['login'], config['password'], str(appid))
-if config_args.depot:
-  print('Preparing depot downloader...')
-  os.environ['LD_PRELOAD'] = config['depotpath'] + '/steamclient.so'
-  os.symlink(config['steamcmdclient'], os.environ['LD_PRELOAD'], True)
-  for k, v in appinfos['depots'].items():
-    print('Adding depot ' + str(k) + ' to schedule...')
-    steam_script += """
-download_depot {0} {1}
-""".format(str(appid), str(k))
-else:
-  print('Preparing classic downloader...')
-  steam_script += """
-app_update {0} validate
-""".format(str(appid))
-steam_script += "quit"
 if not config_args.nodl:
-  with tempfile.NamedTemporaryFile('w') as f:
-    f.write(steam_script)
-    f.flush()
-    subprocess.run(["steamcmd", "+runscript", f.name])
-if config_args.depot:
-  # Cleanup and data moving after depot downloading
-  os.environ['LD_PRELOAD'] = ""
-  os.remove(config['depotpath'] + '/steamclient.so')
-  os.makedirs(rs_location, exist_ok=True)
-  for k, v in appinfos['depots'].items():
-    path = config['depotpath'] + '/steamapps/content/app_{0}/depot_{1}/'.format(str(appid), str(k))
-    for sub in os.listdir(path):
-      shutil.move(path + sub, rs_location)
+  print("Downloading " + appinfos["name"] + " via steamcmd...")
+  if config_args.depot:
+    steaminterface.depotDownload()
+  else:
+    steaminterface.appUpdate()
+
 print("Generating the steam_api.dll wrapper just for this game...")
 steamapidll = find_steamapi_dll(rs_location)
 fixedspec = rs_location.replace(" ", "\\ ")+"steam_api.spec"
