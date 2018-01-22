@@ -30,7 +30,7 @@ class SteamNativeInterface(SteamInterface):
   def __init__(self, config):
     self.appid = config['appid']
     self.config = config
-    self.scriptheader = "+@sSteamCmdForcePlatformType windows +app_license_request " + str(self.appid)
+    self.scriptheader = " +app_license_request " + str(self.appid)
     print("Connecting to steam instance...")
     self.pid = findSteamPid()
     if self.pid == None or self.pid == "":
@@ -93,11 +93,12 @@ class SteamNativeInterface(SteamInterface):
     self.appinfo = parse_app_info(answer, self.appid)
     return self.appinfo
   def appUpdate(self):
-    self.steamIn(self.scriptheader + " +app_install " +
+    self.steamIn(self.scriptheader + "+@sSteamCmdForcePlatformType windows +app_install " +
                          str(self.appid) + " " + str(self.config["volume"]))
     print("Downloading started! Check out your steam. " +
               "When download is finished, run this script again with the same options " +
               "and additional --no-download argument.")
+    self.steamIn( "+@sSteamCmdForcePlatformType linux")
     quit()
   def depotDownload(self):
     if len(self.volumes) == 0:
