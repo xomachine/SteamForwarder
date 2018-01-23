@@ -42,12 +42,12 @@ proc run(obj: ptr WrappedCallback, p: pointer) =
   let originObj = obj.origin
   asm """
     mov %[obj], %%ecx
-    mov %%esp, %%ebx
+    mov %%esp, %%edi
     push %[p]
     call %[mcall]
-    mov %%ebx, %%esp
+    mov %%edi, %%esp
     ::[obj]"g"(`originObj`), [p]"g"(`p`), [mcall]"g"(`originRun`)
-    :"eax", "ebx", "ecx", "cc"
+    :"eax", "edi", "ecx", "cc"
   """
 
 proc run2(obj: ptr WrappedCallback, p: pointer, iofail: bool, scall: uint64) =
@@ -57,14 +57,14 @@ proc run2(obj: ptr WrappedCallback, p: pointer, iofail: bool, scall: uint64) =
   let originObj = obj.origin
   asm """
     mov %[obj], %%ecx
-    mov %%esp, %%ebx
+    mov %%esp, %%edi
     push %[scall]
     push %[iofail]
     push %[p]
     call %[originRun]
-    mov %%ebx, %%esp
+    mov %%edi, %%esp
     ::[obj]"g"(`originObj`), [scall]"g"(`scall`), [iofail]"g"(`iofail`), [p]"g"(`p`), [originRun]"g"(`originRun`)
-    : "ecx", "ebx", "eax", "cc"
+    : "ecx", "edi", "eax", "cc"
   """
 
 proc getCallbackSizeBytes(obj: ptr WrappedCallback): int32 =
