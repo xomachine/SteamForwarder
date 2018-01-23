@@ -35,7 +35,6 @@ install:
     cd ..
   - export PATH="$PWD/nim-$BRANCH/bin${PATH:+:$PATH}"
 script:
-  - echo $PATH
   - nim -v
   - make tools
   - make tests
