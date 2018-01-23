@@ -37,6 +37,7 @@ install:
 script:
   - nim -v
   - make tools
+  - touch signatures.txt
   - make tests
 cache:
   directories:
