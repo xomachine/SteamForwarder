@@ -1,4 +1,5 @@
 {.passL: "-lopcodes".}
+{.emit: "#include <stdarg.h>".}
 from bfd import BFD, Section
 from strutils import count, `%`, replace, contains, strip
 
