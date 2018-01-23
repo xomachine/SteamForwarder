@@ -12,7 +12,7 @@ matrix:
     - env: BRANCH=devel
   fast_finish: true
 install:
-  - sudo apt-get install wine-dev binutils-dev
+  - sudo apt-get install -f wine-dev binutils-dev
   - |
     if [ ! -x nim-$BRANCH/bin/nim ]; then
       git clone -b $BRANCH --depth 1 git://github.com/nim-lang/nim nim-$BRANCH/
