@@ -35,6 +35,9 @@ install:
     cd ..
   - export PATH="nim-$BRANCH/bin${PATH:+:$PATH}"
 script:
+  - find . -name "nim"
+  - echo $PATH
+  - nim -v
   - make tools
   - make tests
 cache:
