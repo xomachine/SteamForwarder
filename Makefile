@@ -67,10 +67,10 @@ $(OUTPUTDLL): $(SPECFILE) $(SIGNATURESFILE)
             --passC:"-m$(ARCH)" --passL:"-m$(ARCH)" --cpu:$(NIMARCH) \
             --nimcache:$(CACHEDIR)/nimcache -o:$(OUTPUTDLL) steam_api.nim
 
-$(SPECFILE): $(ORIGINAL_SPECFILE) $(DLLPARSER)
+$(SPECFILE): $(ORIGINAL_SPECPATH) $(DLLPARSER)
 	$(DLLPARSER) $(VERSIONSDIR) < $(ORIGINAL_SPECFILE) > $(SPECFILE)
 
-$(ORIGINAL_SPECPATH): tools
+$(ORIGINAL_SPECPATH):
 	cd $(SPECDIR)
 	$(WINEDUMP) spec $(DLL) -o$(ORIGINAL_SPECFILE:.spec=.dll)
 	$(RM) $(ORIGINAL_SPECFILE:%.spec=%_main.c) Makefile.in
