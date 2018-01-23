@@ -1,4 +1,6 @@
 # SteamForwarder
+![https://travis-ci.org/xomachine/SteamForwarder](https://travis-ci.org/xomachine/SteamForwarder.svg?branch=master)
+
 steam_api.dll implementation for wine. Your windows games now can interact with your linux steam!
 
 # ! DISCLAIMER !
