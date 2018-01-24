@@ -18,7 +18,8 @@ SteamForwarder is NOT able to download:
 
 * Everything that steamcmd are not able to download (mostly paid games with protection)
 
-SteamForwarder may encounter problems with any games, except ones built with latest steam api. (The version on Releases page is not built againist latest steam api, it includes api for one of wide spread versions). The **Hard way** might solve the problem but not in all cases. In most complicated case the steam api headers for particular version are required. For pre-2014 steam api it's recomended to use [SteamBrige](https://github.com/sirnuke/steambridge)
+For pre-2014 steam api it's recomended to use
+[SteamBrige](https://github.com/sirnuke/steambridge)
 
 ## Usage dependencies
 * steamcmd (not required with experimental flag `--steamnative`)
