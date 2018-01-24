@@ -72,11 +72,11 @@ for sym in symbols:
 for entry in specdata.values:
   let tail =
     if entry.name in resolved:
-      let stack = resolved[entry.name]
-      let nargs = stack.depth div 4
-      let arguments = repeat("ptr", nargs).join(" ")
-      "cdecl " & entry.name & "(" & arguments & ") " & entry.name &
-        "_" & " #" & (if stack.retStruct: "+" else: "") & $nargs
+      (let stack = resolved[entry.name];
+       let nargs = stack.depth div 4;
+       let arguments = repeat("ptr", nargs).join(" ");
+       "cdecl " & entry.name & "(" & arguments & ") " & entry.name &
+         "_" & " #" & (if stack.retStruct: "+" else: "") & $nargs)
     else:
       entry.callconv & " " & entry.name
   echo(entry.idx, " ", tail)
