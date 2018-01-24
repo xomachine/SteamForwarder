@@ -1,5 +1,6 @@
 #!/bin/env python3
-
+import os
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
 from urllib.request import urlopen, Request
 from getpass import getpass
 from collections import defaultdict
@@ -11,7 +12,6 @@ import subprocess
 import tempfile
 import re
 import argparse
-import os
 
 def find_steamapi_dll(installdir):
   for root, dirs, files in os.walk(installdir):
@@ -243,18 +243,12 @@ print("Generating the steam_api.dll wrapper just for this game...")
 steamapidll = find_steamapi_dll(rs_location)
 fixedspec = rs_location.replace(" ", "\\ ")+"steam_api.spec"
 fixedspecfp = rs_location+"steam_api.spec"
-filepath = os.path.dirname(os.path.abspath(__file__))
-if os.path.isfile(filepath + "/Makefile"):
-  makedir = filepath
-else:
-  makedir = os.path.dirname(filepath) + "/share/SteamForwarder/"
-subprocess.run(["make", "clean", "-C", makedir])
+subprocess.run(["make", "clean"])
 with tempfile.TemporaryDirectory() as tmpdir:
   subprocess.run(["make", "DLL="+steamapidll.replace(" ", "\\ ")+"",
                   "SPECDIR="+rs_location.replace(" ", "\\ "),
                   "SPECFILE="+fixedspec,
-                  "CACHEDIR="+tmpdir.replace(" ", "\\ "),
-                  "-C", makedir])
+                  "CACHEDIR="+tmpdir.replace(" ", "\\ ")])
 with open(fixedspecfp, 'r') as f:
   thefirstline = f.readline()
 libsteamapi = os.path.dirname(thefirstline.strip('# \n'))

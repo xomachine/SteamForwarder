@@ -31,6 +31,7 @@ DLL                    ?= $(SRCDIR)/steam_api$(LIB_POSTFIX).dll
 OUTPUTDLL               = $(DLL).so
 NIMSRCS                 = $(wildcard $(SRCDIR)/genmacros/*.nim)
 VERFILES                = $(wildcard $(SRCDIR)/versions/*/libsteam_api.so)
+INSTALLERSCRIPT         = $(wildcard $(SRCDIR)/installer/*.py)
 VERENDS                 = $(notdir $(VERFILES:%/libsteam_api.so=%))
 INSTALLVERLIBS          = $(foreach sf, $(VERENDS), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/libsteam_api.so $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/libsteam_api.so;)
 
@@ -48,13 +49,19 @@ install: tools $(SIGNATURESFILE)
 	$(INSTALL) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder/tools $(SIGSEARCH) \
 	              $(DLLPARSER)
 	$(INSTALLVERLIBS)
-	$(INSTALL) $(SRCDIR)/app_install.py $(DESTDIR)$(PREFIX)/bin/app_install
+	$(INSTALL) $(SRCDIR)/app_install.py \
+	           $(DESTDIR)$(PREFIX)/share/SteamForwarder/app_install.py
 	$(INSTALLDATA) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder $(SIGNATURESFILE) \
 	                  $(SRCDIR)/steam_api.nim \
                     $(SRCDIR)/steam_api.nims \
                     Makefile
+	$(INSTALLDATA) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder/installer \
+	                  $(INSTALLERSCRIPT)
 	$(INSTALLDATA) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder/genmacros \
 	                  $(NIMSRCS)
+	$(INSTALL) -d $(DESTDIR)$(PREFIX)/bin
+	ln -s ../share/SteamForwarder/app_install.py \
+	      $(DESTDIR)$(PREFIX)/bin/app_install
 
 $(SIGSEARCH):
 	$(MAKE) -C $(SRCDIR)/tools $(SIGSEARCH)
