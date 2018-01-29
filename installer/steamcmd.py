@@ -15,6 +15,9 @@ login {0} {1}
 app_license_request {2}
 """.format(config['login'], config['password'], str(config['appid']))
     self.appid = config['appid']
+    self.vollist = list()
+    self.volumes = self.getVolumes()
+
   def getAppInfo(self):
     result = subprocess.check_output(["steamcmd", "+app_info_print",
                                       str(self.appid), "+quit"]).decode('utf-8')
@@ -24,9 +27,9 @@ app_license_request {2}
       raise Exception("Incorrect app info received from steamcmd... Incorrect appID?")
     json_begin = json_begin.start()
     steam_json = result[json_begin:]
-    
     self.appinfo = parse_app_info(steam_json, self.appid)
     return self.appinfo
+
   def appUpdate(self):
     print('Preparing classic downloader...')
     steam_script = self.steam_script_header + """
@@ -34,6 +37,20 @@ app_update {0} validate
 """.format(str(self.appid))
     steam_script += "quit"
     do_script(steam_script)
+
+  def getVolumes(self):
+    result = list()
+    vollist = subprocess.check_output(["steamcmd", "+install_folder_list",
+                                      str(self.appid), "+quit"]).decode('utf-8')
+    for line in vollist.splitlines():
+      if line.startswith("Index"):
+        self.vollist.append(line)
+        startp = line.find('"')+1
+        endp = line.rfind('"')
+        path = line[startp:endp]
+        result.append(path)
+    return result
+
   def depotDownload(self):
     rs_location = (self.config["steamapps"] + '/common/' +
                            self.appinfo["installdir"] + '/')

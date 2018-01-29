@@ -77,7 +77,7 @@ def generate_manifest(appinfos):
 """ % (appinfos["id"], appinfos["name"], appinfos["installdir"])
   return manifest
 
-def generate_runscript(appinfo: LaunchInfo, config, libsteamapi, installpath):
+def generate_runscript(appinfo: LaunchInfo, config, libsteamapi, dlldir, steamapps):
   print("...for " + appinfo.executable)
   runscript = """
 #!/bin/bash
@@ -93,8 +93,8 @@ export SteamGameId="{6}"
 export SteamUser="{7}"
 export SteamAppUser="{7}"
 LD_PRELOAD="gameoverlayrenderer.so" wine "{1}/common/{2}" {3} &> "$(dirname "$0")/lastrun.log"
-""".format(config['wineprefix'], config['steamapps'], appinfo.executable,
-           appinfo.arguments, installpath, config['overlaypath'],
+""".format(config['wineprefix'], steamapps, appinfo.executable,
+           appinfo.arguments, dlldir, config['overlaypath'],
            config['appid'], config['login'], libsteamapi)
   return runscript
 
@@ -110,15 +110,6 @@ except:
   print("Configuration file not found! Using default values... " +
         "You may change them at " + configdir)
   config['overlaypath'] = os.getenv("HOME")+"/.local/share/Steam/ubuntu12_32/"
-
-  steamfolder = os.getenv('HOME') + '/.local/share/Steam'
-  #print(steamfolder)
-  if os.path.isdir(steamfolder):
-    #print("is dir")
-    for d in os.listdir(steamfolder):
-      #print(d)
-      if not re.match("[sS]team[aA]pps", d) is None:
-        config['steamapps'] = steamfolder + '/' + d
   config['login'] = 'anonymous'
   os.makedirs(configdir, exist_ok=True)
   with open(configdir + "config.json", "w") as f:
@@ -132,13 +123,19 @@ if not 'steamcmdclient' in config:
 
 class printvollist(argparse.Action):
   def __call__(self, parser, ns, values, ostring):
-    steaminterface = SteamNativeInterface(config)
+    if ns.steamnative:
+      steaminterface = SteamNativeInterface(config)
+    else:
+      steaminterface = SteamCmdInterface(config)
     for p in steaminterface.vollist:
       print(p)
     quit(0)
 
 aparser = argparse.ArgumentParser(description="The windows steam games " +
                                   "installation script")
+aparser.add_argument('--steamnative', default=False, dest='steamnative',
+                      help='use native steam instead of steamcmd (experimental)',
+                      action='store_true')
 aparser.add_argument('--volumelist', nargs=0,
                       help='print the list of available volumes in your steam',
                       action=printvollist)
@@ -158,9 +155,6 @@ aparser.add_argument('--depot-path', type=str, default=config["depotpath"],
 aparser.add_argument('--steamcmdclient', dest='steamclient', type=str,
                      help='path to steamclient.so related to steamcmd',
                      default=config["steamcmdclient"])
-aparser.add_argument('-s', '--steamapps-dir', type=str, dest='steamapps',
-                      help='path to the steamapps dir',
-                      default=config["steamapps"])
 aparser.add_argument('-o', '--overlay-dir', dest='overlaypath', type=str,
                       help='path to the gameoverlayrenderer.so and other ' +
                       'steam libs', default=config["overlaypath"])
@@ -175,11 +169,8 @@ aparser.add_argument('--no-download', default=False, dest='nodl',
 aparser.add_argument('--store', default=False, dest='store',
                       help='save configuration for futher use as default',
                       action='store_true')
-aparser.add_argument('--steamnative', default=False, dest='steamnative',
-                      help='use native steam instead of steamcmd (experimental)',
-                      action='store_true')
 aparser.add_argument('-v', '--volume', type=int, dest='volume',
-                      help='select steam volume index for game to download into (works only with --steamnative)' +
+                      help='select steam volume index for game to download into' +
                       ' use --volumelist to get list of volumes',
                       default=int(config["volume"] or 0))
 
@@ -196,16 +187,12 @@ config['appid'] = appid
 if config_args.steamnative:
   steaminterface = SteamNativeInterface(config)
 else:
-  if config_args.steamapps == "":
-    print('Can not find steam location... Please specify it using -s key')
-    quit(1)
   if config['steamcmdclient'] == "" and not config_args.steamnative:
     print('Can not find steamcmd\'s steamclient.so location. Please specify ' +
           'it using --steamcmdclient option to unlock --depot option.')
     if config_args.depot:
       config_args.depot = False
       print("Depot downloading disabled. Falling back to default method.")
-  config['steamapps'] = config_args.steamapps
   if config_args.askPassword:
     config['password'] = getpass()
   else:
@@ -216,7 +203,7 @@ if config_args.store:
   with open(configdir + "config.json", "w") as f:
     dump(config, f, indent=2)
 
-
+steamapps = os.path.join(steaminterface.volumes[config["volume"]], "steamapps")
 
 print("Obtaining app info...")
 try:
@@ -229,12 +216,12 @@ except Exception as e:
     print("Depot downloading is not available with http method!")
     config_args.depot = False
 manifest = generate_manifest(appinfos)
-manifest_location = config["steamapps"] + '/appmanifest_' + str(appid) + '.acf'
+manifest_location = steamapps+ '/appmanifest_' + str(appid) + '.acf'
 print("Generating manifest...")
 with open(manifest_location, "w") as f:
   f.write(manifest)
 
-rs_location = config["steamapps"] + '/common/' + appinfos["installdir"] + '/'
+rs_location = steamapps + '/common/' + appinfos["installdir"] + '/'
 if not config_args.nodl:
   print("Downloading " + appinfos["name"] + " via steamcmd...")
   if config_args.depot:
@@ -257,7 +244,7 @@ with open(fixedspecfp, 'r') as f:
 libsteamapi = os.path.dirname(thefirstline.strip('# \n'))
 print("Generating runscripts...")
 for name, appinfo in appinfos["infos"].items():
-  runscript = generate_runscript(appinfo, config, libsteamapi, rs_location)
+  runscript = generate_runscript(appinfo, config, libsteamapi, rs_location, steamapps)
   runscript_location = (rs_location + name + '.sh')
   with open(runscript_location, "w") as f:
     f.write(runscript)
