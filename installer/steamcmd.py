@@ -21,7 +21,7 @@ app_license_request {2}
     json_begin = re.search(colonre, result)
     if json_begin is None:
       print(result)
-      raise
+      raise Exception("Incorrect app info received from steamcmd... Incorrect appID?")
     json_begin = json_begin.start()
     steam_json = result[json_begin:]
     

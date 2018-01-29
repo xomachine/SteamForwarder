@@ -49,7 +49,10 @@ def get_app_config_http(appid):
   startinfos["id"] = appid
   startinfos["infos"] = dict()
   startinfos["name"] = namere.search(content).groupdict()["name"]
-  installdir = installdirre.search(content).groupdict()["installdir"]
+  installsearch = installdirre.search(content)
+  if installsearch is None:
+    raise Exception("Incorrect AppID!!!")
+  installdir = installsearch.groupdict()["installdir"]
   startinfos["installdir"] = installdir
   for startinfo_m in startinfore.finditer(content):
     match_dict = startinfo_m.groupdict()
