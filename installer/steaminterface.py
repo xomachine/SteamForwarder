@@ -1,4 +1,5 @@
 from json import loads
+from locale import getlocale, normalize
 from shutil import move, rmtree
 from os.path import join, isdir, isfile
 from os import remove, listdir
@@ -67,6 +68,12 @@ def parse_app_info(steam_json,  appid):
   if 'baselanguages' in appinfo['depots']:
     langs = appinfo['depots']['baselanguages'].split(',')
     curlang = ""
+    curlocale = getlocale()[0]
+    for lang in langs:
+      localename = normalize(lang).split('.')[0]
+      if localename == curlocale:
+        print('Autoselected ' + lang + ' language based on locale settings')
+        curlang = lang
     while not curlang in langs:
       curlang = input("Enter the translation you want to download: [" +
                        appinfo['depots']['baselanguages'] + "]\n")
