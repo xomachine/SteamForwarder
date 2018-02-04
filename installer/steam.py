@@ -29,7 +29,7 @@ class SteamNativeInterface(SteamInterface):
   def __init__(self, config):
     self.appid = config['appid']
     self.config = config
-    self.scriptheader = " +app_license_request " + str(self.appid)
+    self.scriptheader = " +app_license_request " + str(self.appid) + " "
     print("Connecting to steam instance...")
     self.pid = findSteamPid()
     if self.pid == None or self.pid == "":
