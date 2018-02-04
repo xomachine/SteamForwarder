@@ -64,9 +64,20 @@ def parse_app_info(steam_json,  appid):
         v['description'] = appinfos['name']
       name = v['description']
       appinfos['infos'][name] = LaunchInfo(v, installdir)
+  if 'baselanguages' in appinfo['depots']:
+    langs = appinfo['depots']['baselanguages'].split(',')
+    curlang = ""
+    while not curlang in langs:
+      curlang = input("Enter the translation you want to download: [" +
+                       appinfo['depots']['baselanguages'] + "]\n")
+  if 'install' in appinfo:
+    appinfos['install'] = appinfo['install']
   for k, v in appinfo['depots'].items():
     if not 'config' in v:
       continue
-    elif v['config']['oslist'] == 'windows':
+    elif (('Language' in v['config'] and
+           v['config']['Language'] == curlang) or
+          (not 'oslist' in v['config']) or
+          (v['config']['oslist'] == 'windows')):
       appinfos['depots'][k] = v
   return appinfos
