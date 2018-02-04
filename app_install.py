@@ -7,6 +7,7 @@ from collections import defaultdict
 from installer.steamcmd import SteamCmdInterface
 from installer.steaminterface import LaunchInfo
 from installer.steam import SteamNativeInterface
+from traceback import print_exc
 from json import load, dump
 import subprocess
 import tempfile
@@ -208,8 +209,8 @@ steamapps = os.path.join(steaminterface.volumes[config["volume"]], "steamapps")
 print("Obtaining app info...")
 try:
   appinfos = steaminterface.getAppInfo()
-except Exception as e:
-  print(e)
+except:
+  print_exc()
   print("Failed to get appinfo via steamcmd, falling back to http method...")
   appinfos = get_app_config_http(appid)
   if config_args.depot:
