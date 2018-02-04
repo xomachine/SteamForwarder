@@ -137,6 +137,8 @@ class SteamNativeInterface(SteamInterface):
             paths.append(path)
           if len(depots) == 0:
             break
+        elif read.startswith("Depot download failed"):
+          raise Exception(read)
         elif read.find("depot") >= 0 or read.find("Depot") >= 0:
           print(read)
     os.makedirs(rs_location, exist_ok=True)
