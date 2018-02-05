@@ -61,7 +61,7 @@ install: tools $(SIGNATURESFILE)
 	                  $(NIMSRCS)
 	$(INSTALL) -d $(DESTDIR)$(PREFIX)/bin
 	ln -s ../share/SteamForwarder/app_install.py \
-	      $(DESTDIR)$(PREFIX)/bin/app_install
+	      $(DESTDIR)$(PREFIX)/bin/sf_install
 
 $(SIGSEARCH):
 	$(MAKE) -C $(SRCDIR)/tools $(SIGSEARCH)
