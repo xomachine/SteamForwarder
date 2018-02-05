@@ -230,6 +230,18 @@ if not config_args.nodl:
   else:
     steaminterface.appUpdate()
 
+if 'regfile' in appinfos:
+  print("Applying registry installation file...")
+  content = "REGEDIT4\n" + appinfos['regfile'].replace("%INSTALLDIR%", rs_location).replace(
+            "%COMMON MYDOCS%", os.getenv("HOME"))
+  print("Following file will be applied:")
+  print(content)
+  with tempfile.NamedTemporaryFile('w') as tmpfile:
+    tmpfile.write(content)
+    tmpfile.flush()
+    p = subprocess.Popen(["regedit", tmpfile.name],
+      env={"WINEPREFIX": config["wineprefix"], "WINEARCH": "win32"})
+    p.wait()
 print("Generating the steam_api.dll wrapper just for this game...")
 steamapidll = find_steamapi_dll(rs_location)
 fixedspec = rs_location.replace(" ", "\\ ")+"steam_api.spec"
