@@ -47,6 +47,29 @@ class SteamInterface:
 colonre = re.compile(r'^(\s*"[^"]+")', re.MULTILINE)
 commare = re.compile(r'("|})(\s*$\s*")', re.MULTILINE)
 
+def quote(value, t="string"):
+  if t == "string":
+    return '"' + value.replace('\\', '\\\\').replace('"', '\"') + '"'
+  elif t == "dword":
+    more = max(8 - len(value), 0)
+    return t + ":" + "0" * more + value
+  else:
+    return t + ":" + value.replace('\\', '\\\\').replace('"', '\\"')
+
+def makeRegFile(reginfo, curlang):
+  result = ""
+  for k,v in reginfo.items():
+    result += "[" + k + "]\n"
+    for t ,d in v.items():
+      for name, value in d.items():
+        if type(value) is dict:
+          if name == curlang:
+            for n, vl in value.items():
+              result += quote(n) + '=' + quote(vl, t) + "\n"
+        else:
+          result += quote(name) + '=' + quote(value, t) + "\n"
+  return result
+
 def parse_app_info(steam_json,  appid):
   steam_json = re.sub(colonre, r'\1:', steam_json)
   steam_json = re.sub(commare, r'\1,\2', steam_json)
@@ -78,6 +101,9 @@ def parse_app_info(steam_json,  appid):
       curlang = input("Enter the translation you want to download: [" +
                        appinfo['depots']['baselanguages'] + "]\n")
   if 'install' in appinfo:
+    installactions = appinfo['install']
+    if 'Registry' in installactions:
+      appinfos['regfile'] = makeRegFile(installactions['Registry'], curlang)
     appinfos['install'] = appinfo['install']
   for k, v in appinfo['depots'].items():
     if not 'config' in v:
