@@ -36,6 +36,7 @@ VERENDS                 = $(notdir $(VERFILES:%/libsteam_api.so=%))
 INSTALLVERLIBS          = $(foreach sf, $(VERENDS), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/libsteam_api.so $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/libsteam_api.so;)
 
 .PHONY: all tools clean fullclean install tests
+.NOTPARALLEL:
 
 all: $(OUTPUTDLL)
 
