@@ -75,11 +75,11 @@ $(OUTPUTDLL): $(SPECFILE) $(SIGNATURESFILE)
             --nimcache:$(CACHEDIR)/nimcache -o:$(OUTPUTDLL) steam_api.nim
 
 $(SPECFILE): $(ORIGINAL_SPECPATH) $(DLLPARSER)
-	$(DLLPARSER) $(VERSIONSDIR) < $(ORIGINAL_SPECFILE) > $(SPECFILE)
+	$(DLLPARSER) $(VERSIONSDIR) < $(ORIGINAL_SPECPATH) > $(SPECFILE)
 
 $(ORIGINAL_SPECPATH):
 	cd $(SPECDIR)
-	$(WINEDUMP) spec $(DLL) -o$(ORIGINAL_SPECFILE:.spec=.dll)
+	$(WINEDUMP) spec $(DLL) -o$(ORIGINAL_SPECPATH:.spec=.dll)
 	$(RM) $(ORIGINAL_SPECFILE:%.spec=%_main.c) Makefile.in
 	cd $(SRCDIR)
 
