@@ -80,7 +80,7 @@ $(SPECFILE): $(ORIGINAL_SPECPATH) $(DLLPARSER)
 
 $(ORIGINAL_SPECPATH):
 	cd $(SPECDIR) && \
-	$(WINEDUMP) spec $(DLL) -o$(ORIGINAL_SPECPATH:.spec=.dll) && \
+	$(WINEDUMP) spec $(DLL) && \
 	$(RM) $(ORIGINAL_SPECFILE:%.spec=%_main.c) Makefile.in
 
 $(SIGNATURESFILE): $(SIGSEARCH)
