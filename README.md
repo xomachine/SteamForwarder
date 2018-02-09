@@ -45,9 +45,9 @@ Some hints for experts can be found in the section below.
 * Run installed game via runscript generated. (Its location will be printed after app\_install.py will install the game.)
 
 Some tips:
-* If you dont want to install steamcmd, it is possible to avoid it by using `--steamnative` flag in `app_install.py`
+* If you dont want to install steamcmd, it is possible to avoid it by using `--steamnative` flag in `sf_install`
 * If the game does not installing with typical method try to use `--depot` option
-* There is `install` target for `make`, so you can build a package or install SteamForwarder to your system. Don't forget about PREFIX and DESTDIR variables. `app_install.py` will become just `app_install` command after installation.
+* There is `install` target for `make`, so you can build a package or install SteamForwarder to your system. Don't forget about PREFIX and DESTDIR variables.
 * If `app_install.py` can not write the run script or can not find steam\_api.dll check the game installation, it may be not even installed. In other case, it might be incompatible with SteamForwarder
 
 ## Found a bug?
@@ -62,9 +62,9 @@ The SteamForwarder may be represented as two almost independent parts:
 steam\_api.dll.so and service tools. Service tools may also be
 devided to user tools and developer tools.
 
-For a moment there is only one user tool - `app_install.py`. This script
-performs downloading of the game and prepares SteamForwarder to work with
-this game, including the run scripts creation and steam\_api.dll.so building.
+For a moment there is only one user tool - `sf_install`. This script
+tells steam or steamcmd to download the game and prepares SteamForwarder to work
+with this game, including the run scripts creation and steam\_api.dll.so building.
 It has arbitary user-friendly interface with many settings managed by command
 line switches.
 

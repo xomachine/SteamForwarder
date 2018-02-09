@@ -50,8 +50,8 @@ install: tools $(SIGNATURESFILE)
 	$(INSTALL) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder/tools $(SIGSEARCH) \
 	              $(DLLPARSER)
 	$(INSTALLVERLIBS)
-	$(INSTALL) $(SRCDIR)/app_install.py \
-	           $(DESTDIR)$(PREFIX)/share/SteamForwarder/app_install.py
+	$(INSTALL) $(SRCDIR)/sf_install \
+	           $(DESTDIR)$(PREFIX)/share/SteamForwarder/sf_install
 	$(INSTALLDATA) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder $(SIGNATURESFILE) \
 	                  $(SRCDIR)/steam_api.nim \
                     $(SRCDIR)/steam_api.nims \
@@ -61,7 +61,7 @@ install: tools $(SIGNATURESFILE)
 	$(INSTALLDATA) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder/genmacros \
 	                  $(NIMSRCS)
 	$(INSTALL) -d $(DESTDIR)$(PREFIX)/bin
-	ln -s ../share/SteamForwarder/app_install.py \
+	ln -s ../share/SteamForwarder/sf_install \
 	      $(DESTDIR)$(PREFIX)/bin/sf_install
 
 $(SIGSEARCH):
