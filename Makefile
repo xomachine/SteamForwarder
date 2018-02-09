@@ -2,6 +2,7 @@
 SRCDIR                ?= $(CURDIR)
 NIMC                  ?= nim
 WINEDUMP              ?= winedump
+MV                    ?= mv
 RM                    ?= rm
 MAKE                  ?= make
 CACHEDIR              ?= $(SRCDIR)
@@ -79,9 +80,10 @@ $(SPECFILE): $(ORIGINAL_SPECPATH) $(DLLPARSER)
 	$(DLLPARSER) $(VERSIONSDIR) < $(ORIGINAL_SPECPATH) > $(SPECFILE)
 
 $(ORIGINAL_SPECPATH):
-	cd $(SPECDIR) && \
-	$(WINEDUMP) spec $(DLL) && \
-	$(RM) $(ORIGINAL_SPECFILE:%.spec=%_main.c) Makefile.in
+	cd $(SPECDIR); \
+	$(WINEDUMP) spec $(DLL); \
+	$(RM) $(ORIGINAL_SPECFILE:%.spec=%_main.c) Makefile.in; \
+	$(MV) steam_api.spec "$@"
 
 $(SIGNATURESFILE): $(SIGSEARCH)
 	$(SIGSEARCH) $(STEAMCLIENT) > $(SIGNATURESFILE)
