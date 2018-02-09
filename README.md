@@ -44,6 +44,9 @@ Some hints for experts can be found in the section below.
 * Launch your linux **steam** (don't allow it to update your windows games if they support MacOS either)
 * Run installed game via runscript generated. (Its location will be printed after app\_install.py will install the game.)
 
+There is [a little video example](https://youtu.be/JDpusySP92s) that shows
+typical use case.
+
 Some tips:
 * If you dont want to install steamcmd, it is possible to avoid it by using `--steamnative` flag in `sf_install`
 * If the game does not installing with typical method try to use `--depot` option
