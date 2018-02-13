@@ -14,9 +14,9 @@ type
 
 {.push cdecl.}
 
-proc wrap*(address: uint32): uint32
-proc unwrap*(address: uint32)
-proc wrapToOrigin*(address: uint32)
+proc wrap*(address: pointer): pointer
+proc unwrap*(address: pointer)
+proc wrapToOrigin*(address: pointer)
 
 from wine import trace
 from tables import initTable, `[]`, `[]=`, contains, del, mvalues, Table
@@ -87,17 +87,17 @@ var vtable = [
   cast[pointer](getCallbackSizeBytes)
 ]
 
-var callbacks = initTable[uint32, WrappedCallback]()
+var callbacks = initTable[pointer, WrappedCallback]()
   ## The registred wrapped callback objects list.
 
-proc unwrap(address: uint32) =
+proc unwrap(address: pointer) =
   ## Removes the wrapped callback object from the registred list causing the GC
   ## to collect it. The address should point to the original CCallback object.
   trace("Deleting %p...", address)
   callbacks.del(address)
   trace("done\n")
 
-proc wrapToOrigin(address: uint32) =
+proc wrapToOrigin(address: pointer) =
   ## Moves the CCallback object fields from wrapped one to original.
   ## The address should be a pointer to the WrappedCallback object.
   let wc = cast[ptr WrappedCallback](address)
@@ -107,7 +107,7 @@ proc wrapToOrigin(address: uint32) =
   wc.origin.icallback = wc.icallback
   trace("before: %p, %p\n", wc.origin.flags, wc.origin.icallback)
 
-proc wrap(address: uint32): uint32 =
+proc wrap(address: pointer): pointer =
   ## Wraps the CCallback got from wine side to the linux side equivalent.
   ## The address should be a pointer to the original(wine side) CCallback
   ## object. Returns the pointer to the WrappedCallback object.
@@ -123,4 +123,4 @@ proc wrap(address: uint32): uint32 =
     callbacks[address].flags = origin.flags
     callbacks[address].icallback = origin.icallback
     trace("already wrapped\n")
-  cast[uint32](callbacks[address].addr)
+  callbacks[address].addr

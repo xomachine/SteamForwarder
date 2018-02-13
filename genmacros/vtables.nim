@@ -9,9 +9,9 @@ type
     origin*: ptr Class
   MethodProc = proc() {.cdecl.}
 
-proc wrapClass*(name: string, address: uint32): uint32
-proc fastWrap*(address: uint32): uint32
-proc fastUnWrap*(address: uint32): uint32
+proc fastUnWrap*(address: pointer): pointer
+proc wrapClass*(name: string, address: pointer): pointer
+proc fastWrap*(address: pointer): pointer
 proc eachInt(k: string, a: seq[StackState], sink: NimNode): NimNode
   {.compileTime.}
 
@@ -49,6 +49,7 @@ static:
 proc makePseudoMethod(stack: uint8, swp: bool): NimNode {.compileTime.} =
   ## Generates a pseudo method for stack depth of `stack`.
   ## If `swp` is true, the generated method should perform inmemory return.
+  ## This pseudo method generator is valid only for 32-bit context!
   result = newProc(newIdentNode(pseudoMethodPrefix & $stack &
                                 (if swp:"S" else: "")))
   result.addPragma(newIdentNode("cdecl"))
@@ -155,46 +156,47 @@ macro eachTable(sink: untyped): untyped =
   let cc = readClasses()
   for k, v in cc.pairs:
     result.add(eachInt(k, v, sink))
-  for i in declared:
-    result.insert(0, makePseudoMethod(i, false))
-  for i in swpdeclared:
-    result.insert(0, makePseudoMethod(i, true))
+  when hostCPU == "i386":
+    for i in declared:
+      result.insert(0, makePseudoMethod(i, false))
+    for i in swpdeclared:
+      result.insert(0, makePseudoMethod(i, true))
 
 var vtables: Table[string, seq[MethodProc]]
 eachTable(vtables)
 ## The classes which already wrapped is stored in the `classAssociations`
-var classAssociations = initTable[uint32, WrappedClass]()
+var classAssociations = initTable[pointer, WrappedClass]()
 
-proc fastUnWrap(address: uint32): uint32 =
+proc fastUnWrap(address: pointer): pointer =
   ## Checks if `address` already in classAssocations and returns the
   ## unwrapped object address if it is so or original `address` in other case
   for k in classAssociations.keys():
-    if cast[uint32](classAssociations[k].addr) == address:
+    if classAssociations[k].addr == address:
       return k
   return address
 
-proc fastWrap(address: uint32): uint32 =
+proc fastWrap(address: pointer): pointer =
   ## Checks if `address` already in classAssocations and returns the
   ## wrapped object address if it is so or 0 in other case
   if address in classAssociations:
-    cast[uint32](classAssociations[address].addr)
+    classAssociations[address].addr
   else:
-    0
+    nil
 
-proc wrapClass(name: string, address: uint32): uint32 =
+proc wrapClass(name: string, address: pointer): pointer =
   ## Wraps object passed by given `address` and which has a given type `name`
   trace("Wrapping %p as %s...", address, name.cstring)
   if address notin classAssociations:
     trace("new class required\n")
     let origin = cast[ptr Class](address)
-    let tinfoaddr = cast[ptr MethodProc](cast[uint32](origin.vtable) - 4)
-    var shift = 0'u32
-    while true:
-      let maddr = cast[ptr uint32](cast[uint32](origin.vtable) + shift)[]
-      trace("Method: %p\n", maddr)
-      if maddr < 0x10000'u32 or maddr > 0xffff0000'u32:
-        break
-      shift += 4
+    let tinfoaddr = cast[ptr MethodProc](cast[uint](origin.vtable) - 4)
+    #var shift = 0'u32
+    #while true:
+    #  let maddr = cast[ptr uint](cast[uint](origin.vtable) + shift)[]
+    #  trace("Method: %p\n", maddr)
+    #  if maddr < 0x10000'u32 or maddr > 0xffff0000'u32:
+    #    break
+    #  shift += 4
     #for a in vtables[name]:
     #  trace("Wrapped method: %p\n", a)
     trace("Type info located at %p and equals %p\n", tinfoaddr, tinfoaddr[])
@@ -205,6 +207,6 @@ proc wrapClass(name: string, address: uint32): uint32 =
     classAssociations[address] = WrappedClass(vtable: vtableptr, origin: origin)
   else:
     trace("already wrapped\n")
-  result = cast[uint32](classAssociations[address].addr)
+  result = classAssociations[address].addr
   trace("Wrapped into class at %p\n", result)
 
