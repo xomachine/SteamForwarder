@@ -18,7 +18,7 @@ proc genArgs*(n: int): seq[NimNode] =
   result[0] = newIdentNode("uint64")
   for i in 1..n:
     result[i] = newIdentDefs(newIdentNode("argument" & $i),
-                             newIdentNode("uint32"))
+                             newIdentNode("pointer"))
 
 proc genCall*(name: string, n: int): NimNode =
   ## Generates the call of the function with name `name` and `n` number of

@@ -10,7 +10,7 @@ type
     private
   ModuleEntry* = tuple
     ## The memory region related to file descriptor
-    mrange: Slice[uint32]
+    mrange: Slice[pointer]
     permissions: set[Flags]
     name: string
   MemMaps* = tuple
@@ -20,7 +20,7 @@ type
 {.push cdecl.}
 proc getRealPid*(): string
 proc getMMap*(old: var MemMaps)
-proc checkAddress*(m: MemMaps, address: uint32): ModuleEntry
+proc checkAddress*(m: MemMaps, address: pointer): ModuleEntry
 #proc parseFlags(f: string): set[Flags]
 proc getCurWPath(): string
 proc getWPath(p: string): string
@@ -60,11 +60,11 @@ proc flags(f: string, res: var set[Flags], start: int): int =
   res = outp
   return 4
 
-proc hex(input: string, intval: var uint32, start: int): int =
+proc hex(input: string, intval: var pointer, start: int): int =
   ## Hex number reader for scanf
   var i = start
   while i < input.len and input[i] in HexDigits: i.inc
-  if i != start: intval = parseHexInt(input[start..<i]).uint32
+  if i != start: intval = cast[pointer](parseHexInt(input[start..<i]))
   return i - start
 
 proc modname(input: string, name: var string, start: int): int =
@@ -114,7 +114,7 @@ proc getRealPid(): string =
         trace("Real PID = %s\n", stripped.cstring)
         return stripped
 
-proc checkAddress(m: MemMaps, address: uint32): ModuleEntry =
+proc checkAddress(m: MemMaps, address: pointer): ModuleEntry =
   ## Checks if given `address` belongs to the linux process described by `m`
   ## and returns the region description which the `address` is related to
   for i in 0..<m.upper:
