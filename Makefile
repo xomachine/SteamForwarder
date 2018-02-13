@@ -5,13 +5,23 @@ WINEDUMP              ?= winedump
 MV                    ?= mv
 RM                    ?= rm
 MAKE                  ?= make
+ARCH                  ?= 32
+NOTUNE                ?= 0
+ifeq ($(ARCH), 64)
+  LIB_POSTFIX = 64
+  NIMARCH = amd64
+else
+  LIB_POSTFIX =
+  NIMARCH = i386
+endif
 CACHEDIR              ?= $(SRCDIR)
 STEAMCLIENT           ?= $(SRCDIR)/steamclient.so
 SIGNATURESFILE        ?= $(SRCDIR)/signatures.txt
 SPECDIR               ?= $(SRCDIR)
 ORIGINAL_SPECFILE     ?= steam_api_orig.spec
+DLL                   ?= $(SRCDIR)/steam_api$(LIB_POSTFIX).dll
 ORIGINAL_SPECPATH     ?= $(SPECDIR)/$(ORIGINAL_SPECFILE)
-SPECFILE              ?= $(SPECDIR)/steam_api.spec
+SPECFILE              ?= $(DLL:%.dll=%.spec)
 DLLPARSER             ?= $(SRCDIR)/tools/dllparser
 SIGSEARCH             ?= $(SRCDIR)/tools/sigsearch
 VERSIONSDIR           ?= $(SRCDIR)/versions
@@ -19,16 +29,6 @@ PREFIX                ?= /usr/local
 INSTALL               ?= install -Dm 755
 INSTALLDATA           ?= install -Dm 644
 
-ARCH                  ?= 32
-NOTUNE                ?= 0
-ifeq ($(ARCH), 64)
-  LIB_POSTFIX = 64
-  NIMARCH = x86
-else
-  LIB_POSTFIX =
-  NIMARCH = i386
-endif
-DLL                    ?= $(SRCDIR)/steam_api$(LIB_POSTFIX).dll
 OUTPUTDLL               = $(DLL).so
 NIMSRCS                 = $(wildcard $(SRCDIR)/genmacros/*.nim)
 VERFILES                = $(wildcard $(SRCDIR)/versions/*/libsteam_api.so)
@@ -78,12 +78,15 @@ $(OUTPUTDLL): $(SPECFILE) $(SIGNATURESFILE)
 
 $(SPECFILE): $(ORIGINAL_SPECPATH) $(DLLPARSER)
 	$(DLLPARSER) $(VERSIONSDIR) < $(ORIGINAL_SPECPATH) > $(SPECFILE)
+ifeq ($(ARCH), 64)
+	sed -i 's/versions/versions64/' $(SPECFILE)
+endif
 
 $(ORIGINAL_SPECPATH):
 	cd $(SPECDIR); \
 	$(WINEDUMP) spec $(DLL); \
 	$(RM) $(ORIGINAL_SPECFILE:%.spec=%_main.c) Makefile.in; \
-	$(MV) steam_api.spec "$@"
+	$(MV) "$(SPECFILE)" "$@"
 
 $(SIGNATURESFILE): $(SIGSEARCH)
 	$(SIGSEARCH) $(STEAMCLIENT) > $(SIGNATURESFILE)
