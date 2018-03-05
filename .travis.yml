@@ -10,7 +10,7 @@ matrix:
   allow_failures:
     # Ignore failures when building against the master Nim branch since it
     # is not supported yet
-    - env: BRANCH=master
+    - env: BRANCH=devel
   fast_finish: true
 install:
   - sudo apt-get install -f wine-dev binutils-dev gcc-multilib
