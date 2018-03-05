@@ -1,5 +1,6 @@
 # SteamForwarder
-![https://travis-ci.org/xomachine/SteamForwarder](https://travis-ci.org/xomachine/SteamForwarder.svg?branch=master)
+
+[![Build Status](https://travis-ci.org/xomachine/SteamForwarder.svg?branch=master)](https://travis-ci.org/xomachine/SteamForwarder)
 
 `steam_api.dll` implementation for WINE. Your windows games now can interact with your linux steam! What does it mean? It means this tool provides a component for WINE named `steam_api.dll`. It works like for example `opengl32.dll` provided by WINE which allows windows programms to access OpenGL API under linux. If `opengl32.dll` supplies interface to `libGL.so`, the `steam_api.dll` does the same thing but for `libsteam_api.so` (which is provided by Valve for linux steam games).
 
