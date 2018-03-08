@@ -1,4 +1,4 @@
-# Generated from /home/xomachine/.Soft/projects/steamforwarder/versions/1.33b/steam_api.dll by winedump
+
 
 1 stub GetHSteamPipe
 2 stub GetHSteamUser

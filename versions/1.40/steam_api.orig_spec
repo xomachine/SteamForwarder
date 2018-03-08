@@ -1,4 +1,4 @@
-# Generated from /home/xomachine/.Soft/projects/steamforwarder/versions/1.40/steam_api.dll by winedump
+
 
 1 stub CAddUGCDependencyResult_t_RemoveCallResult
 2 stub CAddUGCDependencyResult_t_SetCallResult

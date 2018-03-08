@@ -1,4 +1,4 @@
-# Generated from /home/xomachine/.Soft/projects/steamforwarder/versions/1.36/steam_api.dll by winedump
+
 
 1 stub CAssociateWithClanResult_t_RemoveCallResult
 2 stub CAssociateWithClanResult_t_SetCallResult
