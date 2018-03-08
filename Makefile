@@ -34,7 +34,11 @@ PRETARGETS              = $(ORSPECS:%.orig_spec=%.dll.so)
 PRESPECS                = $(WINLIBS:%.dll=%.spec)
 INSTALLERSCRIPT         = $(wildcard $(SRCDIR)/installer/*.py)
 VERENDS                 = $(notdir $(VERFILES:%/libsteam_api.so=%))
+VERAVAILABLE            = $(notdir $(ORSPECS:%/steam_api.orig_spec=%))
 INSTALLVERLIBS          = $(foreach sf, $(VERENDS), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/libsteam_api.so $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/libsteam_api.so;)
+INSTALLPRELIBS          = $(foreach sf, $(VERAVAILABLE), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/steam_api.dll.so $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/steam_api.dll.so;)
+INSTALLVERSPECS          = $(foreach sf, $(VERAVAILABLE), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/steam_api.spec $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/steam_api.spec;)
+INSTALLVERORSPECS        = $(foreach sf, $(VERAVAILABLE), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/steam_api.orig_spec $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/steam_api.orig_spec;)
 
 .PHONY: all tools clean fullclean install tests precompile prespec preorig signatures
 
@@ -50,10 +54,13 @@ preorig: $(PREORIGS)
 
 signatures: $(SIGNATURESFILE)
 
-install: tools $(SIGNATURESFILE)
+install: tools $(ORSPECS) $(PRESPECS) $(SIGNATURESFILE) $(PRETARGETS)
 	$(INSTALL) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder/tools $(SIGSEARCH) \
 	              $(DLLPARSER)
 	$(INSTALLVERLIBS)
+	$(INSTALLVERSPECS)
+	$(INSTALLPRELIBS)
+	$(INSTALLVERORSPECS)
 	$(INSTALL) $(SRCDIR)/sf_install \
 	           $(DESTDIR)$(PREFIX)/share/SteamForwarder/sf_install
 	$(INSTALLDATA) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder $(SIGNATURESFILE) \
