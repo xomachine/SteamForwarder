@@ -7,7 +7,7 @@ proc makePseudoMethods*(): NimNode {.compileTime.}
 
 from strutils import toHex
 from utils import strToAsm, `+`
-from generators import genArgs, genCall, genTraceCall
+from generators import genArgs, genCall, genTraceCall, genAsmNativeCall64
 import macros
 
 static:
@@ -18,7 +18,7 @@ proc makePseudoMethod(stack: uint8): NimNode {.compileTime.} =
   let nargs = max(int(stack div 4), 0)
   let meaningfull_args = genArgs(nargs)
   result[3] = newTree(nnkFormalParams, meaningfull_args)
-  let mcall = genCall("origin_method", nargs)
+  let mcall = genAsmNativeCall64("origin_method", nargs)
   let omethod = newIdentNode("origin_method")
   let tracecall = genTraceCall(nargs)
   let procty = newTree(nnkProcTy, newTree(nnkFormalParams, meaningfull_args),
@@ -65,6 +65,6 @@ proc eachInt(k: string, a: seq[StackState], sink: NimNode): NimNode =
     let asmstmt = newTree(nnkAsmStmt, newEmptyNode(), tq)
     let methodname = newIdentNode("m" & k & $i)
     result.add quote do:
-      proc `methodname`() {.asmNoStackFrame, noReturn, cdecl.} =
+      proc `methodname`() {.asmNoStackFrame, cdecl.} =
         `asmstmt`
       add(`sink`[`klit`], `methodname`)
