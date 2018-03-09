@@ -30,10 +30,18 @@ proc makePseudoMethod(stack: uint8): NimNode {.compileTime.} =
     :[mnum]"=g"(`mnum`)
     ::
 """
-    trace("Calling method number %d\n", mnum + 1)
+    trace("Calling method number %d\n", mnum)
     `tracecall`
-    let `omethod` = cast[`procty`](argument1 + mnum*8)
-    `mcall`
+    trace("\n")
+    let obj = cast[ptr WrappedClass](argument1)
+    trace("Origin: %p\n", obj.origin)
+    trace("Origin vtable: %p\n", obj.origin.vtable)
+    let methodptr = cast[ptr `procty`](obj.origin.vtable + mnum*sizeof(pointer))
+    let `omethod` = methodptr[]
+    trace("Method address: %p\n", `omethod`)
+    let res = `mcall`
+    trace("Result = %p\n", res)
+    wrapIfNecessary(res)
 
 proc makePseudoMethods(): NimNode =
   result = newStmtList()
