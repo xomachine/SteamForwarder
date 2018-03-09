@@ -88,9 +88,9 @@ def parse_app_info(steam_json,  appid):
         v['description'] = appinfos['name']
       name = v['description']
       appinfos['infos'][name] = LaunchInfo(v, installdir)
+  curlang = ""
   if 'baselanguages' in appinfo['depots']:
     langs = appinfo['depots']['baselanguages'].split(',')
-    curlang = ""
     curlocale = getlocale()[0]
     for lang in langs:
       localename = normalize(lang).split('.')[0]
