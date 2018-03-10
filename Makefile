@@ -42,6 +42,7 @@ INSTALLVERSPECS          = $(foreach sf, $(VERAVAILABLE), $(INSTALLDATA) $(SRCDI
 INSTALLVERORSPECS        = $(foreach sf, $(VERAVAILABLE), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/steam_api.orig_spec $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/steam_api.orig_spec;)
 
 .PHONY: all tools clean fullclean install tests precompile prespec preorig signatures
+.SECONDARY: $(DLL:%.dll=%.spec)
 
 all: $(OUTPUTDLL)
 
