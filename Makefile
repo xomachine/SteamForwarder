@@ -82,7 +82,7 @@ $(SIGSEARCH):
 $(DLLPARSER):
 	$(MAKE) -C tools $(DLLPARSER)
 
-%.dll.so: %.spec $(NIMSRCS) $(SRCDIR)/steam_api.nim $(SIGNATURESFILE)
+%.dll.so: %.spec $(NIMSRCS) $(SRCDIR)/steam_api.nims $(SRCDIR)/steam_api.nim $(SIGNATURESFILE)
 	$(NIMC) c -d:specname=$< -d:cdfile=$(SIGNATURESFILE) \
             --passC:"-m$(ARCH)" --passL:"-m$(ARCH)" --cpu:$(NIMARCH) \
             --nimcache:`mktemp -d --tmpdir=$(CACHEDIR) nimcache.XXXX` -o:$@ \
