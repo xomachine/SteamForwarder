@@ -72,7 +72,8 @@ proc wrapClass(name: string, address: pointer): pointer =
   if address notin classAssociations:
     trace("new class required\n")
     let origin = cast[ptr Class](address)
-    let tinfoaddr = cast[ptr MethodProc](cast[uint](origin.vtable) - 4)
+    let tinfoaddr = cast[ptr MethodProc](cast[int](origin.vtable) -
+                                         pointer.sizeof())
     #var shift = 0'u32
     #while true:
     #  let maddr = cast[ptr uint](cast[uint](origin.vtable) + shift)[]

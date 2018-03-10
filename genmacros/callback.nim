@@ -62,7 +62,7 @@ proc run(obj: ptr WrappedCallback, p: pointer) =
 proc run2(obj: ptr WrappedCallback, p: pointer, iofail: bool, scall: uint64) =
   ## Second CCallback virtual method
   trace("[%p](%p, %p, %p)\n", obj, p, iofail, scall)
-  let originRun = (obj.origin.vtable + 4)[]
+  let originRun = (obj.origin.vtable + pointer.sizeof)[]
   let originObj = obj.origin
   when hostCPU == "i386":
     asm """
