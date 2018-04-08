@@ -23,12 +23,20 @@ For pre-2014 steam api it might be worthy to use
 
 ## Usage dependencies
 * steamcmd (not required with experimental flag `--steamnative`)
-* nim 0.18.0 or higher (to generate and compile a bunch of wrappers code)
 * python3 (for installer script)
 * wine-devel (including `winedump`, `winegcc` and headers)
-* binutils (`libopcode.so` and `libbfd.so` in particular)
+* make
 
-Addinional dependences to build:
+Note that you may need to build `steam_api.dll.so` if the `sf_install` script
+won't be able to find matching precompiled library. The script will try to do
+the job for you, but it needs the build dependencies installed in your system to
+succeed.
+
+## Build dependences
+All usage dependencies plus
+
+* nim compiler of version 0.18.0 or higher
+* binutils (`libopcode.so` and `libbfd.so` in particular)
 * binutils-devel (including `bfd.h` and `dis-asm.h`)
 
 ## Usage
