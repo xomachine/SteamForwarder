@@ -9,6 +9,7 @@ from installer.steaminterface import LaunchInfo
 from installer.steam import SteamNativeInterface
 from traceback import print_exc
 from json import load, dump
+from installer.dllsearch import findMatchingLibrary
 import subprocess
 import tempfile
 import re
@@ -83,7 +84,7 @@ def generate_runscript(appinfo: LaunchInfo, config, libsteamapi, dlldir, steamap
   runscript = """
 #!/bin/bash
 export WINEPREFIX="{0}"
-export WINEDLLPATH+=":{4}"
+export WINEDLLPATH+=":{4}:{8}"
 export LD_LIBRARY_PATH+=":{5}:{8}"
 export WINEDEBUG="trace+steam_api"
 export WINEARCH="win32"
@@ -254,18 +255,7 @@ if 'regfile' in appinfos:
       env={"WINEPREFIX": config["wineprefix"], "WINEARCH": "win32"})
     p.wait()
 print("Generating the steam_api.dll wrapper just for this game...")
-steamapidll = find_steamapi_dll(rs_location)
-fixedspec = rs_location.replace(" ", "\\ ")+"steam_api.spec"
-fixedspecfp = rs_location+"steam_api.spec"
-subprocess.run(["make", "clean"])
-with tempfile.TemporaryDirectory() as tmpdir:
-  subprocess.run(["make", "DLL="+steamapidll.replace(" ", "\\ ")+"",
-                  "SPECDIR="+rs_location.replace(" ", "\\ "),
-                  "SPECFILE="+fixedspec,
-                  "CACHEDIR="+tmpdir.replace(" ", "\\ ")])
-with open(fixedspecfp, 'r') as f:
-  thefirstline = f.readline()
-libsteamapi = os.path.dirname(thefirstline.strip('# \n'))
+libsteamapi = findMatchingLibrary(rs_location)
 print("Generating runscripts...")
 for name, appinfo in appinfos["infos"].items():
   runscript = generate_runscript(appinfo, config, libsteamapi, rs_location, steamapps)

@@ -93,8 +93,8 @@ $(DLLPARSER):
 	$(DLLPARSER) $(VERSIONSDIR) < $< > $@
 
 %.orig_spec: %.dll
-	cd $(dir $<); \
-	$(WINEDUMP) spec $<; \
+	cd "`dirname "$<"`"; \
+	$(WINEDUMP) spec "$<"; \
 	$(RM) $(@:%.orig_spec=%_main.c) Makefile.in; \
 	$(MV) $(@:%.orig_spec=%.spec) $@
 
