@@ -1,5 +1,5 @@
-from os.path import join, dirname, isfile
-from os import walk, listdir
+from os.path import join, dirname, isfile, abspath
+from os import walk, listdir, symlink
 from subprocess import run
 from tempfile import TemporaryDirectory
 
@@ -30,6 +30,14 @@ def esc(path):
   return path.replace(" ", "\\ ")
 
 def findMatchingLibrary(gamelocation):
+  if " " in gamelocation:
+    with TemporaryDirectory() as tmpdir:
+      newgamelocation = join(tmpdir, "thegame")
+      if " " in newgamelocation:
+        raise Exception("Can not handle the whitespaces in path. " +
+                        "The temporary directory also contains whitespaces!")
+      symlink(gamelocation, newgamelocation)
+      return findMatchingLibrary(newgamelocation)
   steamdll = find_steamapi_dll(gamelocation)
   print("Found steam_api.dll: "+steamdll)
   origspecfile = join(dirname(steamdll), "steam_api.orig_spec")
@@ -41,9 +49,10 @@ def findMatchingLibrary(gamelocation):
   versionlist = listdir("versions")
   versionlist.sort()
   for version in versionlist:
-    prefile = join(join("versions", version), "steam_api.orig_spec")
+    predir = join("versions", version)
+    prefile = join(predir, "steam_api.orig_spec")
     if isfile(prefile) and compare_specs(origspecfile, prefile):
-      return version
+      return abspath(predir)
   run(["make", "DLL="+esc(steamdll), "clean"])
   fixedspec = join(gamelocation, "steam_api.spec")
   with TemporaryDirectory() as tmpdir:
