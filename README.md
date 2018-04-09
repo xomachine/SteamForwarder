@@ -44,9 +44,9 @@ All usage dependencies plus
 This is a common usage scenario of SteamForwarder for users.
 Some hints for experts can be found in the section below.
 
-* Download redist.tar.bz2 from latest release of SteamForwarder from releases page
-* Unpack it to the folder you want
-* Open the terminal in the folder SteamForwarder was unpacked
+* Download redist.tar.bz2 from latest release of SteamForwarder at the releases page.
+* Unpack it to the folder you want.
+* Open a terminal in the folder the `sf_install` script was unpacked (`share/SteamForwarder` or `bin`).
 * Type `python3 sf_install --help` to learn command line options of installer tool.
 * Launch your linux steam client if you decided to use `--steamnative` option, otherwise close the steam client if it is running (it may conflict with the steamcmd).
 * Use `sf_install` to install your windows game. E.g. for Paladins it command might look like `python3 sf_install 444090`. The steam AppId of the game can be found in the url of the game page on the steam store site.
