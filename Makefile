@@ -24,6 +24,11 @@ else
   LIB_POSTFIX =
   NIMARCH = i386
 endif
+ifeq ($(NOTUNE), 1)
+  TUNEOPTS = --opt:none --passC:'-mtune=generic'
+else
+  TUNEOPTS =
+endif
 DLL                    ?= $(SRCDIR)/steam_api$(LIB_POSTFIX).dll
 OUTPUTDLL               = $(DLL).so
 NIMSRCS                 = $(wildcard $(SRCDIR)/genmacros/*.nim)
@@ -78,7 +83,7 @@ install: tools $(ORSPECS) $(PRESPECS) $(SIGNATURESFILE) $(PRETARGETS)
 	      $(DESTDIR)$(PREFIX)/bin/sf_install
 
 $(SIGSEARCH):
-	$(MAKE) -C $(SRCDIR)/tools $(SIGSEARCH)
+	$(MAKE) -C $(SRCDIR)/tools TUNEOPTS="$(TUNEOPTS)" $(SIGSEARCH)
 
 $(DLLPARSER):
 	$(MAKE) -C tools $(DLLPARSER)
@@ -86,6 +91,7 @@ $(DLLPARSER):
 %.dll.so: %.spec $(NIMSRCS) $(SRCDIR)/steam_api.nims $(SRCDIR)/steam_api.nim $(SIGNATURESFILE)
 	$(NIMC) c -d:specname=$< -d:cdfile=$(SIGNATURESFILE) \
             --passC:"-m$(ARCH)" --passL:"-m$(ARCH)" --cpu:$(NIMARCH) \
+            $(TUNEOPTS) \
             --nimcache:`mktemp -d --tmpdir=$(CACHEDIR) nimcache.XXXX` -o:$@ \
             steam_api.nim
 
