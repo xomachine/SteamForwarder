@@ -12,10 +12,12 @@ endif
 all: $(SIGSEARCH) $(DLLPARSER)
 
 clean:
-	$(RM) -r $(SRCDIR)/nimcache $(SIGSEARCH) $(DLLPARSER)
+	$(RM) -r $(SRCDIR)/nimcache.* $(SIGSEARCH) $(DLLPARSER)
 
 $(SIGSEARCH):
-	$(NIMC) c $(ADDITIONALARGS) -o:$(SIGSEARCH) $(SRCDIR)/sigsearch.nim
+	$(NIMC) c $(ADDITIONALARGS) -o:$(SIGSEARCH) $(TUNEOPTS) \
+	--nimcache:`mktemp -d --tmpdir=$(SRCDIR) nimcache.XXXX` $(SRCDIR)/sigsearch.nim
 
 $(DLLPARSER):
-	$(NIMC) c $(ADDITIONALARGS) -o:$(DLLPARSER) $(SRCDIR)/dllparser.nim
+	$(NIMC) c $(ADDITIONALARGS) -o:$(DLLPARSER) $(TUNEOPTS) \
+	--nimcache:`mktemp -d --tmpdir=$(SRCDIR) nimcache.XXXX` $(SRCDIR)/dllparser.nim

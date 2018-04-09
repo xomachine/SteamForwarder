@@ -4,6 +4,7 @@ from wrapper import wrapIfNecessary
 from generators import genTraceCall, genCall, genArgs
 from wine import trace
 from callback import wrap, unwrap, wrapToOrigin
+from vtables import fastUnWrap
 import macros
 
 type Dummy = object
@@ -87,8 +88,17 @@ macro generateWineDecls*(specs: static[SpecFile]): untyped =
     else:
       let resultidt = newIdentNode("result")
         # This one will be returned implicitly
+      let checkarg =
+        if s.nargs > 0:
+          let originarg = call[1]
+          let unwrappedarg = newIdentNode("unwrapped")
+          call[1] = unwrappedarg
+          quote do:
+            let `unwrappedarg` = fastUnWrap(`originarg`)
+        else: newEmptyNode()
       decl.body = quote do:
         `tracecall`
+        `checkarg`
         `resultidt` = `call`
         trace(" = %p\n", `resultidt`)
       if not s.swap: # Objects with vtables are never being returned inmemory

@@ -39,7 +39,7 @@ script:
   - nim -v
   - make tools
   - touch signatures.txt
-  - make tests
+  - make precompile
 cache:
   directories:
     - nim-master

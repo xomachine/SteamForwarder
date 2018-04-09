@@ -11,6 +11,7 @@ type
 
 proc wrapClass*(name: string, address: uint32): uint32
 proc fastWrap*(address: uint32): uint32
+proc fastUnWrap*(address: uint32): uint32
 proc eachInt(k: string, a: seq[StackState], sink: NimNode): NimNode
   {.compileTime.}
 
@@ -163,6 +164,14 @@ var vtables: Table[string, seq[MethodProc]]
 eachTable(vtables)
 ## The classes which already wrapped is stored in the `classAssociations`
 var classAssociations = initTable[uint32, WrappedClass]()
+
+proc fastUnWrap(address: uint32): uint32 =
+  ## Checks if `address` already in classAssocations and returns the
+  ## unwrapped object address if it is so or original `address` in other case
+  for k in classAssociations.keys():
+    if cast[uint32](classAssociations[k].addr) == address:
+      return k
+  return address
 
 proc fastWrap(address: uint32): uint32 =
   ## Checks if `address` already in classAssocations and returns the

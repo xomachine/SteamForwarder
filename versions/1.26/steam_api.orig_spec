@@ -1,4 +1,4 @@
-# Generated from steam_api_poe.dll by winedump
+
 
 1 stub GetHSteamPipe
 2 stub GetHSteamUser

@@ -24,12 +24,20 @@ For pre-2014 steam api it might be worthy to use
 
 ## Usage dependencies
 * steamcmd (not required with experimental flag `--steamnative`)
-* nim 0.18.0 or higher (to generate and compile a bunch of wrappers code)
 * python3 (for installer script)
 * wine-devel (including `winedump`, `winegcc` and headers)
-* binutils (`libopcode.so` and `libbfd.so` in particular)
+* make
 
-Addinional dependences to build:
+Note that you may need to build `steam_api.dll.so` if the `sf_install` script
+won't be able to find matching precompiled library. The script will try to do
+the job for you, but it needs the build dependencies installed in your system to
+succeed.
+
+## Build dependences
+All usage dependencies plus
+
+* nim compiler of version 0.18.0 or higher
+* binutils (`libopcode.so` and `libbfd.so` in particular)
 * binutils-devel (including `bfd.h` and `dis-asm.h`)
 
 ## Usage
@@ -37,9 +45,9 @@ Addinional dependences to build:
 This is a common usage scenario of SteamForwarder for users.
 Some hints for experts can be found in the section below.
 
-* Download redist.tar.bz2 from latest release of SteamForwarder from releases page
-* Unpack it to the folder you want
-* Open the terminal in the folder SteamForwarder was unpacked
+* Download redist.tar.bz2 from latest release of SteamForwarder at the releases page.
+* Unpack it to the folder you want.
+* Open a terminal in the folder the `sf_install` script was unpacked (`share/SteamForwarder` or `bin`).
 * Type `python3 sf_install --help` to learn command line options of installer tool.
 * Launch your linux steam client if you decided to use `--steamnative` option, otherwise close the steam client if it is running (it may conflict with the steamcmd).
 * Use `sf_install` to install your windows game. E.g. for Paladins it command might look like `python3 sf_install 444090`. The steam AppId of the game can be found in the url of the game page on the steam store site.

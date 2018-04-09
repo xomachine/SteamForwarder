@@ -89,6 +89,8 @@ class SteamNativeInterface(SteamInterface):
       while (len(read) == 0 or read[0] != '}') and (len(select([fd], [], [], 1.0)[0]) > 0):
         read = fd.readline()
         answer+=read
+    if answer.find("requesting...") >= 0:
+      return self.getAppInfo()
     self.appinfo = parse_app_info(answer, self.appid)
     return self.appinfo
   def appUpdate(self):
