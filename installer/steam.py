@@ -7,12 +7,13 @@ import subprocess
 import os
 
 def findReader(pid):
-  link = os.readlink("/proc/" + pid + "/fd/1")
+  link = os.readlink("/proc/" + pid + "/fd/2")
   for p in iglob("/proc/*/fd/0"):
     if os.readlink(p) == link:
       rpid = int(p.split('/')[2])
       return rpid
-  raise Exception("Reader not found")
+  raise Exception("Can not find a reader of the steam's stderr pipe! " +
+                  "Please remove --steamnative and install steamcmd.")
   
 def findInputPipe(pid):
   for p in iglob("/proc/"+pid+"/fd/*"):
