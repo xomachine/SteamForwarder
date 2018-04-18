@@ -31,6 +31,8 @@ class SteamNativeInterface(SteamInterface):
     self.appid = config['appid']
     self.config = config
     self.scriptheader = " +app_license_request " + str(self.appid) + " "
+    print("WARNING! You are using experimental feature --steamnative!")
+    print("In case of any problems please remove --steamnative flag and install steamcmd.")
     print("Connecting to steam instance...")
     self.pid = findSteamPid()
     if self.pid == None or self.pid == "":
