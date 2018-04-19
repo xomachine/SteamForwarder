@@ -1,20 +1,11 @@
 from installer.steaminterface import SteamInterface,  parse_app_info, move_over
-from contextlib import contextmanager
-from signal import SIGSTOP, SIGCONT
-from glob import iglob
+from installer.responsereader import selectReader
 from select import select
+from glob import iglob
+from time import sleep
 import subprocess
 import os
 
-def findReader(pid):
-  link = os.readlink("/proc/" + pid + "/fd/2")
-  for p in iglob("/proc/*/fd/0"):
-    if os.readlink(p) == link:
-      rpid = int(p.split('/')[2])
-      return rpid
-  raise Exception("Can not find a reader of the steam's stderr pipe! " +
-                  "Please remove --steamnative and install steamcmd.")
-  
 def findInputPipe(pid):
   for p in iglob("/proc/"+pid+"/fd/*"):
     link = os.readlink(p)
@@ -38,25 +29,23 @@ class SteamNativeInterface(SteamInterface):
     if self.pid == None or self.pid == "":
       print("Can not find steam! Is it running?")
       quit(1)
-    self.rpid = findReader(self.pid)
-    if self.rpid == None or self.rpid == "":
-      print("Can not find steam stdout reader! Is steam running from standart script?")
-      quit(1)
+    print("Steam process found")
+    print("PID:",  self.pid)
+    self.reader = selectReader(self.pid)
     self.commandpipe = findInputPipe(self.pid)
+    print("Command pipe:",  self.commandpipe)
     if self.commandpipe == None or self.commandpipe == "":
       print("Can not find steam input pipe (steam.pipe)! Did it renamed?")
       quit(1)
     self.vollist = list()
     self.volumes = self.getVolumes()
-    print("Steam process found")
-    print("PID:",  self.pid)
-    print("Command pipe:",  self.commandpipe)
-    print("Output reader PID:",  self.rpid)
     print("Volumes:", self.volumes)
 
   def getVolumes(self):
     result = list()
-    with self.steamOut() as out:
+    answered = False
+    timer = 0
+    with self.reader.steamOut() as out:
       self.steamIn("+install_folder_list")
       read = ""
       while len(select([out], [], [], 1.0)[0]) > 0:
@@ -67,14 +56,16 @@ class SteamNativeInterface(SteamInterface):
           endp = read.rfind('"')
           path = read[startp:endp]
           result.append(path)
+          answered = True
+        elif read == "":
+          if answered:
+            break
+          if timer > 10:
+            raise Exception("Timeout waiting answer from steam!")
+          sleep(0.5)
+          timer += 1
     return result
 
-  @contextmanager
-  def steamOut(self):
-    with open('/proc/'+self.pid+'/fd/1', "r") as fd:
-      os.kill(self.rpid, SIGSTOP)
-      yield fd
-      os.kill(self.rpid, SIGCONT)
   def steamIn(self, commands):
     with open(self.commandpipe,  "w") as wfd:
       wfd.write("steam steam://open/console/ ")
@@ -83,7 +74,7 @@ class SteamNativeInterface(SteamInterface):
       wfd.flush()
   def getAppInfo(self):
     answer = ""
-    with self.steamOut() as fd:
+    with self.reader.steamOut() as fd:
       self.steamIn("+app_info_print "+str(self.appid))
       read = ""
       while (len(read) == 0 or read[0] != '"') and (len(select([fd], [], [], 1.0)[0]) > 0):
@@ -96,6 +87,7 @@ class SteamNativeInterface(SteamInterface):
       return self.getAppInfo()
     self.appinfo = parse_app_info(answer, self.appid)
     return self.appinfo
+
   def appUpdate(self):
     self.steamIn(self.scriptheader + "+@sSteamCmdForcePlatformType windows +app_install " +
                          str(self.appid) + " " + str(self.config["volume"]))
@@ -104,6 +96,7 @@ class SteamNativeInterface(SteamInterface):
               "and additional --no-download argument.")
     self.steamIn( "+@sSteamCmdForcePlatformType linux")
     quit()
+
   def depotDownload(self):
     if len(self.volumes) == 0:
       print("Can not obtain steam install folders! Please use steamcmd based method to download the game!")
@@ -121,7 +114,7 @@ class SteamNativeInterface(SteamInterface):
       depots.add(str(k))
     paths = []
     print(depots)
-    with self.steamOut() as fd:
+    with self.reader.steamOut() as fd:
       self.steamIn(self.scriptheader + script)
       read = ""
       print("Waiting for steam to download the depot... It could take a LOT of time...")
@@ -148,5 +141,4 @@ class SteamNativeInterface(SteamInterface):
           print(read)
     os.makedirs(rs_location, exist_ok=True)
     for path in paths:
-      #for sub in os.listdir(path):
       move_over(path, rs_location)
