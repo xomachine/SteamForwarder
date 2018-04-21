@@ -1,4 +1,5 @@
 from os.path import join, dirname, isfile, abspath
+from sys import stdout
 from os import walk, listdir, symlink
 from subprocess import run
 from tempfile import TemporaryDirectory
@@ -48,11 +49,15 @@ def findMatchingLibrary(gamelocation):
                     " Ensure that winedump exists in the system.")
   versionlist = listdir("versions")
   versionlist.sort()
+  print("Searching for precompiled version of steam_api.dll.so...")
   for version in versionlist:
+    stdout.write(version+"...")
     predir = join("versions", version)
     prefile = join(predir, "steam_api.orig_spec")
     if isfile(prefile) and compare_specs(origspecfile, prefile):
+      print("Found")
       return abspath(predir)
+    print("MISS")
   run(["make", "DLL="+esc(steamdll), "clean"])
   fixedspec = join(gamelocation, "steam_api.spec")
   with TemporaryDirectory() as tmpdir:
