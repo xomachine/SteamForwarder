@@ -23,6 +23,14 @@ def find_steamapi_dll(installdir):
         "the game is incompatible with SteamForwarder")
   exit(1)
 
+def detectSteamAppsInVolume(voldir):
+  for thedir in os.listdir(voldir):
+    steamappsdir = os.path.join(voldir, thedir)
+    if re.match("[Ss]team[Aa]pps",thedir) and os.path.isdir(steamappsdir):
+      return steamappsdir
+  raise Exception("Can not find steamapps directory in the volume folder: " +
+                  voldir)
+
 def get_app_config_http(appid):
   namere = re.compile("""<td itemprop="name">(?P<name>[^<>]+)</td>""")
   startinfore = re.compile("""<tr>[\n\s]*
@@ -215,9 +223,7 @@ if config_args.store:
 if config_args.nodl and not config_args.steamapps is None:
   steamapps = config_args.steamapps
 else:
-  steamapps = os.path.join(steaminterface.volumes[config["volume"]],
-                           "steamapps")
-
+  steamapps = detectSteamAppsInVolume(steaminterface.volumes[config['volume']])
 print("Obtaining app info...")
 try:
   appinfos = steaminterface.getAppInfo()
