@@ -97,7 +97,7 @@ class SteamNativeInterface(SteamInterface):
     self.steamIn( "+@sSteamCmdForcePlatformType linux")
     quit()
 
-  def depotDownload(self):
+  def depotDownload(self, rs_location):
     if len(self.volumes) == 0:
       print("Can not obtain steam install folders! Please use steamcmd based method to download the game!")
       quit(1)
@@ -106,7 +106,6 @@ class SteamNativeInterface(SteamInterface):
     else:
       print("No volume specified, using default (0)")
       vol = 0
-    rs_location = self.volumes[vol] + "/steamapps/common/" + self.appinfo["installdir"] + "/"
     script = ""
     depots = set()
     for k, v in self.appinfo["depots"].items():

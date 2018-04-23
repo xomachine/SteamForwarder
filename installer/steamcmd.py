@@ -51,9 +51,7 @@ app_update {0} validate
         result.append(path)
     return result
 
-  def depotDownload(self):
-    rs_location = (self.config["steamapps"] + '/common/' +
-                           self.appinfo["installdir"] + '/')
+  def depotDownload(self, rs_location):
     print('Preparing depot downloader...')
     os.environ['LD_PRELOAD'] = self.config['depotpath'] + '/steamclient.so'
     os.symlink(self.config['steamcmdclient'], os.environ['LD_PRELOAD'], True)

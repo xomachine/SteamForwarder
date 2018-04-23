@@ -244,7 +244,7 @@ rs_location = steamapps + '/common/' + appinfos["installdir"] + '/'
 if not config_args.nodl:
   print("Downloading " + appinfos["name"] + " via steamcmd...")
   if config_args.depot:
-    steaminterface.depotDownload()
+    steaminterface.depotDownload(rs_location)
   else:
     steaminterface.appUpdate()
 
