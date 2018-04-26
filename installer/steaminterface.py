@@ -106,9 +106,9 @@ def parse_app_info(steam_json,  appid):
       appinfos['regfile'] = makeRegFile(installactions['Registry'], curlang)
     appinfos['install'] = appinfo['install']
   for k, v in appinfo['depots'].items():
-    if not 'config' in v:
+    if not 'manifests' in v:
       continue
-    elif (('Language' in v['config'] and
+    elif ((not 'config' in v) or ('Language' in v['config'] and
            v['config']['Language'] == curlang) or
           (not 'oslist' in v['config']) or
           (v['config']['oslist'] == 'windows')):
