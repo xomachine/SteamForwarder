@@ -105,7 +105,10 @@ def parse_app_info(steam_json,  appid):
     if 'Registry' in installactions:
       appinfos['regfile'] = makeRegFile(installactions['Registry'], curlang)
     appinfos['install'] = appinfo['install']
+  print("Depots related to the game:")
   for k, v in appinfo['depots'].items():
+    if 'name' in v:
+      print(k + ": " + v['name'])
     if not 'manifests' in v:
       continue
     elif ((not 'config' in v) or ('Language' in v['config'] and
