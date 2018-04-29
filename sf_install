@@ -141,6 +141,9 @@ class printvollist(argparse.Action):
       print(p)
     quit(0)
 
+def parselist(inp):
+  return inp.split(',')
+
 aparser = argparse.ArgumentParser(description="The windows steam games " +
                                   "installation script")
 aparser.add_argument('--steamnative', default=False, dest='steamnative',
@@ -157,6 +160,8 @@ aparser.add_argument('-w', '--wineprefix', type=str, dest='wineprefix',
 aparser.add_argument('-l', '--login', help='your login at steam ' +
                      '(may be needed only without --steamnative)', type=str,
                      dest='login', default=config['login'])
+aparser.add_argument('--with-dlc', help='download dlc content from depot',
+                     dest='dlcdepot', default=list(), type=parselist)
 aparser.add_argument('--depot', help='download directly from steam depot',
                      dest='depot', default=False, action='store_true')
 aparser.add_argument('--depot-path', type=str, default=config["depotpath"],
@@ -198,6 +203,7 @@ config['overlaypath'] = config_args.overlaypath
 config['steamcmdclient'] = config_args.steamclient
 config['depotpath'] = config_args.depotpath
 config['volume'] = config_args.volume
+config['dlcs'] = config_args.dlcdepot
 appid = config_args.appid
 config['appid'] = appid
 

@@ -109,6 +109,11 @@ class SteamNativeInterface(SteamInterface):
     script = ""
     depots = set()
     for k, v in self.appinfo["depots"].items():
+      if 'dlcappid' in v:
+        print("DLC depot: " + str(k))
+        if not (k in self.config['dlcs']):
+          print("Skipping DLC " + str(k) + ", use --with-dlc to download it")
+          continue
       script += " +download_depot " + str(self.appid) + " " + str(k)
       depots.add(str(k))
     paths = []
