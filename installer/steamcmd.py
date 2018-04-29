@@ -62,6 +62,10 @@ app_update {0} validate
         if not (k in self.config['dlcs']):
           print("Skipping DLC " + str(k) + ", use --with-dlc to download it")
           continue
+      elif self.config['dlconly']:
+        print("Skipping the game depot " + k +
+              " since --dlc-only option passed")
+        continue
       print('Adding depot ' + str(k) + ' to schedule...')
       steam_script += """
 download_depot {0} {1}

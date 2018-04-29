@@ -162,6 +162,9 @@ aparser.add_argument('-l', '--login', help='your login at steam ' +
                      dest='login', default=config['login'])
 aparser.add_argument('--with-dlc', help='download dlc content from depot',
                      dest='dlcdepot', default=list(), type=parselist)
+aparser.add_argument('--dlc-only', help='download only dlc depot, without ' +
+                     'the game itself',
+                     dest='dlconly', default=False, action='store_true')
 aparser.add_argument('--depot', help='download directly from steam depot',
                      dest='depot', default=False, action='store_true')
 aparser.add_argument('--depot-path', type=str, default=config["depotpath"],
@@ -204,6 +207,7 @@ config['steamcmdclient'] = config_args.steamclient
 config['depotpath'] = config_args.depotpath
 config['volume'] = config_args.volume
 config['dlcs'] = config_args.dlcdepot
+config['dlconly'] = config_args.dlconly
 appid = config_args.appid
 config['appid'] = appid
 

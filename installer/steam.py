@@ -114,6 +114,10 @@ class SteamNativeInterface(SteamInterface):
         if not (k in self.config['dlcs']):
           print("Skipping DLC " + str(k) + ", use --with-dlc to download it")
           continue
+      elif self.config['dlconly']:
+        print("Skipping the game depot " + k +
+              " since --dlc-only option passed")
+        continue
       script += " +download_depot " + str(self.appid) + " " + str(k)
       depots.add(str(k))
     paths = []
@@ -122,7 +126,7 @@ class SteamNativeInterface(SteamInterface):
       self.steamIn(self.scriptheader + script)
       read = ""
       print("Waiting for steam to download the depot... It could take a LOT of time...")
-      while True:
+      while len(depots) > 0:
         if len(select([fd], [], [], 2.0)[0]) == 0:
           continue
         read = fd.readline()
