@@ -12,25 +12,29 @@ def find_steamapi_dll(installdir):
         "the game is incompatible with SteamForwarder")
   exit(1)
 
+def read_spec(filepath):
+  ## Reads spec file and returns a list of function names found in it
+  result = set()
+  with open(filepath, "r") as fd:
+    for line in fd.readlines():
+      if line.strip(" \n") == "" or line.startswith("#"):
+        continue
+      result.add(line.split()[2]) # №(0) stub(1) Name(2)
+  return result
+
 def compare_specs(gamespec, precompiledspec):
-  with open(gamespec, "r") as gamespecfd:
-    with open(precompiledspec, "r") as prefd:
-      for line in gamespecfd.readlines():
-        if line.strip(" \n") == "" or line.startswith("#"):
-          continue
-        fname = line.split()
-        preline = ""
-        while preline.strip("\n ") == "" or preline.startswith("#"):
-          preline = prefd.readline()
-        prefname = preline.split()
-        if fname != prefname:
-          return False
-  return True
+  ## Compares two specs and returns how many functions from first spec
+  ## have found in second one relative to total amount of functions in the
+  ## first spec
+  gs = read_spec(gamespec)
+  pcs = read_spec(precompiledspec)
+  intersects = gs.intersection(pcs)
+  return len(intersects)/len(gs)
 
 def esc(path):
   return path.replace(" ", "\\ ")
 
-def findMatchingLibrary(gamelocation):
+def findMatchingLibrary(gamelocation, strict):
   if " " in gamelocation:
     with TemporaryDirectory() as tmpdir:
       newgamelocation = join(tmpdir, "thegame")
@@ -38,7 +42,7 @@ def findMatchingLibrary(gamelocation):
         raise Exception("Can not handle the whitespaces in path. " +
                         "The temporary directory also contains whitespaces!")
       symlink(gamelocation, newgamelocation)
-      return findMatchingLibrary(newgamelocation)
+      return findMatchingLibrary(newgamelocation, strict)
   steamdll = find_steamapi_dll(gamelocation)
   print("Found steam_api.dll: "+steamdll)
   origspecfile = join(dirname(steamdll), "steam_api.orig_spec")
@@ -50,14 +54,25 @@ def findMatchingLibrary(gamelocation):
   versionlist = listdir("versions")
   versionlist.sort()
   print("Searching for precompiled version of steam_api.dll.so...")
+  totalcoverage = 0.0
+  bestpath = ""
   for version in versionlist:
     stdout.write(version+"...")
     predir = join("versions", version)
     prefile = join(predir, "steam_api.orig_spec")
-    if isfile(prefile) and compare_specs(origspecfile, prefile):
-      print("Found")
-      return abspath(predir)
-    print("MISS")
+    if isfile(prefile):
+      coverage = compare_specs(origspecfile, prefile)
+      if coverage == 1.0:
+        print("Found")
+        return abspath(predir)
+      elif coverage > totalcoverage:
+        totalcoverage = coverage
+        bestpath = abspath(predir)
+      print("[%0.1f%% matching]" % (coverage * 100))
+    else:
+      print("No such file")
+  if not strict and totalcoverage > 0:
+    return bestpath
   run(["make", "DLL="+esc(steamdll), "clean"])
   fixedspec = join(gamelocation, "steam_api.spec")
   with TemporaryDirectory() as tmpdir:

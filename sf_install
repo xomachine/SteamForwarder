@@ -167,6 +167,9 @@ aparser.add_argument('--dlc-only', help='download only dlc depot, without ' +
                      dest='dlconly', default=False, action='store_true')
 aparser.add_argument('--depot', help='download directly from steam depot',
                      dest='depot', default=False, action='store_true')
+aparser.add_argument('--strict', help='do not try to match the precompiled ' +
+                     'library partialy, compile the new one instead',
+                     dest='strict', default=False, action='store_true')
 aparser.add_argument('--depot-path', type=str, default=config["depotpath"],
                       help='path where temporary data will be stored while ' +
                       'depot downloading (needed only without --steamnative)',
@@ -208,6 +211,7 @@ config['depotpath'] = config_args.depotpath
 config['volume'] = config_args.volume
 config['dlcs'] = config_args.dlcdepot
 config['dlconly'] = config_args.dlconly
+config['strict'] = config_args.strict
 appid = config_args.appid
 config['appid'] = appid
 
@@ -271,7 +275,7 @@ if 'regfile' in appinfos:
       env={"WINEPREFIX": config["wineprefix"], "WINEARCH": "win32"})
     p.wait()
 print("Generating the steam_api.dll wrapper just for this game...")
-libsteamapi = findMatchingLibrary(rs_location)
+libsteamapi = findMatchingLibrary(rs_location, config['strict'])
 print("Generating runscripts...")
 for name, appinfo in appinfos["infos"].items():
   runscript = generate_runscript(appinfo, config, libsteamapi, rs_location, steamapps)
