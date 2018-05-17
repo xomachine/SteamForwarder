@@ -85,13 +85,15 @@ $(DLLPARSER):
 %.dll.so: %.spec $(NIMSRCS) $(SRCDIR)/steam_api.nim $(SIGNATURESFILE)
 	$(NIMC) c -d:specname=$< -d:cdfile=$(SIGNATURESFILE) \
             --passC:"-m$(ARCH)" --passL:"-m$(ARCH)" --cpu:$(NIMARCH) \
-            --nimcache:`mktemp -d --tmpdir=$(CACHEDIR) nimcache.XXXX` -o:$@ \
+            --nimcache:$@.nimcache -o:$@ \
             steam_api.nim
 
 %.spec: %.orig_spec | $(DLLPARSER)
-	$(DLLPARSER) $(VERSIONSDIR) < $< > $@
 ifeq ($(ARCH), 64)
+	$(DLLPARSER) $(VERSIONSDIR) "$(VERSIONSDIR)64" < $< > $@
 	sed -i 's/versions/versions64/' $@
+else
+	$(DLLPARSER) $(VERSIONSDIR) < $< > $@
 endif
 
 %.orig_spec: %.dll
@@ -109,4 +111,4 @@ fullclean: clean
 
 clean:
 	$(RM) -r $(CACHEDIR)/nimcache.*
-	$(RM) $(SCRDIR)/$(OUTPUTDLL) steam_api_main.c
+	$(RM) $(SRCDIR)/$(OUTPUTDLL) steam_api_main.c

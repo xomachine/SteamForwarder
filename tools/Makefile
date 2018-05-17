@@ -16,8 +16,8 @@ clean:
 
 $(SIGSEARCH):
 	$(NIMC) c $(ADDITIONALARGS) -o:$(SIGSEARCH) \
-	--nimcache:`mktemp -d --tmpdir=$(SRCDIR) nimcache.XXXX` $(SRCDIR)/sigsearch.nim
+	--nimcache:nimcache.sigsearch $(SRCDIR)/sigsearch.nim
 
 $(DLLPARSER):
 	$(NIMC) c $(ADDITIONALARGS) -o:$(DLLPARSER) \
-	--nimcache:`mktemp -d --tmpdir=$(SRCDIR) nimcache.XXXX` $(SRCDIR)/dllparser.nim
+	--nimcache:nimcache.dllparser $(SRCDIR)/dllparser.nim
