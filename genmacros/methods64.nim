@@ -57,7 +57,7 @@ proc eachInt(k: string, a: seq[StackState], sink: NimNode): NimNode =
     methods.incl(v.depth.uint8)
     var tq = newNimNode(nnkTripleStrLit)
     tq.strVal = """
-    pop %rbp # necessary because compiler ignores noAsmStackFrame somehow
+    # pop %rbp # necessary because compiler ignores noAsmStackFrame somehow
     # xchg %rcx, %rdx # it looks like wine already performs call conversion
     mov $0x""" & i.toHex & """, %r10 # The virtual method number
     jmp `""" & pseudoMethodPrefix & $v.depth & """`
