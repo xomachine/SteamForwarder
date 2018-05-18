@@ -26,7 +26,7 @@ proc makePseudoMethod(stack: uint8): NimNode {.compileTime.} =
   result.body = quote do:
     let mnum = 0
     asm """
-    mov %%r10, %[mnum]
+    mov %%r11, %[mnum]
     :[mnum]"=g"(`mnum`)
     ::
 """
@@ -59,7 +59,7 @@ proc eachInt(k: string, a: seq[StackState], sink: NimNode): NimNode =
     tq.strVal = """
     # pop %rbp # necessary because compiler ignores noAsmStackFrame somehow
     # xchg %rcx, %rdx # it looks like wine already performs call conversion
-    mov $0x""" & i.toHex & """, %r10 # The virtual method number
+    mov $0x""" & i.toHex & """, %r11 # The virtual method number
     jmp `""" & pseudoMethodPrefix & $v.depth & """`
 """
     let asmstmt = newTree(nnkAsmStmt, newEmptyNode(), tq)
