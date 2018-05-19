@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
+from stat import S_IRWXU, S_IRWXG, S_IROTH
 from urllib.request import urlopen, Request
 from getpass import getpass
 from collections import defaultdict
@@ -282,6 +283,7 @@ for name, appinfo in appinfos["infos"].items():
   runscript_location = (rs_location + name + '.sh')
   with open(runscript_location, "w") as f:
     f.write(runscript)
+  os.chmod(runscript_location, S_IRWXU | S_IRWXG | S_IROTH)
 print("Placing steam_appid.txt to the game location...")
 with open(rs_location + '/steam_appid.txt', "w") as f:
   f.write(str(appid))
