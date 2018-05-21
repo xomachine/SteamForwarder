@@ -136,7 +136,7 @@ proc eachInt(k: string, a: seq[StackState], sink: NimNode): NimNode =
     add $0x4, %esp # remove number of method from the stack
     pop %ecx # pop object reference back
     pop %ebp # well compiller stores ebp regardless, so we need to pop it back
-    ret $""" & $(v.depth-4) &  """ # clean arguments from the stack and return
+    ret $""" & $(v.depth-4) & """ # clean arguments from the stack and return
 """
     var tstr = newNimNode(nnkTripleStrLit)
     tstr.strVal = asmcode
