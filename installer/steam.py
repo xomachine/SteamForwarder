@@ -72,7 +72,7 @@ class SteamNativeInterface(SteamInterface):
       wfd.write(commands)
       wfd.write("\n")
       wfd.flush()
-  def getAppInfo(self):
+  def getAppInfo(self, again = False):
     answer = ""
     with self.reader.steamOut() as fd:
       self.steamIn("+app_info_print "+str(self.appid))
@@ -83,8 +83,10 @@ class SteamNativeInterface(SteamInterface):
       while (len(read) == 0 or read[0] != '}') and (len(select([fd], [], [], 1.0)[0]) > 0):
         read = fd.readline()
         answer+=read
-    if answer.find("requesting...") >= 0:
-      return self.getAppInfo()
+    if read[0] != '}' and not again:
+      print("Waiting 10 seconds until steam will retrieve app info...")
+      sleep(10)
+      return self.getAppInfo(again=True)
     self.appinfo = parse_app_info(answer, self.appid)
     return self.appinfo
 
