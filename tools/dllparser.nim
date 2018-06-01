@@ -1,4 +1,4 @@
-from os import paramCount, paramStr, walkFiles, pcFile
+from os import paramCount, paramStr, walkFiles, pcFile, dirExists, fileExists
 from tables import OrderedTable, `[]`, contains, len, `$`, initTable, `[]=`,
                    values
 from spec import readSpecFile, SpecFile
@@ -15,12 +15,17 @@ type
     path: string
     handle: BFD
 
-proc findBestSOLib(verfolder: string, specdata: SpecFile): MatchingLib =
+proc findBestSOLib(verfolder, check: string, specdata: SpecFile): MatchingLib =
   ## Iterates over all subfolder in `verfolder` and parses symbols from
   ## libsteam_api.so located there. Then compares the parsed symbols with
   ## given `specdata` and returns best libsteam_api.so matching.
   var maxcount = 0
   for filename in walkFiles(verfolder & "/*/libsteam_api.so"):
+    if check.dirExists() and
+       not fileExists(check & "/" & filename[verfolder.len..^1]):
+        stderr.writeLine("File does not exist " & check & "/" &
+                         filename[verfolder.len-1..^1])
+        continue
     let bfile = bfd_open(filename, nil)
     if not bfile.init():
       quit("Can not open " & filename)
@@ -43,15 +48,16 @@ proc findBestSOLib(verfolder: string, specdata: SpecFile): MatchingLib =
         result = (path: filename, handle: bfile)
 
 
-assert(paramCount() == 1, "This program requires one and only one parameter: " &
+assert(paramCount() in 1..2, "This program requires one and only one parameter: " &
                           "versions folder with various versions of " &
                           "libsteam_api.so in subfolders. It also reads spec " &
                           "file from stdin.")
 let specdata = stdin.readSpecFile()
 stderr.writeLine("Spec file: loaded " & $specdata.len & " entries")
 let versionfolder = paramStr(1)
+let checkfolder = if paramCount() > 1: paramStr(2) else: ""
 bfd_init()
-let (libpath, bfile) = findBestSOLib(versionfolder, specdata)
+let (libpath, bfile) = findBestSOLib(versionfolder, checkfolder, specdata)
 let startAddress = bfd_get_start_address(bfile)
 let symbols = bfile.readSymbolTable()
 let textSection = bfile.bfd_get_section_by_name(".text")

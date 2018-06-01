@@ -29,6 +29,33 @@ proc genCall*(name: string, n: int): NimNode =
     args[i] = newIdentNode("argument" & $i)
   newTree(nnkCall, args)
 
+proc genAsmNativeCall64*(name: string, n: int): NimNode =
+  const mapping = ["rdi", "rsi", "rdx", "rcx", "r8", "r9"]
+  var str = newNimNode(nnkTripleStrLit)
+  var pushes = ""
+  var asigns = newSeq[string]()
+  asigns.add("[name]\"g\"(`" & name & "`)")
+  var clubbers = newSeq[string]()
+  clubbers.add("\"cc\"")
+  clubbers.add("\"rsp\"")
+  clubbers.add("\"rax\"")
+  for i in 1..n:
+    asigns.add("[argument" & $i & "]\"g\"(`argument" & $i & "`)")
+    if i <= mapping.len:
+      pushes = pushes & "mov %[argument" & $i & "], %%" & mapping[i-1] & "\n"
+      clubbers.add("\"" & mapping[i-1] & "\"")
+    else:
+      pushes = pushes & "push %[argument" & $i & "]\n"
+  str.strVal = pushes & """
+  call %[name]
+  mov %%rax, %[result]
+  :[result]"=g"(`tmpvar`)
+  :""" & asigns.join(", ") & """
+  :""" & clubbers.join(", ")
+  let asmstmt = newTree(nnkAsmStmt, newEmptyNode(), str)
+  quote do:
+    (var tmpvar: uint64; `asmstmt`; tmpvar)
+
 proc genAsmHiddenCall*(name, obj: string, n: int): NimNode =
   ## Generates the call of the method with name `name` of object `obj` and
   ## `n` number of arguments which have names argument1, argument2 etc...

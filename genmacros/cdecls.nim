@@ -27,7 +27,7 @@ macro generateLinuxDecls*(specs: static[SpecFile]): untyped =
     if s.swap:
       params[0] = bindSym("Dummy")
     var decl = quote do:
-      proc `name`() {.cdecl, importc: `actualname`.}
+      proc `name`() {.codegenDecl:"extern $# $#$#", importc: `actualname`.}
     decl[3] = params
     result.add(decl)
   when defined(debug):

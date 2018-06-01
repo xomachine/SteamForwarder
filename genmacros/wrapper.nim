@@ -24,14 +24,14 @@ proc wrapIfClass(address: pointer, checker: proc(a: pointer): bool): pointer =
     trace("invalid\n")
     return address
   trace("vtable...")
-  let tinfoaddr = cast[ptr pointer](vtableaddr-4)[]
+  let tinfoaddr = cast[ptr pointer](vtableaddr-sizeof(pointer))[]
   trace("[%p]->", tinfoaddr)
   if not checker(tinfoaddr):
     trace("invalid\n")
     return address
   trace("typeinfo...")
-  let strptraddr = cast[ptr pointer](tinfoaddr+4)
-  trace("[%p]->", tinfoaddr + 4)
+  let strptraddr = cast[ptr pointer](tinfoaddr+sizeof(pointer))
+  trace("[%p]->", tinfoaddr + sizeof(pointer))
   if not checker(strptraddr[]):
     trace("invalid\n")
     return address

@@ -5,9 +5,19 @@ WINEDUMP              ?= winedump
 MV                    ?= mv
 RM                    ?= rm
 MAKE                  ?= make
+ARCH                  ?= 32
+NOTUNE                ?= 0
+ifeq ($(ARCH), 64)
+  LIB_POSTFIX = 64
+  NIMARCH = amd64
+else
+  LIB_POSTFIX =
+  NIMARCH = i386
+endif
 CACHEDIR              ?= $(SRCDIR)
 STEAMCLIENT           ?= $(SRCDIR)/steamclient.so
 SIGNATURESFILE        ?= $(SRCDIR)/signatures.txt
+DLL                   ?= $(SRCDIR)/steam_api$(LIB_POSTFIX).dll
 DLLPARSER             ?= $(SRCDIR)/tools/dllparser
 SIGSEARCH             ?= $(SRCDIR)/tools/sigsearch
 VERSIONSDIR           ?= $(SRCDIR)/versions
@@ -15,15 +25,6 @@ PREFIX                ?= /usr/local
 INSTALL               ?= install -Dm 755
 INSTALLDATA           ?= install -Dm 644
 
-ARCH                  ?= 32
-NOTUNE                ?= 0
-ifeq ($(ARCH), 64)
-  LIB_POSTFIX = 64
-  NIMARCH = x86
-else
-  LIB_POSTFIX =
-  NIMARCH = i386
-endif
 ifeq ($(NOTUNE), 1)
   TUNEOPTS = --opt:none --passC:'-mtune=generic'
 else
@@ -96,7 +97,12 @@ $(DLLPARSER):
             steam_api.nim
 
 %.spec: %.orig_spec | $(DLLPARSER)
+ifeq ($(ARCH), 64)
+	$(DLLPARSER) $(VERSIONSDIR) "$(VERSIONSDIR)64" < $< > $@
+	sed -i 's/versions/versions64/' $@
+else
 	$(DLLPARSER) $(VERSIONSDIR) < $< > $@
+endif
 
 %.orig_spec: %.dll
 	cd "`dirname "$<"`"; \
@@ -113,4 +119,4 @@ fullclean: clean
 
 clean:
 	$(RM) -r $(CACHEDIR)/nimcache.*
-	$(RM) $(SCRDIR)/$(OUTPUTDLL) steam_api_main.c
+	$(RM) $(SRCDIR)/$(OUTPUTDLL) steam_api_main.c

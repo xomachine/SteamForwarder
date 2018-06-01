@@ -40,30 +40,50 @@ proc run(obj: ptr WrappedCallback, p: pointer) =
   trace("[%p](%p)\n", obj, p)
   let originRun = (obj.origin.vtable + 0)[]
   let originObj = obj.origin
-  asm """
-    mov %[obj], %%ecx
-    push %[p]
-    call %[mcall]
-    ::[obj]"g"(`originObj`), [p]"g"(`p`), [mcall]"g"(`originRun`)
-    :"eax", "ecx", "esp", "cc"
-  """
+  when hostCPU == "i386":
+    asm """
+      mov %[obj], %%ecx
+      push %[p]
+      call %[mcall]
+      ::[obj]"g"(`originObj`), [p]"g"(`p`), [mcall]"g"(`originRun`)
+      :"eax", "ecx", "esp", "cc"
+    """
+  else:
+    asm """
+      mov %[obj], %%rcx
+      mov %[p], %%rdx
+      call %[mcall]
+      ::[obj]"g"(`originObj`), [mcall]"g"(`originRun`), [p]"g"(`p`)
+      :"cc", "rcx", "rdx"
+    """
 
 proc run2(obj: ptr WrappedCallback, p: pointer, iofail: bool, scall: uint64) =
   ## Second CCallback virtual method
   trace("[%p](%p, %p, %p)\n", obj, p, iofail, scall)
-  let originRun = (obj.origin.vtable + 4)[]
+  let originRun = (obj.origin.vtable + pointer.sizeof)[]
   let originObj = obj.origin
-  asm """
-    mov %[obj], %%ecx
-    push %[scall]
-    push %[iofail]
-    push %[p]
-    call %[originRun]
-    ::[obj]"g"(`originObj`), [scall]"g"(`scall`), [iofail]"g"(`iofail`), [p]"g"(`p`), [originRun]"g"(`originRun`)
-    : "ecx", "eax", "esp", "cc"
-  """
+  when hostCPU == "i386":
+    asm """
+      mov %[obj], %%ecx
+      push %[scall]
+      push %[iofail]
+      push %[p]
+      call %[originRun]
+      ::[obj]"g"(`originObj`), [scall]"g"(`scall`), [iofail]"g"(`iofail`), [p]"g"(`p`), [originRun]"g"(`originRun`)
+      : "ecx", "eax", "esp", "cc"
+    """
+  else:
+    asm """
+      mov %[obj], %%rcx
+      mov %[p], %%rdx
+      mov %[iofail], %%r8
+      mov %[scall], %%r9
+      call %[mcall]
+      ::[obj]"g"(`originObj`), [mcall]"g"(`originRun`), [p]"g"(`p`), [iofail]"g"(`iofail`), [scall]"g"(`scall`)
+      :"cc", "rcx", "rdx", "r8", "r9"
+    """
 
-proc getCallbackSizeBytes(obj: ptr WrappedCallback): int32 =
+proc getCallbackSizeBytes(obj: ptr WrappedCallback): pointer =
   ## Third CCallback virtual method. It does not need to call original
   ## getCallbackSizeBytes because it is used to obtain the actually passed to
   ## the linux side object.
@@ -79,6 +99,8 @@ proc getCallbackSizeBytes(obj: ptr WrappedCallback): int32 =
     :"eax", "ecx", "esp", "cc"
   """
   trace(" = %d\n", result)
+  #trace("[%p]() = %d\n", obj, sizeof(WrappedCallback))
+  #return cast[pointer](sizeof(WrappedCallback))
 {.pop.}
 
 var vtable = [
