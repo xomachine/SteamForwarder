@@ -88,19 +88,19 @@ proc getCallbackSizeBytes(obj: ptr WrappedCallback): pointer =
   ## getCallbackSizeBytes because it is used to obtain the actually passed to
   ## the linux side object.
   trace("[%p]()\n", obj)
-  let originRun = (obj.origin.vtable + 8)[]
-  let originObj = obj.origin
-  asm """
-    mov %[obj], %%ecx
-    call %[mcall]
-    mov %%eax, %[result]
-    :[result]"=g"(`result`)
-    :[obj]"g"(`originObj`), [mcall]"g"(`originRun`)
-    :"eax", "ecx", "esp", "cc"
-  """
-  trace(" = %d\n", result)
-  #trace("[%p]() = %d\n", obj, sizeof(WrappedCallback))
-  #return cast[pointer](sizeof(WrappedCallback))
+  #let originRun = (obj.origin.vtable + pointer.sizeof()*2)[]
+  #let originObj = obj.origin
+  #asm """
+  #  mov %[obj], %%ecx
+  #  call %[mcall]
+  #  mov %%eax, %[result]
+  #  :[result]"=g"(`result`)
+  #  :[obj]"g"(`originObj`), [mcall]"g"(`originRun`)
+  #  :"eax", "ecx", "esp", "cc"
+  #"""
+  #trace(" = %d\n", result)
+  trace("[%p]() = %d\n", obj, sizeof(WrappedCallback))
+  return cast[pointer](sizeof(WrappedCallback))
 {.pop.}
 
 var vtable = [
