@@ -38,7 +38,11 @@ WINLIBS                 = $(wildcard $(SRCDIR)/versions/*/steam_api.dll)
 PREORIGS                = $(WINLIBS:%.dll=%.orig_spec)
 ORSPECS                 = $(wildcard $(SRCDIR)/versions/*/steam_api.orig_spec)
 PRESPECS                = $(ORSPECS:%.orig_spec=%.spec)
-PRETARGETS              = $(ORSPECS:%.orig_spec=%.dll.so)
+ifeq ($(ARCH), 64)
+  PRETARGETS              = $(ORSPECS:%.orig_spec=%64.dll.so)
+else
+  PRETARGETS              = $(ORSPECS:%.orig_spec=%.dll.so)
+endif
 INSTALLERSCRIPT         = $(wildcard $(SRCDIR)/installer/*.py)
 VERENDS                 = $(notdir $(VERFILES:%/libsteam_api.so=%))
 VERAVAILABLE            = $(notdir $(ORSPECS:%/steam_api.orig_spec=%))
@@ -96,13 +100,11 @@ $(DLLPARSER):
             --nimcache:`mktemp -d --tmpdir=$(CACHEDIR) nimcache.XXXX` -o:$@ \
             steam_api.nim
 
-%.spec: %.orig_spec | $(DLLPARSER)
-ifeq ($(ARCH), 64)
+%64.spec: %.orig_spec | $(DLLPARSER)
 	$(DLLPARSER) $(VERSIONSDIR) "$(VERSIONSDIR)64" < $< > $@
 	sed -i 's/versions/versions64/' $@
-else
+%.spec: %.orig_spec | $(DLLPARSER)
 	$(DLLPARSER) $(VERSIONSDIR) < $< > $@
-endif
 
 %.orig_spec: %.dll
 	cd "`dirname "$<"`"; \
