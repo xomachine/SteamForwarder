@@ -88,8 +88,9 @@ def generate_manifest(appinfos):
 """ % (appinfos["id"], appinfos["name"], appinfos["installdir"])
   return manifest
 
-def generate_runscript(appinfo: LaunchInfo, config, libsteamapi, dlldir, steamapps):
+def generate_runscript(appinfo: LaunchInfo, config, ldpaths, dlldir, steamapps):
   print("...for " + appinfo.executable)
+  libsteamapi = ":".join(ldpaths)
   runscript = """
 #!/bin/bash
 export WINEPREFIX="{0}"
@@ -276,10 +277,10 @@ if 'regfile' in appinfos:
       env={"WINEPREFIX": config["wineprefix"], "WINEARCH": "win32"})
     p.wait()
 print("Generating the steam_api.dll wrapper just for this game...")
-libsteamapi = findMatchingLibrary(rs_location, config['strict'])
+ldpaths = findMatchingLibrary(rs_location, config['strict'])
 print("Generating runscripts...")
 for name, appinfo in appinfos["infos"].items():
-  runscript = generate_runscript(appinfo, config, libsteamapi, rs_location, steamapps)
+  runscript = generate_runscript(appinfo, config, ldpaths, rs_location, steamapps)
   runscript_location = (rs_location + name + '.sh')
   with open(runscript_location, "w") as f:
     f.write(runscript)

@@ -4,10 +4,15 @@ from os import walk, listdir, symlink
 from subprocess import run
 from tempfile import TemporaryDirectory
 
-def find_steamapi_dll(installdir):
+def find_steamapi_dlls(installdir):
+  result = list()
   for root, dirs, files in walk(installdir):
     if "steam_api.dll" in files:
-      return join(root, "steam_api.dll")
+      result.append(join(root, "steam_api.dll"))
+    if "steam_api64.dll" in files:
+      result.append(join(root, "steam_api64.dll"))
+  if len(result) > 0:
+    return result
   print("Can not find steam_api.dll inside the game directory! Probably, " +
         "the game is incompatible with SteamForwarder")
   exit(1)
@@ -43,15 +48,24 @@ def findMatchingLibrary(gamelocation, strict):
                         "The temporary directory also contains whitespaces!")
       symlink(gamelocation, newgamelocation)
       return findMatchingLibrary(newgamelocation, strict)
-  steamdll = find_steamapi_dll(gamelocation)
-  print("Found steam_api.dll: "+steamdll)
+  steamdlls = find_steamapi_dlls(gamelocation)
+  result = list()
+  for steamdll in steamdlls:
+    print("Found steam_api.dll: " + steamdll)
+    result.append(findForLib(gamelocation, steamdll, strict))
+  return result
+
+def findForLib(gamelocation, steamdll, strict):
+  postfix = ""
+  if steamdll.endswith("64.dll"):
+    postfix = "64"
   origspecfile = join(dirname(steamdll), "steam_api.orig_spec")
   print("Specfile will be generated: "+origspecfile)
-  run(["make", "DLL="+esc(steamdll), esc(origspecfile)])
+  run(["make", "ARCH="+postfix, "DLL="+esc(steamdll), esc(origspecfile)])
   if not isfile(origspecfile):
     raise Exception("Can not generate spec file for steam_api!" +
                     " Ensure that winedump exists in the system.")
-  versionlist = listdir("versions")
+  versionlist = listdir("versions" + postfix)
   versionlist.sort()
   print("Searching for precompiled version of steam_api.dll.so...")
   totalcoverage = 0.0
@@ -64,19 +78,20 @@ def findMatchingLibrary(gamelocation, strict):
       coverage = compare_specs(origspecfile, prefile)
       if coverage == 1.0:
         print("Found")
-        return abspath(predir)
+        return abspath(join("versions" + postfix, version))
       elif coverage > totalcoverage:
         totalcoverage = coverage
-        bestpath = abspath(predir)
+        bestpath = abspath(join("versions" + postfix, version))
       print("[%0.1f%% matching]" % (coverage * 100))
     else:
       print("No such file")
   if not strict and totalcoverage > 0:
     return bestpath
   run(["make", "DLL="+esc(steamdll), "clean"])
-  fixedspec = join(gamelocation, "steam_api.spec")
+  fixedspec = join(gamelocation, "steam_api" + postfix + ".spec")
   with TemporaryDirectory() as tmpdir:
     run(["make", "DLL="+esc(steamdll),
+                 "ARCH="+postfix,
                  "SPECDIR="+esc(gamelocation),
                  "SPECFILE="+esc(fixedspec),
                  "CACHEDIR="+esc(tmpdir),
@@ -85,5 +100,3 @@ def findMatchingLibrary(gamelocation, strict):
     raise Exception("Failed to compile steam_api.dll.so!")
   with open(fixedspec, "r") as f:
     return dirname(f.readline().strip("# \n"))
-
-
