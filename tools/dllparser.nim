@@ -19,13 +19,16 @@ proc findBestSOLib(verfolder, check: string, specdata: SpecFile): MatchingLib =
   ## Iterates over all subfolder in `verfolder` and parses symbols from
   ## libsteam_api.so located there. Then compares the parsed symbols with
   ## given `specdata` and returns best libsteam_api.so matching.
+  ## The `check` argument is a folder with 64-bit `libsteam_api.so` files
+  ## and the procedure will check if the file for such a version exists
+  ## in this folder before parsing. It should be equal to verfolder for
+  ## 32-bit libraries.
   var maxcount = 0
   for filename in walkFiles(verfolder & "/*/libsteam_api.so"):
-    if check.dirExists() and
-       not fileExists(check & "/" & filename[verfolder.len..^1]):
-        stderr.writeLine("File does not exist " & check & "/" &
-                         filename[verfolder.len-1..^1])
-        continue
+    let trueFilename = check & "/" & filename[verfolder.len..^1]
+    if check.dirExists() and not fileExists(trueFilename):
+      stderr.writeLine("File does not exist " & trueFilename)
+      continue
     let bfile = bfd_open(filename, nil)
     if not bfile.init():
       quit("Can not open " & filename)
@@ -42,20 +45,21 @@ proc findBestSOLib(verfolder, check: string, specdata: SpecFile): MatchingLib =
         discard result.handle.bfd_close()
       if specdata.len == counter:
         stderr.writeLine("Found exact match: " & filename)
-        return (path: filename, handle: bfile)
+        return (path: trueFilename, handle: bfile)
       else:
         maxcount = counter
-        result = (path: filename, handle: bfile)
+        result = (path: trueFilename, handle: bfile)
 
 
-assert(paramCount() in 1..2, "This program requires one and only one parameter: " &
+assert(paramCount() in 1..2, "This program requires one or two parameters: " &
                           "versions folder with various versions of " &
-                          "libsteam_api.so in subfolders. It also reads spec " &
-                          "file from stdin.")
+                          "libsteam_api.so in subfolders and one more same " &
+                          "folder for 64-bit libsteam_api.so. It also reads " &
+                          "a spec file from stdin.")
 let specdata = stdin.readSpecFile()
 stderr.writeLine("Spec file: loaded " & $specdata.len & " entries")
 let versionfolder = paramStr(1)
-let checkfolder = if paramCount() > 1: paramStr(2) else: ""
+let checkfolder = if paramCount() > 1: paramStr(2) else: versionfolder
 bfd_init()
 let (libpath, bfile) = findBestSOLib(versionfolder, checkfolder, specdata)
 let startAddress = bfd_get_start_address(bfile)

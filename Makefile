@@ -102,7 +102,7 @@ $(DLLPARSER):
 
 %64.spec: %.orig_spec | $(DLLPARSER)
 	$(DLLPARSER) $(VERSIONSDIR) "$(VERSIONSDIR)64" < $< > $@
-	sed -i 's/versions/versions64/' $@
+
 %.spec: %.orig_spec | $(DLLPARSER)
 	$(DLLPARSER) $(VERSIONSDIR) < $< > $@
 
