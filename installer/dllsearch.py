@@ -76,12 +76,13 @@ def findForLib(gamelocation, steamdll, strict):
     prefile = join(predir, "steam_api.orig_spec")
     if isfile(prefile):
       coverage = compare_specs(origspecfile, prefile)
+      thepath = abspath(join("versions" + postfix, version))
       if coverage == 1.0:
         print("Found")
-        return abspath(join("versions" + postfix, version))
+        return thepath
       elif coverage > totalcoverage:
         totalcoverage = coverage
-        bestpath = abspath(join("versions" + postfix, version))
+        bestpath = thepath
       print("[%0.1f%% matching]" % (coverage * 100))
     else:
       print("No such file")
