@@ -1,12 +1,27 @@
 image: gcc
 
 before_script:
-- dpkg --add-architecture i386
-- wget -qO - https://dl.winehq.org/wine-builds/Release.key | apt-key add -
-- echo "deb http://dl.winehq.org/wine-builds/debian/ jessie main" > /etc/apt/sources.list.d/wine.list
-- apt-get update
-- apt-get install -y -f wine-stable wine-stable-dev binutils-dev
 - export PATH="/opt/wine-stable/bin${PATH:+:$PATH}"
+
+install:wine:
+  stage: build
+  cache:
+    key: wine
+    paths:
+    - /opt/wine-*
+  artifacts:
+    expire_in: 1 mounth
+    paths:
+    - /opt/wine-*
+  script:
+  - |
+    if [ ! -x /opt/wine-stable/bin/winegcc ]; then
+      dpkg --add-architecture i386
+      wget -qO - https://dl.winehq.org/wine-builds/Release.key | apt-key add -
+      echo "deb http://dl.winehq.org/wine-builds/debian/ jessie main" > /etc/apt/sources.list.d/wine.list
+      apt-get update
+      apt-get install -y -f wine-stable wine-stable-dev binutils-dev
+    fi
 
 build:compiler:
   stage: build
@@ -50,21 +65,21 @@ test:master:
   stage: test
   dependencies:
   - build:compiler
+  - install:wine
   script:
-  - export PATH="nim-master/bin${PATH:+:$PATH}"
-  - nim -v
+  - nim-master/bin/nim -v
   - winegcc -v
   - wine --version
-  - make ARCH=64 precompile
+  - make NIMC="$PWD/nim-master/bin/nim" ARCH=64 precompile
 
 test:devel:
   stage: test
   dependencies:
   - build:compiler
+  - install:wine
   allow_failure: true
   script:
-  - export PATH="nim-devel/bin${PATH:+:$PATH}"
-  - nim -v
+  - nim-devel/bin/nim -v
   - winegcc -v
   - wine --version
-  - make ARCH=64 precompile
+  - make NIMC="$PWD/nim-devel/bin/nim" ARCH=64 precompile
