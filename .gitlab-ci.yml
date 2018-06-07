@@ -1,7 +1,7 @@
 image: gcc
 
 before_script:
-- apt-get install -f wine-dev binutils-dev gcc-multilib
+- apt-get install -f wine-dev binutils-dev
 
 build:compiler:
   stage: build
