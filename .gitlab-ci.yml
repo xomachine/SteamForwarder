@@ -1,8 +1,11 @@
 image: gcc
 
 before_script:
+- dpkg --add-architecture i386
+- wget -qO - https://dl.winehq.org/wine-builds/Release.key | apt-key add -
+- deb https://dl.winehq.org/wine-builds/debian/ jessie main
 - apt-get update
-- apt-get install -f wine-dev binutils-dev
+- apt-get install -f wine-stable-dev binutils-dev
 
 build:compiler:
   stage: build
