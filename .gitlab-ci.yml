@@ -1,0 +1,66 @@
+image: gcc
+
+before_script:
+- sudo apt-get install -f wine-dev binutils-dev gcc-multilib
+
+build:compiler:
+  stage: build
+  cache:
+    key: nim-compiler
+    paths:
+    - nim-devel
+    - nim-master
+  artifacts:
+    expire_in: 1h
+    paths:
+    - nim-*
+  script:
+  - |
+    for BRANCH in master devel; do
+    if [ ! -x nim-$BRANCH/bin/nim ]; then
+      git clone -b $BRANCH --depth 1 git://github.com/nim-lang/nim nim-$BRANCH/
+      cd nim-$BRANCH
+      git clone --depth 1 git://github.com/nim-lang/csources csources/
+      cd csources
+      sh build.sh
+      cd ..
+      rm -rf csources
+      bin/nim c koch
+      ./koch boot -d:release
+      ./koch nimble
+    else
+      cd nim-$BRANCH
+      git fetch origin
+      if ! git merge FETCH_HEAD | grep "Already up-to-date"; then
+        bin/nim c koch
+        ./koch boot -d:release
+        ./koch nimble
+      fi
+    fi
+    cd ..
+    done
+
+
+test:master:
+  stage: test
+  dependencies:
+  - build:compiler
+  allow_failure: true
+  script:
+  - export PATH="nim-master/bin${PATH:+:$PATH}"
+  - nim -v
+  - winegcc -v
+  - wine --version
+  - make ARCH=64 precompile
+
+test:devel:
+  stage: test
+  dependencies:
+  - build:compiler
+  allow_failure: true
+  script:
+  - export PATH="nim-devel/bin${PATH:+:$PATH}"
+  - nim -v
+  - winegcc -v
+  - wine --version
+  - make ARCH=64 precompile
