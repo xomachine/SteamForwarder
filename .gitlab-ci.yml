@@ -33,7 +33,12 @@ build:compiler:
   artifacts:
     expire_in: 1h
     paths:
-    - nim-*
+    - nim-master/bin
+    - nim-master/config
+    - nim-master/lib
+    - nim-devel/bin
+    - nim-devel/config
+    - nim-devel/lib
   script:
   - |
     for BRANCH in master devel; do
