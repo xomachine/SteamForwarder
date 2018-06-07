@@ -1,11 +1,12 @@
-image: "purplekarrot/wine64-gcc"
+image: gcc
 
-#before_script:
-#- dpkg --add-architecture i386
-#- wget -qO - https://dl.winehq.org/wine-builds/Release.key | apt-key add -
-#- echo "deb http://dl.winehq.org/wine-builds/debian/ jessie main" > /etc/apt/sources.list.d/wine.list
-#- apt-get update
-#- apt-get install -y -f wine-stable-dev binutils-dev
+before_script:
+- dpkg --add-architecture i386
+- wget -qO - https://dl.winehq.org/wine-builds/Release.key | apt-key add -
+- echo "deb http://dl.winehq.org/wine-builds/debian/ jessie main" > /etc/apt/sources.list.d/wine.list
+- apt-get update
+- apt-get install -y -f wine-stable wine-stable-dev binutils-dev
+- export PATH="/opt/wine-stable/bin${PATH:+:$PATH}"
 
 build:compiler:
   stage: build
