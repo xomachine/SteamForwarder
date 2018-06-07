@@ -5,7 +5,7 @@ before_script:
 - wget -qO - https://dl.winehq.org/wine-builds/Release.key | apt-key add -
 - echo "deb http://dl.winehq.org/wine-builds/debian/ jessie main" > /etc/apt/sources.list.d/wine.list
 - apt-get update
-- apt-get install -f wine-stable-dev binutils-dev
+- apt-get install -y -f wine-stable-dev binutils-dev
 
 build:compiler:
   stage: build
