@@ -10,7 +10,7 @@ install:wine:
     paths:
     - /opt/wine-*
   artifacts:
-    expire_in: 1 mounth
+    expire_in: 1 month
     paths:
     - /opt/wine-*
   script:
