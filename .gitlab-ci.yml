@@ -1,6 +1,7 @@
 image: gcc
 
 before_script:
+- apt-get update
 - apt-get install -f wine-dev binutils-dev
 
 build:compiler:
