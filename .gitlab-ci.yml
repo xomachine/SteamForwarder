@@ -1,26 +1,30 @@
 image: gcc
 
 before_script:
-- export PATH="/opt/wine-stable/bin${PATH:+:$PATH}"
+- export PATH="wine-stable/bin${PATH:+:$PATH}"
 
 install:wine:
   stage: build
   cache:
     key: wine
     paths:
-    - /opt/wine-*
+    - wine-stable
   artifacts:
-    expire_in: 1 month
+    expire_in: 1 hour
     paths:
-    - /opt/wine-*
+    - wine-stable
   script:
   - |
-    if [ ! -x /opt/wine-stable/bin/winegcc ]; then
-      dpkg --add-architecture i386
-      wget -qO - https://dl.winehq.org/wine-builds/Release.key | apt-key add -
-      echo "deb http://dl.winehq.org/wine-builds/debian/ jessie main" > /etc/apt/sources.list.d/wine.list
-      apt-get update
-      apt-get install -y -f wine-stable wine-stable-dev binutils-dev
+    if [ ! -x wine-stable/bin/winegcc ]; then
+      mkdir -p wine-stable
+      wget -O wine-i386.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable-i386_3.0.1~jessie_i386.deb
+      wget -O wine-amd64.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable-amd64_3.0.1~jessie_amd64.deb
+      wget -O wine-dev.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable-dev_3.0.1~jessie_i386.deb
+      dpkg -X wine-i386.deb wine-stable
+      dpkg -X wine-amd64.deb wine-stable
+      dpkg -X wine-dev.deb wine-stable
+      mv wine-stable/opt/winestable/* wine-stable
+      rm -rf wine-stable/opt wine-stable/usr
     fi
 
 build:compiler:
