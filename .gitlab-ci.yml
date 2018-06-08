@@ -17,6 +17,7 @@ install:wine:
   script:
   - |
     if [ ! -x wine-stable/bin/winegcc ]; then
+      rm -rf wine-stable
       mkdir -p wine-stable
       wget -O wine-i386.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable-i386_3.0.1~jessie_i386.deb
       wget -O wine-amd64.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable-amd64_3.0.1~jessie_amd64.deb
@@ -27,7 +28,7 @@ install:wine:
       dpkg -X wine-dev.deb wine-stable
       dpkg -X wine.deb wine-stable
       mv wine-stable/opt/wine-stable/* wine-stable
-      rm -rf wine-stable/opt wine-stable/usr
+      rm -rf wine-stable/opt wine-stable/usr wine-stable/share
     fi
 
 build:compiler:
