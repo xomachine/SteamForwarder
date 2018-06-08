@@ -13,6 +13,7 @@ matrix:
     - env: BRANCH=devel
   fast_finish: true
 install:
+  - sudo apt-get update
   - sudo apt-get install -f wine-dev binutils-dev gcc-multilib
   - |
     if [ ! -x nim-$BRANCH/bin/nim ]; then
