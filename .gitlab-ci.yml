@@ -7,7 +7,7 @@ variables:
 before_script:
 - export PATH="$PWD/wine/bin${PATH:+:$PATH}"
 - export LD_LIBRARY_PATH="$PWD/wine/lib:$PWD/wine/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-- [ -f wine/binutils-dev.deb ] && dpkg -i wine/binutils-dev.deb || true
+- if [ -f wine/binutils-dev.deb ]; then dpkg -i wine/binutils-dev.deb; fi
 
 install:wine:
   stage: build
