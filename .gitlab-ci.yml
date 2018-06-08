@@ -1,34 +1,38 @@
 image: gcc
 
+variables:
+  WBRANCH: stable
+  WVERSION: 3.0.1
+
 before_script:
-- export PATH="wine-stable/bin${PATH:+:$PATH}"
-- export LD_LIBRARY_PATH="wine-stable/lib${PATH:+:$LD_LIBRARY_PATH}"
+- export PATH="$PWD/wine/bin${PATH:+:$PATH}"
+- export LD_LIBRARY_PATH="$PWD/wine/lib:$PWD/wine/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 
 install:wine:
   stage: build
   cache:
     key: wine
     paths:
-    - wine-stable
+    - wine
   artifacts:
     expire_in: 1 hour
     paths:
-    - wine-stable
+    - wine
   script:
   - |
-    if [ ! -x wine-stable/bin/winegcc ]; then
-      rm -rf wine-stable
-      mkdir -p wine-stable
-      wget -O wine-i386.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable-i386_3.0.1~jessie_i386.deb
-      wget -O wine-amd64.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable-amd64_3.0.1~jessie_amd64.deb
-      wget -O wine-dev.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable-dev_3.0.1~jessie_amd64.deb
-      wget -O wine.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable_3.0.1~jessie_amd64.deb
-      dpkg -X wine-i386.deb wine-stable
-      dpkg -X wine-amd64.deb wine-stable
-      dpkg -X wine-dev.deb wine-stable
-      dpkg -X wine.deb wine-stable
-      mv wine-stable/opt/wine-stable/* wine-stable
-      rm -rf wine-stable/opt wine-stable/usr wine-stable/share
+    if [ ! -x wine/bin/winegcc ]; then
+      rm -rf wine
+      mkdir -p wine
+      wget -O wine-i386.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-i386_${WVERSION}~jessie_i386.deb
+      wget -O wine-amd64.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-amd64_${WVERSION}~jessie_amd64.deb
+      wget -O wine-dev.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-dev_${WVERSION}~jessie_amd64.deb
+      wget -O wine.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}_${WVERSION}~jessie_amd64.deb
+      dpkg -X wine-i386.deb wine
+      dpkg -X wine-amd64.deb wine
+      dpkg -X wine-dev.deb wine
+      dpkg -X wine.deb wine
+      mv wine/opt/wine-${WBRANCH}/* wine
+      rm -rf wine/opt wine/usr wine/share
     fi
 
 build:compiler:
@@ -82,7 +86,7 @@ test:master:
   script:
   - nim-master/bin/nim -v
   - winegcc -v
-  - wine --version
+  - wine64 --version || true
   - make NIMC="$PWD/nim-master/bin/nim" ARCH=64 precompile
 
 test:devel:
@@ -94,5 +98,5 @@ test:devel:
   script:
   - nim-devel/bin/nim -v
   - winegcc -v
-  - wine --version
+  - wine64 --version || true
   - make NIMC="$PWD/nim-devel/bin/nim" ARCH=64 precompile
