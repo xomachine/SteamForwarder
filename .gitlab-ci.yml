@@ -10,14 +10,14 @@ variables:
 #- export LD_LIBRARY_PATH="$PWD/wine/lib:$PWD/wine/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 
 before_script:
+- apt-get update
+- apt-get install -y -f binutils-dev gcc-multilib
 - |
   for p in wine wine-dev wine-i386 wine-amd64 winehq; do
     if [ -f wine/$p.deb ]; then dpkg --force-all -i wine/$p.deb; fi
   done
 - |
   if [ -f /opt/wine-${WBRANCH}/bin/winegcc ]; then
-    apt-get update
-    apt-get install -y -f binutils-dev gcc-multilib
     ln -s /opt/wine-${WBRANCH}/include/wine /usr/include/wine
   fi
 
