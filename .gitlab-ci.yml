@@ -23,7 +23,7 @@ install:wine:
       dpkg -X wine-i386.deb wine-stable
       dpkg -X wine-amd64.deb wine-stable
       dpkg -X wine-dev.deb wine-stable
-      mv wine-stable/opt/winestable/* wine-stable
+      mv wine-stable/opt/wine-stable/* wine-stable
       rm -rf wine-stable/opt wine-stable/usr
     fi
 
