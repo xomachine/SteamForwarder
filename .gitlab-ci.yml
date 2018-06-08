@@ -3,11 +3,11 @@ image: gcc
 variables:
   WBRANCH: stable
   WVERSION: 3.0.1
-  BVERSION: 2.25-5+deb8u1
 before_script:
 - export PATH="$PWD/wine/bin${PATH:+:$PATH}"
 - export LD_LIBRARY_PATH="$PWD/wine/lib:$PWD/wine/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-- if [ -f wine/binutils-dev.deb ]; then dpkg -i wine/binutils-dev.deb; fi
+- apt-get update
+- apt-get install -y -f binutils-dev gcc-multilib
 
 install:wine:
   stage: build
@@ -24,7 +24,6 @@ install:wine:
     if [ ! -x wine/bin/winegcc ]; then
       rm -rf wine
       mkdir -p wine
-      wget -O wine/binutils-dev.deb http://ftp.uk.debian.org/debian/pool/main/b/binutils/binutils-dev_${BVERSION}_amd64.deb
       wget -O wine-i386.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-i386_${WVERSION}~jessie_i386.deb
       wget -O wine-amd64.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-amd64_${WVERSION}~jessie_amd64.deb
       wget -O wine-dev.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-dev_${WVERSION}~jessie_amd64.deb
