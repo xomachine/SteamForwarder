@@ -2,6 +2,7 @@ image: gcc
 
 before_script:
 - export PATH="wine-stable/bin${PATH:+:$PATH}"
+- export LD_LIBRARY_PATH="wine-stable/lib${PATH:+:$LD_LIBRARY_PATH}"
 
 install:wine:
   stage: build
@@ -19,10 +20,12 @@ install:wine:
       mkdir -p wine-stable
       wget -O wine-i386.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable-i386_3.0.1~jessie_i386.deb
       wget -O wine-amd64.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable-amd64_3.0.1~jessie_amd64.deb
-      wget -O wine-dev.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable-dev_3.0.1~jessie_i386.deb
+      wget -O wine-dev.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable-dev_3.0.1~jessie_amd64.deb
+      wget -O wine.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-stable_3.0.1~jessie_amd64.deb
       dpkg -X wine-i386.deb wine-stable
       dpkg -X wine-amd64.deb wine-stable
       dpkg -X wine-dev.deb wine-stable
+      dpkg -X wine.deb wine-stable
       mv wine-stable/opt/wine-stable/* wine-stable
       rm -rf wine-stable/opt wine-stable/usr
     fi
