@@ -4,6 +4,8 @@ variables:
   WBRANCH: stable
   WVERSION: 3.0.1
 before_script:
+- export C_INCLUDE_PATH="$PWD/wine/include${C_INCLUDE_PATH:+:$C_INCLUDE_PATH}"
+- export CPLUS_INCLUDE_PATH="$PWD/wine/include${CPLUS_INCLUDE_PATH:+:$CPLUS_INCLUDE_PATH}"
 - export PATH="$PWD/wine/bin${PATH:+:$PATH}"
 - export LD_LIBRARY_PATH="$PWD/wine/lib:$PWD/wine/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 - apt-get update
