@@ -19,6 +19,7 @@ before_script:
 - |
   if [ -f /opt/wine-${WBRANCH}/bin/winegcc ]; then
     ln -s /opt/wine-${WBRANCH}/include/wine /usr/include/wine
+    ln -s /opt/wine-${WBRANCH}/lib{,32}
   fi
 
 install:wine:
