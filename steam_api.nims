@@ -7,5 +7,3 @@
 --d:useMalloc
 --os:windows
 --noMain
-switch("gcc.exe", "/usr/bin/winegcc")
-switch("gcc.linkerexe", "/usr/bin/winegcc")

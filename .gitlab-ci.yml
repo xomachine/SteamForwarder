@@ -88,8 +88,8 @@ test:master:
   script:
   - nim-master/bin/nim -v
   - winegcc -v
-  - wine64 --version || true
-  - make NIMC="$PWD/nim-master/bin/nim" ARCH=64 precompile
+  - wine64 --version
+  - make WINEGCC="$PWD/wine/bin/winegcc" NIMC="$PWD/nim-master/bin/nim" ARCH=64 precompile
 
 test:devel:
   stage: test
@@ -100,5 +100,5 @@ test:devel:
   script:
   - nim-devel/bin/nim -v
   - winegcc -v
-  - wine64 --version || true
-  - make NIMC="$PWD/nim-devel/bin/nim" ARCH=64 precompile
+  - wine64 --version
+  - make WINEGCC="$PWD/wine/bin/winegcc" NIMC="$PWD/nim-devel/bin/nim" ARCH=64 precompile

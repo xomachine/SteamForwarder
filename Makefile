@@ -2,6 +2,7 @@
 SRCDIR                ?= $(CURDIR)
 NIMC                  ?= nim
 WINEDUMP              ?= winedump
+WINEGCC               ?= /usr/bin/winegcc
 MV                    ?= mv
 RM                    ?= rm
 MAKE                  ?= make
@@ -85,7 +86,7 @@ $(DLLPARSER):
 	$(NIMC) c -d:specname="$(abspath $<)" \
 	          -d:cdfile="$(abspath $(SIGNATURESFILE))" \
             --passC:"-m64" --passL:"-m64" --cpu:amd64 \
-            $(TUNEOPTS) \
+            $(TUNEOPTS) --gcc.exe:$(WINEGCC) --gcc.linkerexe:$(WINEGCC) \
             --nimcache:`mktemp -d --tmpdir=$(CACHEDIR) nimcache.XXXX` -o:$@ \
             steam_api.nim
 
@@ -93,7 +94,7 @@ $(DLLPARSER):
 	$(NIMC) c -d:specname="$(abspath $<)" \
 	          -d:cdfile="$(abspath $(SIGNATURESFILE))" \
             --passC:"-m32" --passL:"-m32" --cpu:i386 \
-            $(TUNEOPTS) \
+            $(TUNEOPTS) --gcc.exe:$(WINEGCC) --gcc.linkerexe:$(WINEGCC) \
             --nimcache:`mktemp -d --tmpdir=$(CACHEDIR) nimcache.XXXX` -o:$@ \
             steam_api.nim
 
