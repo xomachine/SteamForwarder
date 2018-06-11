@@ -61,7 +61,7 @@ cache:
   stage: test
   <<: *compiler
   script:
-  - nim-master/bin/nim -v
+  - nim-${NIMBRANCH}/bin/nim -v
   - winegcc -v
   - wine64 --version
   - make ARCH=64 precompile
