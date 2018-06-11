@@ -1,5 +1,5 @@
 # SteamForwarder
-![https://travis-ci.org/xomachine/SteamForwarder](https://travis-ci.org/xomachine/SteamForwarder.svg?branch=master)
+![https://travis-ci.org/xomachine/SteamForwarder](https://travis-ci.org/xomachine/SteamForwarder.svg?branch=master)[![pipeline status](https://gitlab.com/xomachine/SteamForwarder/badges/master/pipeline.svg)](https://gitlab.com/xomachine/SteamForwarder/commits/master)
 
 `steam_api.dll` implementation for WINE. Your windows games now can interact with your linux steam! What does it mean? It means this tool provides a component for WINE named `steam_api.dll`. It works like for example `opengl32.dll` provided by WINE which allows windows programms to access OpenGL API under linux. If `opengl32.dll` supplies interface to `libGL.so`, the `steam_api.dll` does the same thing but for `libsteam_api.so` (which is provided by Valve for linux steam games).
 
@@ -88,7 +88,7 @@ build process. So the target of whole build process is a `steam_api.dll.so`
 library which implements everything implemented in `steam_api.dll` file from
 the game installed. The target library should forward every call to the
 `libsteam_api.so` library on linux side. The building of `steam_api.dll.so`
-starts from gathering information about original `steam\_api.dll`. There are
+starts from gathering information about original `steam_api.dll`. There are
 two kinds of information: version dependent and version independent.
 
 The version dependent information is represented by the library's exported
