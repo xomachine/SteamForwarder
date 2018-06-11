@@ -4,35 +4,20 @@ variables:
   WBRANCH: stable
   WVERSION: 3.0.1
 
-#- export C_INCLUDE_PATH="$PWD/wine/include/wine/windows:$PWD/wine/include${C_INCLUDE_PATH:+:$C_INCLUDE_PATH}"
-#- export CPLUS_INCLUDE_PATH="$PWD/wine/include/wine/windows:$PWD/wine/include${CPLUS_INCLUDE_PATH:+:$CPLUS_INCLUDE_PATH}"
-#- export PATH="$PWD/wine/bin${PATH:+:$PATH}"
-#- export LD_LIBRARY_PATH="$PWD/wine/lib:$PWD/wine/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+cache:
+  key: wine
+  paths:
+  - wine
 
-before_script:
-- apt-get update
-- apt-get install -y -f binutils-dev gcc-multilib
-- |
-  for p in wine wine-dev wine-i386 wine-amd64 winehq; do
-    if [ -f wine/$p.deb ]; then dpkg --force-all -i wine/$p.deb; fi
-  done
-- |
-  if [ -f /opt/wine-${WBRANCH}/bin/winegcc ]; then
-    ln -s /opt/wine-${WBRANCH}/include/wine /usr/include/wine
-    ln -s /opt/wine-${WBRANCH}/lib{,32}
-  fi
-
-install:wine:
-  stage: build
+.build:environment: &compiler
   cache:
-    key: wine
+    key: nim-${NIMBRANCH}
     paths:
+    - nim-${NIMBRANCH}
     - wine
-  artifacts:
-    expire_in: 1 hour
-    paths:
-    - wine
-  script:
+  before_script:
+  - apt-get update
+  - apt-get install -y -f binutils-dev gcc-multilib
   - |
     if [ ! -f wine/wine.deb ]; then
       rm -rf wine
@@ -43,29 +28,15 @@ install:wine:
       wget -O wine/wine.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}_${WVERSION}~jessie_amd64.deb
       wget -O wine/winehq.deb https://dl.winehq.org/wine-builds/debian/pool/main/winehq-${WBRANCH}_${WVERSION}~jessie_amd64.deb
     fi
-
-build:compiler:
-  stage: build
-  cache:
-    key: nim-compiler
-    paths:
-    - nim-devel
-    - nim-master
-  artifacts:
-    expire_in: 1h
-    paths:
-    - nim-master/bin
-    - nim-master/config
-    - nim-master/lib
-    - nim-devel/bin
-    - nim-devel/config
-    - nim-devel/lib
-  script:
+    for p in wine wine-dev wine-i386 wine-amd64 winehq; do
+      if [ -f wine/$p.deb ]; then dpkg --force-all -i wine/$p.deb; fi
+    done
+    ln -s /opt/wine-${WBRANCH}/include/wine /usr/include/wine
+    ln -s /opt/wine-${WBRANCH}/lib{,32}
   - |
-    for BRANCH in master devel; do
-    if [ ! -x nim-$BRANCH/bin/nim ]; then
-      git clone -b $BRANCH --depth 1 git://github.com/nim-lang/nim nim-$BRANCH/
-      cd nim-$BRANCH
+    if [ ! -x nim-${NIMBRANCH}/bin/nim ]; then
+      git clone -b ${NIMBRANCH} --depth 1 git://github.com/nim-lang/nim nim-${NIMBRANCH}/
+      cd nim-${NIMBRANCH}
       git clone --depth 1 git://github.com/nim-lang/csources csources/
       cd csources
       sh build.sh
@@ -75,7 +46,7 @@ build:compiler:
       ./koch boot -d:release
       ./koch nimble
     else
-      cd nim-$BRANCH
+      cd nim-${NIMBRANCH}
       git fetch origin
       if ! git merge FETCH_HEAD | grep "Already up-to-date"; then
         bin/nim c koch
@@ -84,28 +55,24 @@ build:compiler:
       fi
     fi
     cd ..
-    done
+    export PATH="$PWD/nim-${NIMBRANCH}/bin${PATH:+:$PATH}"
 
-
-test:master:
+.test: &testpart
   stage: test
-  dependencies:
-  - build:compiler
-  - install:wine
+  <<: *compiler
   script:
   - nim-master/bin/nim -v
   - winegcc -v
   - wine64 --version
-  - make NIMC="$PWD/nim-master/bin/nim" ARCH=64 precompile
+  - make ARCH=64 precompile
+
+test:master:
+  variables:
+    NIMBRANCH: master
+  <<: *testpart
 
 test:devel:
-  stage: test
-  dependencies:
-  - build:compiler
-  - install:wine
+  variables:
+    NIMBRANCH: devel
   allow_failure: true
-  script:
-  - nim-devel/bin/nim -v
-  - winegcc -v
-  - wine64 --version
-  - make NIMC="$PWD/nim-devel/bin/nim" ARCH=64 precompile
+  <<: *testpart
