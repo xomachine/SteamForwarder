@@ -33,14 +33,14 @@ proc associate*[TSize, T](self: var AddrTable[TSize, T],
   self.origins[self.size] = origin
   self.wrapped[self.size].reset()
   result = self.wrapped[self.size].addr
-  inc(self.size)
+  self.size += 1
 
 proc removeByPos[TSize, T](self: var AddrTable[TSize, T], pos: int) =
   if pos != -1:
     if pos < self.size - 1:
       self.wrapped[pos] = self.wrapped[self.size-1]
       self.origins[pos] = self.origins[self.size-1]
-    dec(self.size)
+    self.size -= 1
 
 proc removeByOrigin*[TSize, T](self: var AddrTable[TSize, T], origin: pointer) =
   self.removeByPos(self.getByOrigin(origin))

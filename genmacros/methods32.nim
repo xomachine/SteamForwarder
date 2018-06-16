@@ -1,13 +1,18 @@
 import macros
-from classparser import StackState
+from classparser import StackState, Classes
+from methods import MethodDesc, VTableDesc, APIDesc
 
 const pseudoMethodPrefix* = "pMethod" # Just a name prefix for pseudo methods
-proc makePseudoMethods*(): NimNode {.compileTime.}
-proc eachInt*(k: string, a: seq[StackState], sink: NimNode): NimNode
-  {.compileTime.}
-proc makePseudoMethod(stack: uint8, swp: bool): NimNode {.compileTime.}
+{.push, compileTime.}
+proc makePseudoMethods(): NimNode
+proc makePseudoMethod(stack: uint8, swp: bool): NimNode
+proc makeMethodDesc(i: int, k: string, v: StackState): MethodDesc
+proc makeVTableDesc(name: string, sstates: seq[StackState]): VTableDesc
+proc makeAPIDesc*(classes: Classes): APIDesc
+{.pop.}
 
 from generators import genArgs, genCall, genTraceCall, genAsmHiddenCall
+from tables import pairs
 from strutils import toHex
 
 static:
@@ -43,7 +48,8 @@ proc makePseudoMethod(stack: uint8, swp: bool): NimNode =
       # shift in vtable of original method
     newIdentDefs(newIdentNode("obj"), newIdentNode("uint32")),
       # reference to and object
-    newIdentDefs(newIdentNode("prebp"), newIdentNode("uint32")),
+# !!! IMPORTANT!!! older gcc or nim versions put stack frame regardless of pragmas so we need to pop it
+#    newIdentDefs(newIdentNode("prebp"), newIdentNode("uint32")),
       # ebp of caller (not for purpose, just lies here)
     newIdentDefs(newIdentNode("raddr"), newIdentNode("uint32")),
       # return address to method caller (also just lies here)
@@ -67,7 +73,7 @@ proc makePseudoMethod(stack: uint8, swp: bool): NimNode =
     trace("Method No %d was called for obj=%p and return to %p\n",
           shift, obj, raddr)
     `tracecall`
-    trace("\nPrevious ebp = %p\n", prebp)
+    #trace("\nPrevious ebp = %p\n", prebp)
     let wclass = cast[ptr WrappedClass](obj)
     let `origin` = cast[uint32](wclass.origin)
     trace("Origin = %p\n", `origin`)
@@ -94,34 +100,34 @@ proc makePseudoMethod(stack: uint8, swp: bool): NimNode =
       trace("Result = %p\n", res)
       return wrapIfNecessary(res)
 
-proc eachInt(k: string, a: seq[StackState], sink: NimNode): NimNode =
-  ## Generates wrapped methods for WrappedClass's vtable by given in `a`
-  ## stack information. Places methods to the `sink`s entry with key `k`
-  result = newStmtList()
-  let klit = newStrLitNode(k)
-  result.add quote do:
-    `sink`[`klit`] = newSeq[MethodProc](2)
-  for i, v in a.pairs():
+proc makeMethodDesc(i: int, k: string, v: StackState): MethodDesc =
+  var tstr = newNimNode(nnkTripleStrLit)
+  tstr.strVal = """
+  push %ecx # push object reference
+  push $0x""" & i.toHex & """ # push number of method inside the vtable
+  call `""" & pseudoMethodPrefix & $v.depth & (if v.swap: "S" else: "") &
+    """` # call the related pseudomethod
+  add $0x4, %esp # remove number of method from the stack
+  pop %ecx # pop object reference back
+  # !!! IMPORTANT!!! older gcc versions put stack frame regardless of pragmas so we need to pop it
+  # pop %ebp # well compiller stores ebp regardless, so we need to pop it back
+  ret $""" & $(v.depth-4) &  """ # clean arguments from the stack and return
+"""
+  result.body = newTree(nnkAsmStmt, newEmptyNode(), tstr)
+  result.name = "m" & k & $i
+
+proc makeVTableDesc(name: string, sstates: seq[StackState]): VTableDesc =
+  result.name = name
+  result.methods = newSeq[MethodDesc]()
+  for i, v in sstates.pairs():
     if v.swap: # counts what pseudo methods involved to generate them after
       swpdeclared.incl(v.depth.uint8)
     else:
       declared.incl(v.depth.uint8)
-    let asmcode = """
-    push %ecx # push object reference
-    push $0x""" & i.toHex & """ # push number of method inside the vtable
-    call `""" & pseudoMethodPrefix & $v.depth & (if v.swap: "S" else: "") &
-      """` # call the related pseudomethod
-    add $0x4, %esp # remove number of method from the stack
-    pop %ecx # pop object reference back
-    pop %ebp # well compiller stores ebp regardless, so we need to pop it back
-    ret $""" & $(v.depth-4) &  """ # clean arguments from the stack and return
-"""
-    var tstr = newNimNode(nnkTripleStrLit)
-    tstr.strVal = asmcode
-    let asmstmt = newTree(nnkAsmStmt, newEmptyNode(), tstr)
-    let methodname = newIdentNode("m" & k & $i)
-    result.add quote do:
-      proc `methodname` () {.asmNoStackFrame, noReturn, cdecl.} =
-        `asmstmt`
-      add(`sink`[`klit`], `methodname`)
+    result.methods.add(makeMethodDesc(i, name, v))
 
+proc makeAPIDesc(classes: Classes): APIDesc =
+  result.vtables = newSeq[VTableDesc]()
+  for k, v in classes.pairs():
+    result.vtables.add(makeVTableDesc(k, v))
+  result.pseudomethods = makePseudoMethods()

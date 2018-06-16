@@ -37,6 +37,7 @@ proc wrapIfClass(address: pointer, checker: proc(a: pointer): bool): pointer =
     let wrapped = classAssociations.associate(address)
     wrapped.origin = cast[ptr Class](address)
     wrapped.vtable = vtableptr
+    trace("Wrapped to %p\n", wrapped)
     return wrapped
   trace("invalid\n")
   return address

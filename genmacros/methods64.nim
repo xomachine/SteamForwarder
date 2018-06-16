@@ -1,17 +1,22 @@
-from classparser import StackState
+from classparser import StackState, Classes
+from methods import MethodDesc, VTableDesc, APIDesc
 
 const pseudoMethodPrefix = "pseudoMethod"
-proc eachInt*(k: string, a: seq[StackState], sink: NimNode): NimNode
-  {.compileTime.}
-proc makePseudoMethods*(): NimNode {.compileTime.}
+{.push, compileTime.}
+proc makePseudoMethods(): NimNode {.compileTime.}
+proc makeMethodDesc(i: int, k: string, v: StackState): MethodDesc
+proc makeVTableDesc(name: string, sstates: seq[StackState]): VTableDesc
+proc makeAPIDesc*(classes: Classes): APIDesc
+{.pop.}
 
 from strutils import toHex
 from utils import strToAsm, `+`
+from tables import pairs
 from generators import genArgs, genCall, genTraceCall, genAsmNativeCall64
 import macros
 
 static:
-  var methods: set[uint8]
+  var pmethods: set[uint8]
 
 proc makePseudoMethod(stack: uint8): NimNode {.compileTime.} =
   result = newProc(newIdentNode(pseudoMethodPrefix & $stack))
@@ -45,26 +50,29 @@ proc makePseudoMethod(stack: uint8): NimNode {.compileTime.} =
 
 proc makePseudoMethods(): NimNode =
   result = newStmtList()
-  for m in methods:
+  for m in pmethods:
     result.add(makePseudoMethod(m))
 
-proc eachInt(k: string, a: seq[StackState], sink: NimNode): NimNode =
-  result = newStmtList()
-  let klit = newStrLitNode(k)
-  result.add quote do:
-    `sink`[`klit`] = newSeq[MethodProc](2)
-  for i, v in a.pairs():
-    methods.incl(v.depth.uint8)
-    var tq = newNimNode(nnkTripleStrLit)
-    tq.strVal = """
-    # pop %rbp # necessary because compiler ignores noAsmStackFrame somehow
-    # xchg %rcx, %rdx # it looks like wine already performs call conversion
-    mov $0x""" & i.toHex & """, %r11 # The virtual method number
-    jmp `""" & pseudoMethodPrefix & $v.depth & """`
+proc makeMethodDesc(i: int, k: string, v: StackState): MethodDesc =
+  var tq = newNimNode(nnkTripleStrLit)
+  tq.strVal = """
+  # pop %rbp # necessary because compiler ignores noAsmStackFrame somehow
+  # xchg %rcx, %rdx # it looks like wine already performs call conversion
+  mov $0x""" & i.toHex & """, %r11 # The virtual method number
+  jmp `""" & pseudoMethodPrefix & $v.depth & """`
 """
-    let asmstmt = newTree(nnkAsmStmt, newEmptyNode(), tq)
-    let methodname = newIdentNode("m" & k & $i)
-    result.add quote do:
-      proc `methodname`() {.asmNoStackFrame, cdecl.} =
-        `asmstmt`
-      add(`sink`[`klit`], `methodname`)
+  result.body = newTree(nnkAsmStmt, newEmptyNode(), tq)
+  result.name = "m" & k & $i
+
+proc makeVTableDesc(name: string, sstates: seq[StackState]): VTableDesc =
+  result.name = name
+  result.methods = newSeq[MethodDesc]()
+  for i, v in sstates.pairs():
+    pmethods.incl(v.depth.uint8)
+    result.methods.add(makeMethodDesc(i, name, v))
+
+proc makeAPIDesc*(classes: Classes): APIDesc =
+  result.vtables = newSeq[VTableDesc]()
+  for k, v in classes.pairs():
+    result.vtables.add(makeVTableDesc(k, v))
+  result.pseudomethods = makePseudoMethods()
