@@ -123,11 +123,8 @@ proc wrapToOrigin(address: pointer) =
   ## Moves the CCallback object fields from wrapped one to original.
   ## The address should be a pointer to the WrappedCallback object.
   let wc = cast[ptr WrappedCallback](address)
-  trace("before origin: %p, %p\n", wc.origin.flags, wc.origin.icallback)
-  trace("before: %p, %p\n", wc.flags, wc.icallback)
   wc.origin.flags = wc.flags
   wc.origin.icallback = wc.icallback
-  trace("before: %p, %p\n", wc.origin.flags, wc.origin.icallback)
 
 proc wrap(address: pointer): pointer =
   ## Wraps the CCallback got from wine side to the linux side equivalent.
