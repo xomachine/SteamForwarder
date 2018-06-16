@@ -148,3 +148,4 @@ proc wrap(address: pointer): pointer =
       already
   wrapped.flags = origin.flags
   wrapped.icallback = origin.icallback
+  return wrapped
