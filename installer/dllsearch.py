@@ -59,7 +59,7 @@ def findForLib(gamelocation, steamdll, strict):
   postfix = ""
   if steamdll.endswith("64.dll"):
     postfix = "64"
-  origspecfile = join(dirname(steamdll), "steam_api.orig_spec")
+  origspecfile = join(dirname(steamdll), "steam_api"+postfix+".orig_spec")
   print("Specfile will be generated: "+origspecfile)
   run(["make", "ARCH="+postfix, "DLL="+esc(steamdll), esc(origspecfile)])
   if not isfile(origspecfile):
