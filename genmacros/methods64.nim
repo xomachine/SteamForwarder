@@ -39,9 +39,10 @@ proc makePseudoMethod(stack: uint8): NimNode {.compileTime.} =
     `tracecall`
     trace("\n")
     let obj = cast[ptr WrappedClass](argument1)
-    trace("Origin: %p\n", obj.origin)
-    trace("Origin vtable: %p\n", obj.origin.vtable)
-    let methodptr = cast[ptr `procty`](obj.origin.vtable + mnum*sizeof(pointer))
+    let origin = obj.origin
+    trace("Origin: %p\n", origin)
+    trace("Origin vtable: %p\n", origin.vtable)
+    let methodptr = cast[ptr `procty`](origin.vtable + mnum*sizeof(pointer))
     let `omethod` = methodptr[]
     trace("Method address: %p\n", `omethod`)
     let res = `mcall`
