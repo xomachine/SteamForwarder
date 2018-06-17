@@ -30,6 +30,7 @@ proc convertToOrigin*[TSize, T](self: AddrTable[TSize, T],
 
 proc associate*[TSize, T](self: var AddrTable[TSize, T],
                           origin: pointer): ptr T =
+  assert(self.size < TSize, "Stack Table overflow! Old size is " & $TSize)
   self.origins[self.size] = origin
   self.wrapped[self.size].reset()
   result = self.wrapped[self.size].addr
