@@ -7,8 +7,9 @@ from callback import wrap, unwrap, wrapToOrigin
 import macros
 
 type Dummy = object
+  a: uint64
   ## The empty struct needed to be used as return value in some functions and
-  ## cause the compiller to generate code for in-memory return.
+  ## cause the compiller to generate code for in-memory return (CSteamID).
 
 macro generateLinuxDecls*(specs: static[SpecFile]): untyped =
   ## Generates the libsteam_api.so bindings using given SpecFile.
@@ -26,7 +27,8 @@ macro generateLinuxDecls*(specs: static[SpecFile]): untyped =
     if s.swap:
       params[0] = bindSym("Dummy")
     var decl = quote do:
-      proc `name`() {.codegenDecl:"extern $# $#$#", importc: `actualname`.}
+      proc `name`() {.codegenDecl:"extern $# __attribute__((sysv_abi)) $#$#",
+                      importc: `actualname`.}
     decl[3] = params
     result.add(decl)
   when defined(debug):
