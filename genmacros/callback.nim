@@ -34,7 +34,11 @@ from utils import `+`, `-`, dumpMemoryRefs
 ##    the stack to meet the MSVC thiscall convention
 ## 4. Calling the original method
 ## 5. Restoring esp as there was no the original method call at all
-
+{.push, codegenDecl: "$# __attribute__((sysv_abi)) $#$#".}
+proc run(obj: ptr WrappedCallback, p: pointer)
+proc run2(obj: ptr WrappedCallback, p: pointer, iofail: bool, scall: uint64)
+proc getCallbackSizeBytes(obj: ptr WrappedCallback): pointer
+{.pop.}
 proc run(obj: ptr WrappedCallback, p: pointer) =
   ## First CCallback virtual method.
   trace("[%p](%p)\n", obj, p)
