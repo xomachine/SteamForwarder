@@ -40,7 +40,10 @@ proc genAsmNativeCall64*(name: string, n: int): NimNode =
   clubbers.add("\"rsp\"")
   clubbers.add("\"rax\"")
   for i in 1..n:
-    asigns.add("[argument" & $i & "]\"g\"(`argument" & $i & "`)")
+    if i == 1:
+      asigns.add("[argument" & $i & "]\"g\"(`origin`)")
+    else:
+      asigns.add("[argument" & $i & "]\"g\"(`argument" & $i & "`)")
     if i <= mapping.len:
       pushes = pushes & "mov %[argument" & $i & "], %%" & mapping[i-1] & "\n"
       clubbers.add("\"" & mapping[i-1] & "\"")

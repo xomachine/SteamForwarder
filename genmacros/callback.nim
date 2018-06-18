@@ -19,7 +19,7 @@ proc unwrap*(address: pointer)
 proc wrapToOrigin*(address: pointer)
 
 from wine import trace
-from tables import initTable, `[]`, `[]=`, contains, del, mvalues, Table
+from stacktable import AddrTable, convertToWrapped, removeByOrigin, associate
 from maps import getMMap, checkAddress, MemMaps, Flags
 from strutils import repeat
 from utils import `+`, `-`, dumpMemoryRefs
@@ -34,7 +34,11 @@ from utils import `+`, `-`, dumpMemoryRefs
 ##    the stack to meet the MSVC thiscall convention
 ## 4. Calling the original method
 ## 5. Restoring esp as there was no the original method call at all
-
+{.push, codegenDecl: "$# __attribute__((sysv_abi)) $#$#".}
+proc run(obj: ptr WrappedCallback, p: pointer)
+proc run2(obj: ptr WrappedCallback, p: pointer, iofail: bool, scall: uint64)
+proc getCallbackSizeBytes(obj: ptr WrappedCallback): pointer
+{.pop.}
 proc run(obj: ptr WrappedCallback, p: pointer) =
   ## First CCallback virtual method.
   trace("[%p](%p)\n", obj, p)
@@ -109,40 +113,40 @@ var vtable = [
   cast[pointer](getCallbackSizeBytes)
 ]
 
-var callbacks = initTable[pointer, WrappedCallback]()
+var callbacks: AddrTable[100, WrappedCallback]
   ## The registred wrapped callback objects list.
 
 proc unwrap(address: pointer) =
   ## Removes the wrapped callback object from the registred list causing the GC
   ## to collect it. The address should point to the original CCallback object.
   trace("Deleting %p...", address)
-  callbacks.del(address)
+  callbacks.removeByOrigin(address)
   trace("done\n")
 
 proc wrapToOrigin(address: pointer) =
   ## Moves the CCallback object fields from wrapped one to original.
   ## The address should be a pointer to the WrappedCallback object.
   let wc = cast[ptr WrappedCallback](address)
-  trace("before origin: %p, %p\n", wc.origin.flags, wc.origin.icallback)
-  trace("before: %p, %p\n", wc.flags, wc.icallback)
   wc.origin.flags = wc.flags
   wc.origin.icallback = wc.icallback
-  trace("before: %p, %p\n", wc.origin.flags, wc.origin.icallback)
 
 proc wrap(address: pointer): pointer =
   ## Wraps the CCallback got from wine side to the linux side equivalent.
   ## The address should be a pointer to the original(wine side) CCallback
   ## object. Returns the pointer to the WrappedCallback object.
   trace("Wrapping %p...", address)
+  let already = callbacks.convertToWrapped(address)
   let origin = cast[ptr WinCallback](address)
-  if address notin callbacks:
-    callbacks[address] = WrappedCallback(vtable: vtable[0].addr,
-                                         flags: origin.flags,
-                                         icallback: origin.icallback,
-                                         origin: origin)
-    trace("wrapped as %p\n", callbacks[address].addr)
-  else:
-    callbacks[address].flags = origin.flags
-    callbacks[address].icallback = origin.icallback
-    trace("already wrapped\n")
-  callbacks[address].addr
+  let wrapped =
+    if already.isNil():
+      let newwrapped = callbacks.associate(address)
+      newwrapped.vtable = vtable[0].addr
+      newwrapped.origin = origin
+      trace("wrapped as %p\n", newwrapped)
+      newwrapped
+    else:
+      trace("already wrapped\n")
+      already
+  wrapped.flags = origin.flags
+  wrapped.icallback = origin.icallback
+  return wrapped

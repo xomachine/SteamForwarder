@@ -6,23 +6,18 @@ type
     ## Wrapped object memory representation
     vtable*: pointer
     origin*: ptr Class
-  MethodProc = proc() {.cdecl.}
 
-proc fastUnWrap*(address: pointer): pointer
-proc wrapClass*(name: string, address: pointer): pointer
-proc fastWrap*(address: pointer): pointer
+proc getVTableByStr*(name: cstring, address: pointer): pointer
 
-from strutils import toHex, `%`
-from utils import strToAsm
+from classparser import Classes, readClasses
+from methods import convertToAST, vtableByName
 from wrapper import wrapIfNecessary
-from classparser import Classes, classes, readClasses
-from tables import Table, initTable, pairs, `[]=`, `[]`, contains, keys
 from wine import trace
 from generators import genTraceCall, genArgs, genCall, genAsmHiddenCall
 when hostCPU == "i386":
-  from methods32 import eachInt, makePseudoMethods
+  from methods32 import makeAPIDesc
 when hostCPU == "amd64":
-  from methods64 import eachInt, makePseudoMethods
+  from methods64 import makeAPIDesc
 when hostCPU notin ["amd64", "i386"]:
   error("Unsupported platform: " & hostCPU)
 import macros
@@ -43,63 +38,14 @@ import macros
 ## debug calls in few pseudo methods which are not dependent of object or method
 ## instead of repeating the `trace` calls in each wrapped method
 
-macro eachTable(sink: untyped): untyped =
+const classes = readClasses()
+macro makeVTables(sink: untyped): untyped =
   ## Generates vtables for classes obtained from steamclient.so and fills
   ## the `sink` with them. Also generates necessary pseudo methods.
-  result = newStmtList()
-  result.add quote do:
-    `sink` = initTable[string, seq[MethodProc]]()
-  let cc = readClasses()
-  for k, v in cc.pairs:
-    result.add(eachInt(k, v, sink))
-  result.insert(0, makePseudoMethods())
+  convertToAST(sink, makeAPIDesc(classes))
 
-var vtables: Table[string, seq[MethodProc]]
-eachTable(vtables)
-## The classes which already wrapped is stored in the `classAssociations`
-var classAssociations = initTable[pointer, WrappedClass]()
+makeVTables(vtables)
 
-proc fastUnWrap(address: pointer): pointer =
-  ## Checks if `address` already in classAssocations and returns the
-  ## unwrapped object address if it is so or original `address` in other case
-  for k in classAssociations.keys():
-    if classAssociations[k].addr == address:
-      return k
-  return address
-
-proc fastWrap(address: pointer): pointer =
-  ## Checks if `address` already in classAssocations and returns the
-  ## wrapped object address if it is so or 0 in other case
-  if address in classAssociations:
-    classAssociations[address].addr
-  else:
-    nil
-
-proc wrapClass(name: string, address: pointer): pointer =
+proc getVTableByStr(name: cstring, address: pointer): pointer =
   ## Wraps object passed by given `address` and which has a given type `name`
-  trace("Wrapping %p as %s...", address, name.cstring)
-  if address notin classAssociations:
-    trace("new class required\n")
-    let origin = cast[ptr Class](address)
-    let tinfoaddr = cast[ptr MethodProc](cast[int](origin.vtable) -
-                                         pointer.sizeof())
-    #var shift = 0'u32
-    #while true:
-    #  let maddr = cast[ptr uint](cast[uint](origin.vtable) + shift)[]
-    #  trace("Method: %p\n", maddr)
-    #  if maddr < 0x10000'u32 or maddr > 0xffff0000'u32:
-    #    break
-    #  shift += 4
-    #for a in vtables[name]:
-    #  trace("Wrapped method: %p\n", a)
-    trace("Type info located at %p and equals %p\n", tinfoaddr, tinfoaddr[])
-    vtables[name][1] = tinfoaddr[]
-    trace("Type info placed at %p and equals %p\n", vtables[name][1].addr, vtables[name][1])
-    let vtableptr = vtables[name][2].addr
-    trace("Setting vtableptr to %p\n", vtableptr)
-    classAssociations[address] = WrappedClass(vtable: vtableptr, origin: origin)
-  else:
-    trace("already wrapped\n")
-  result = classAssociations[address].addr
-  trace("Wrapped into class at %p\n", result)
-
+  vtables.vtableByName(name)
