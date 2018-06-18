@@ -95,7 +95,7 @@ def generate_runscript(appinfo: LaunchInfo, config, ldpaths, dlldir, steamapps):
 #!/bin/bash
 export WINEPREFIX="{0}"
 export WINEDLLPATH+=":{4}:{8}"
-export LD_LIBRARY_PATH+=":{5}:{8}"
+export LD_LIBRARY_PATH+=":{5}/bin32:{5}/bin64:{8}"
 export WINEDEBUG="trace+steam_api"
 export WINEDLLOVERRIDES="*steam_api=b;*steam_api64=b"
 export SteamAppId="{6}"
@@ -106,7 +106,7 @@ export SteamAppUser="{7}"
 cd "{1}/common/{9}"
 LD_PRELOAD="gameoverlayrenderer.so" wine "{1}/common/{2}" {3} &> "$(dirname "$0")/lastrun.log"
 """.format(config['wineprefix'], steamapps, appinfo.executable,
-           appinfo.arguments, dlldir, config['overlaypath'],
+           appinfo.arguments, dlldir, config['steampath'],
            config['appid'], config['login'], libsteamapi, appinfo.workdir)
   return runscript
 
@@ -121,7 +121,7 @@ try:
 except:
   print("Configuration file not found! Using default values... " +
         "You may change them at " + configdir)
-  config['overlaypath'] = os.getenv("HOME")+"/.local/share/Steam/ubuntu12_32/"
+  config['steampath'] = os.getenv("HOME")+"/.steam"
   config['login'] = 'anonymous'
   os.makedirs(configdir, exist_ok=True)
   with open(configdir + "config.json", "w") as f:
@@ -180,9 +180,9 @@ aparser.add_argument('--steamcmdclient', dest='steamclient', type=str,
                      help='path to steamclient.so related to steamcmd' +
                      '(needed only without --steamnative and with --depot)',
                      default=config["steamcmdclient"])
-aparser.add_argument('-o', '--overlay-dir', dest='overlaypath', type=str,
-                      help='path to the gameoverlayrenderer.so and other ' +
-                      'steam libs', default=config["overlaypath"])
+aparser.add_argument('-o', '--steam-dir', dest='steampath', type=str,
+                      help='path to the bin32, bin64, sdk32, sdk64 and other' +
+                      ' steam folders', default=config["steampath"])
 aparser.add_argument('-p', '--password', dest='askPassword', default=False,
                       help='ask password of your steam account (may be ' +
                       'necessary for non-free apps). Note: password will ' +
@@ -207,7 +207,7 @@ aparser.add_argument('-s', '--steamapps', type=str, dest='steamapps',
 config_args = aparser.parse_args()
 config['login'] = config_args.login
 config['wineprefix'] = config_args.wineprefix
-config['overlaypath'] = config_args.overlaypath
+config['steampath'] = config_args.steampath
 config['steamcmdclient'] = config_args.steamclient
 config['depotpath'] = config_args.depotpath
 config['volume'] = config_args.volume
