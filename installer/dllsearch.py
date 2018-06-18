@@ -69,25 +69,27 @@ def findForLib(gamelocation, steamdll, strict):
   versionlist.sort()
   print("Searching for precompiled version of steam_api.dll.so...")
   totalcoverage = 0.0
-  bestpath = ""
+  bestversion = ""
   for version in versionlist:
     stdout.write(version+"...")
     predir = join("versions", version)
     prefile = join(predir, "steam_api.orig_spec")
     if isfile(prefile):
       coverage = compare_specs(origspecfile, prefile)
-      thepath = abspath(join("versions" + postfix, version))
-      if coverage == 1.0:
-        print("Found")
-        return thepath
-      elif coverage > totalcoverage:
+      if coverage > totalcoverage:
         totalcoverage = coverage
-        bestpath = thepath
+        bestversion = version
+        if coverage == 1.0:
+          print("Found")
+          break
       print("[%0.1f%% matching]" % (coverage * 100))
     else:
       print("No such file")
-  if not strict and totalcoverage > 0:
-    return bestpath
+  if totalcoverage == 1.0 or (not strict and totalcoverage > 0):
+    thepath = abspath(join("versions" + postfix, version))
+    if len(postfix) > 0:
+      thepath += ":" + abspath(join("versions", version))
+    return thepath
   run(["make", "DLL="+esc(steamdll), "clean"])
   fixedspec = join(gamelocation, "steam_api" + postfix + ".spec")
   with TemporaryDirectory() as tmpdir:
