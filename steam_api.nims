@@ -3,7 +3,6 @@
 --passC:"-mno-cygwin"
 --passC:"-D__WINESRC__"
 --cc:gcc
---gc:v2
---d:useMalloc
+--gc:regions
 --os:windows
 --noMain

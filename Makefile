@@ -83,7 +83,7 @@ $(DLLPARSER):
 	$(MAKE) -C tools $(abspath $(DLLPARSER))
 
 %64.dll.so: %64.spec $(NIMSRCS) steam_api.nims steam_api.nim $(SIGNATURESFILE)
-	$(NIMC) c -d:specname="$(abspath $<)" \
+	$(NIMC) c -d:specname="$(abspath $<)" --newruntime\
 	          -d:cdfile="$(abspath $(SIGNATURESFILE))" \
             --passC:"-m64" --passL:"-m64" --cpu:amd64 \
             $(TUNEOPTS) --gcc.exe:$(WINEGCC) --gcc.linkerexe:$(WINEGCC) \
@@ -91,7 +91,7 @@ $(DLLPARSER):
             steam_api.nim
 
 %.dll.so: %.spec $(NIMSRCS) steam_api.nims steam_api.nim $(SIGNATURESFILE)
-	$(NIMC) c -d:specname="$(abspath $<)" \
+	$(NIMC) c -d:specname="$(abspath $<)" --newruntime\
 	          -d:cdfile="$(abspath $(SIGNATURESFILE))" \
             --passC:"-m32" --passL:"-m32" --cpu:i386 \
             $(TUNEOPTS) --gcc.exe:$(WINEGCC) --gcc.linkerexe:$(WINEGCC) \
