@@ -22,17 +22,16 @@ def move_over(src, dst):
 
 class LaunchInfo:
   def __init__(self, match_dict, install_dir):
-    self.executable = install_dir + '/' + re.sub(r'\\', r'/',
-                                                 match_dict['executable'])
-    if 'arguments' in match_dict:
-      self.arguments = match_dict["arguments"]
-    else:
-      self.arguments = ""
+    self.executable = join(install_dir, *match_dict['executable'].split('\\'))
+    self.arguments = 'arguments' in match_dict and match_dict["arguments"] or ""
     self.description = match_dict["description"]
+    self.workdir = 'workingdir' in match_dict and match_dict["workingdir"] or ""
+    self.workdir = join(install_dir, *self.workdir.split('\\'))
   def __repr__(self):
-    return "(LaunchInfo: {0} {1} # {2})".format(self.executable,
-                                                self.arguments,
-                                                self.description)
+    return "(LaunchInfo: {3}$ {0} {1} # {2})".format(self.executable,
+                                                     self.arguments,
+                                                     self.description,
+                                                     self.workdir)
 
 class SteamInterface:
   def __init__(self, appid):

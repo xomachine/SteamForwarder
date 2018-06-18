@@ -97,17 +97,17 @@ export WINEPREFIX="{0}"
 export WINEDLLPATH+=":{4}:{8}"
 export LD_LIBRARY_PATH+=":{5}:{8}"
 export WINEDEBUG="trace+steam_api"
-export WINEARCH="win32"
 export WINEDLLOVERRIDES="*steam_api=b,*steam_api64=b"
 export SteamAppId="{6}"
 export SteamControllerAppId="{6}"
 export SteamGameId="{6}"
 export SteamUser="{7}"
 export SteamAppUser="{7}"
+cd "{1}/common/{9}"
 LD_PRELOAD="gameoverlayrenderer.so" wine "{1}/common/{2}" {3} &> "$(dirname "$0")/lastrun.log"
 """.format(config['wineprefix'], steamapps, appinfo.executable,
            appinfo.arguments, dlldir, config['overlaypath'],
-           config['appid'], config['login'], libsteamapi)
+           config['appid'], config['login'], libsteamapi, appinfo.workdir)
   return runscript
 
 
