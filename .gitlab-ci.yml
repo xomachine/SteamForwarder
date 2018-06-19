@@ -79,7 +79,7 @@ test:master: &premaster
   except:
   - tags
   artifacts:
-    name: "devel-$CI_COMMIT_REF_NAME"
+    name: "SteamForwarder-devel-$CI_COMMIT_SHA"
     expire_in: 1 week
     paths:
     - redist/
@@ -91,7 +91,7 @@ deploy:
   only:
   - tags
   artifacts:
-    name: "SteamForwarder-$CI_COMMIT_REF_NAME"
+    name: "SteamForwarder-$CI_COMMIT_TAG"
     paths:
     - redist/
 
