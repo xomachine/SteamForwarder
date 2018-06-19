@@ -57,7 +57,10 @@ cache:
     fi
     cd ..
     export PATH="$PWD/nim-${NIMBRANCH}/bin${PATH:+:$PATH}"
-    export LD_LIBRARY_PATH="/usr/lib32:/usr/libx32:/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    find / -name 'crti.o' | while read n; do
+      echo "$n"
+      export LD_LIBRARY_PATH="$n${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    done
 
 .test: &testpart
   stage: test
