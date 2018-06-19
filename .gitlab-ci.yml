@@ -66,8 +66,8 @@ cache:
   - winegcc -v
   - wine64 --version
   - |
-    export LD_LIBRARY_PATH="$(find / -name 'crti.o' | sed -z -e 's/\n/:/g' -e 's%/crti.o%%g' -e 's/:$//')${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-    echo "$LD_LIBRARY_PATH"
+    export LIBRARY_PATH="$(find / -name 'crti.o' | sed -z -e 's/\n/:/g' -e 's%/crti.o%%g' -e 's/:$//')${LIBRARY_PATH:+:$LIBRARY_PATH}"
+    echo "$LIBRARY_PATH"
     winegcc -print-search-dirs
     make ARCH=64 precompile
 
