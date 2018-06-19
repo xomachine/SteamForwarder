@@ -111,7 +111,7 @@ proc makeMethodDesc(i: int, k: string, v: StackState): MethodDesc =
   pop %ecx # pop object reference back
   # !!! IMPORTANT!!! older gcc versions put stack frame regardless of pragmas so we need to pop it
   # pop %ebp # well compiller stores ebp regardless, so we need to pop it back
-  ret $""" & $(v.depth-4) &  """ # clean arguments from the stack and return
+  ret $""" & $(v.depth-4) & """ # clean arguments from the stack and return
 """
   result.body = newTree(nnkAsmStmt, newEmptyNode(), tstr)
   result.name = "m" & k & $i
