@@ -57,6 +57,7 @@ cache:
     fi
     cd ..
     export PATH="$PWD/nim-${NIMBRANCH}/bin${PATH:+:$PATH}"
+    export LD_LIBRARY_PATH="/usr/lib32:/usr/libx32:/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 
 .test: &testpart
   stage: test
