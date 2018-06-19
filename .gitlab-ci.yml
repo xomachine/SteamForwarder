@@ -56,11 +56,6 @@ cache:
       fi
     fi
     cd ..
-    export PATH="$PWD/nim-${NIMBRANCH}/bin${PATH:+:$PATH}"
-    find / -name 'crti.o' | while read n; do
-      echo "$n"
-      export LD_LIBRARY_PATH="$n${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-    done
 
 .test: &testpart
   stage: test
@@ -69,9 +64,15 @@ cache:
   - nim-${NIMBRANCH}/bin/nim -v
   - winegcc -v
   - wine64 --version
-  - winegcc -print-search-dirs
-  - echo "$LD_LIBRARY_PATH"
-  - make ARCH=64 precompile
+  - |
+    find / -name 'crti.o' | while read n; do
+      echo "$n"
+      export LD_LIBRARY_PATH="$n${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    done
+    echo "$LD_LIBRARY_PATH"
+    export PATH="$PWD/nim-${NIMBRANCH}/bin${PATH:+:$PATH}"
+    winegcc -print-search-dirs
+    make ARCH=64 precompile
 
 test:master:
   variables:
