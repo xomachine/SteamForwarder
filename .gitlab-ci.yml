@@ -70,15 +70,35 @@ cache:
     export LIBRARY_PATH="$libs${LIBRARY_PATH:+:$LIBRARY_PATH}"
     export LD_LIBRARY_PATH="$libs${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
     winegcc -print-search-dirs
-    make ARCH=64 precompile
+    make ARCH=64 DESTDIR=redist PREFIX= install
 
-test:master:
+test:master: &premaster
   variables:
     NIMBRANCH: master
   <<: *testpart
+  except:
+  - tags
+  artifacts:
+    name: "devel-$CI_COMMIT_REF_NAME"
+    expire_in: 1 week
+    paths:
+    - redist/
+
+deploy:
+  <<: *premaster
+  stage: deploy
+  except:
+  only:
+  - tags
+  artifacts:
+    name: "SteamForwarder-$CI_COMMIT_REF_NAME"
+    paths:
+    - redist/
 
 test:devel:
   variables:
     NIMBRANCH: devel
+  except:
+  - tags
   allow_failure: true
   <<: *testpart
