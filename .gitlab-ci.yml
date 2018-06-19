@@ -69,6 +69,8 @@ cache:
   - nim-${NIMBRANCH}/bin/nim -v
   - winegcc -v
   - wine64 --version
+  - winegcc -print-search-dirs
+  - echo "$LD_LIBRARY_PATH"
   - make ARCH=64 precompile
 
 test:master:
