@@ -22,11 +22,12 @@ cache:
     if [ ! -f wine/wine.deb ]; then
       rm -rf wine
       mkdir -p wine
-      wget -O wine/wine-i386.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-i386_${WVERSION}~jessie_i386.deb
-      wget -O wine/wine-amd64.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-amd64_${WVERSION}~jessie_amd64.deb
-      wget -O wine/wine-dev.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-dev_${WVERSION}~jessie_amd64.deb
-      wget -O wine/wine.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}_${WVERSION}~jessie_amd64.deb
-      wget -O wine/winehq.deb https://dl.winehq.org/wine-builds/debian/pool/main/winehq-${WBRANCH}_${WVERSION}~jessie_amd64.deb
+      export DVERNAME=$(sed -n 's/^VERSION=.*(\([a-z]\+\)).*/\1/p' /etc/os-release)
+      wget -O wine/wine-i386.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-i386_${WVERSION}~${DVERNAME}_i386.deb
+      wget -O wine/wine-amd64.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-amd64_${WVERSION}~${DVERNAME}_amd64.deb
+      wget -O wine/wine-dev.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-dev_${WVERSION}~${DVERNAME}_amd64.deb
+      wget -O wine/wine.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}_${WVERSION}~${DVERNAME}_amd64.deb
+      wget -O wine/winehq.deb https://dl.winehq.org/wine-builds/debian/pool/main/winehq-${WBRANCH}_${WVERSION}~${DVERNAME}_amd64.deb
     fi
     for p in wine wine-dev wine-i386 wine-amd64 winehq; do
       if [ -f wine/$p.deb ]; then dpkg --force-all -i wine/$p.deb; fi
