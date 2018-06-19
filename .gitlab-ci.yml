@@ -1,5 +1,4 @@
-image: gcc
-
+image: "vookimedlo/debian-gcc:gcc_debian-stable"
 variables:
   WBRANCH: stable
   WVERSION: 3.0.1
@@ -16,8 +15,9 @@ cache:
     - nim-${NIMBRANCH}
     - wine
   before_script:
+  - dpkg --add-architecture i386
   - apt-get update
-  - apt-get install -y -f binutils-dev gcc-multilib
+  - apt-get install -y -f binutils-dev gcc-multilib wget
   - |
     if [ ! -f wine/wine.deb ]; then
       rm -rf wine
@@ -66,8 +66,9 @@ cache:
   - winegcc -v
   - wine64 --version
   - |
-    export LIBRARY_PATH="$(find / -name 'crti.o' | sed -z -e 's/\n/:/g' -e 's%/crti.o%%g' -e 's/:$//')${LIBRARY_PATH:+:$LIBRARY_PATH}"
-    echo "$LIBRARY_PATH"
+    export libs="$(find / -name 'crti.o' | sed -z -e 's/\n/:/g' -e 's%/crti.o%%g' -e 's/:$//')"
+    export LIBRARY_PATH="$libs${LIBRARY_PATH:+:$LIBRARY_PATH}"
+    export LD_LIBRARY_PATH="$libs${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
     winegcc -print-search-dirs
     make ARCH=64 precompile
 
