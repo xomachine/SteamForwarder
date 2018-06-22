@@ -52,10 +52,6 @@ proc `-`*(a: pointer, b: int): ptr pointer =
   cast[ptr pointer](cast[int](a) - b)
 
 
-proc check*(m: MemMaps, p: pointer): auto =
-  ## Just a helper to avoid type conversion in checkAddress
-  m.checkAddress(cast[uint32](p))
-
 proc dumpMemoryRefs*(m: MemMaps, p: ptr pointer, level: string = "") =
   ## Prints memory around the given pointer `p`. If the memory contains
   ## the valid address, also prints memory around it. And so on until the
@@ -66,7 +62,7 @@ proc dumpMemoryRefs*(m: MemMaps, p: ptr pointer, level: string = "") =
   #  trace("%s%p - invalid\n", level.cstring, p)
   #  return
   trace("%s%p: %p", level.cstring, p, p[])
-  if Flags.read notin m.check(p[]).permissions:
+  if Flags.read notin m.checkAddress(p[]).permissions:
     trace(" - invalid\n")
     return
   trace("\n")

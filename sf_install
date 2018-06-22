@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
+from stat import S_IRWXU, S_IRWXG, S_IROTH
 from urllib.request import urlopen, Request
 from getpass import getpass
 from collections import defaultdict
@@ -22,6 +23,14 @@ def find_steamapi_dll(installdir):
   print("Can not find steam_api.dll inside the game directory! Probably, " +
         "the game is incompatible with SteamForwarder")
   exit(1)
+
+def detectSteamAppsInVolume(voldir):
+  for thedir in os.listdir(voldir):
+    steamappsdir = os.path.join(voldir, thedir)
+    if re.match("[Ss]team[Aa]pps",thedir) and os.path.isdir(steamappsdir):
+      return steamappsdir
+  raise Exception("Can not find steamapps directory in the volume folder: " +
+                  voldir)
 
 def get_app_config_http(appid):
   namere = re.compile("""<td itemprop="name">(?P<name>[^<>]+)</td>""")
@@ -79,25 +88,26 @@ def generate_manifest(appinfos):
 """ % (appinfos["id"], appinfos["name"], appinfos["installdir"])
   return manifest
 
-def generate_runscript(appinfo: LaunchInfo, config, libsteamapi, dlldir, steamapps):
+def generate_runscript(appinfo: LaunchInfo, config, ldpaths, dlldir, steamapps):
   print("...for " + appinfo.executable)
+  libsteamapi = ":".join(ldpaths)
   runscript = """
 #!/bin/bash
 export WINEPREFIX="{0}"
 export WINEDLLPATH+=":{4}:{8}"
-export LD_LIBRARY_PATH+=":{5}:{8}"
+export LD_LIBRARY_PATH+=":{5}/bin32:{5}/bin64:{8}"
 export WINEDEBUG="trace+steam_api"
-export WINEARCH="win32"
-export WINEDLLOVERRIDES="*steam_api=b"
+export WINEDLLOVERRIDES="*steam_api=b;*steam_api64=b"
 export SteamAppId="{6}"
 export SteamControllerAppId="{6}"
 export SteamGameId="{6}"
 export SteamUser="{7}"
 export SteamAppUser="{7}"
+cd "{1}/common/{9}"
 LD_PRELOAD="gameoverlayrenderer.so" wine "{1}/common/{2}" {3} &> "$(dirname "$0")/lastrun.log"
 """.format(config['wineprefix'], steamapps, appinfo.executable,
-           appinfo.arguments, dlldir, config['overlaypath'],
-           config['appid'], config['login'], libsteamapi)
+           appinfo.arguments, dlldir, config['steampath'],
+           config['appid'], config['login'], libsteamapi, appinfo.workdir)
   return runscript
 
 
@@ -111,7 +121,7 @@ try:
 except:
   print("Configuration file not found! Using default values... " +
         "You may change them at " + configdir)
-  config['overlaypath'] = os.getenv("HOME")+"/.local/share/Steam/ubuntu12_32/"
+  config['steampath'] = os.getenv("HOME")+"/.steam"
   config['login'] = 'anonymous'
   os.makedirs(configdir, exist_ok=True)
   with open(configdir + "config.json", "w") as f:
@@ -133,6 +143,9 @@ class printvollist(argparse.Action):
       print(p)
     quit(0)
 
+def parselist(inp):
+  return inp.split(',')
+
 aparser = argparse.ArgumentParser(description="The windows steam games " +
                                   "installation script")
 aparser.add_argument('--steamnative', default=False, dest='steamnative',
@@ -149,8 +162,16 @@ aparser.add_argument('-w', '--wineprefix', type=str, dest='wineprefix',
 aparser.add_argument('-l', '--login', help='your login at steam ' +
                      '(may be needed only without --steamnative)', type=str,
                      dest='login', default=config['login'])
+aparser.add_argument('--with-dlc', help='download dlc content from depot',
+                     dest='dlcdepot', default=list(), type=parselist)
+aparser.add_argument('--dlc-only', help='download only dlc depot, without ' +
+                     'the game itself',
+                     dest='dlconly', default=False, action='store_true')
 aparser.add_argument('--depot', help='download directly from steam depot',
                      dest='depot', default=False, action='store_true')
+aparser.add_argument('--strict', help='do not try to match the precompiled ' +
+                     'library partialy, compile the new one instead',
+                     dest='strict', default=False, action='store_true')
 aparser.add_argument('--depot-path', type=str, default=config["depotpath"],
                       help='path where temporary data will be stored while ' +
                       'depot downloading (needed only without --steamnative)',
@@ -159,9 +180,9 @@ aparser.add_argument('--steamcmdclient', dest='steamclient', type=str,
                      help='path to steamclient.so related to steamcmd' +
                      '(needed only without --steamnative and with --depot)',
                      default=config["steamcmdclient"])
-aparser.add_argument('-o', '--overlay-dir', dest='overlaypath', type=str,
-                      help='path to the gameoverlayrenderer.so and other ' +
-                      'steam libs', default=config["overlaypath"])
+aparser.add_argument('-o', '--steam-dir', dest='steampath', type=str,
+                      help='path to the bin32, bin64, sdk32, sdk64 and other' +
+                      ' steam folders', default=config["steampath"])
 aparser.add_argument('-p', '--password', dest='askPassword', default=False,
                       help='ask password of your steam account (may be ' +
                       'necessary for non-free apps). Note: password will ' +
@@ -186,10 +207,13 @@ aparser.add_argument('-s', '--steamapps', type=str, dest='steamapps',
 config_args = aparser.parse_args()
 config['login'] = config_args.login
 config['wineprefix'] = config_args.wineprefix
-config['overlaypath'] = config_args.overlaypath
+config['steampath'] = config_args.steampath
 config['steamcmdclient'] = config_args.steamclient
 config['depotpath'] = config_args.depotpath
 config['volume'] = config_args.volume
+config['dlcs'] = config_args.dlcdepot
+config['dlconly'] = config_args.dlconly
+config['strict'] = config_args.strict
 appid = config_args.appid
 config['appid'] = appid
 
@@ -215,9 +239,7 @@ if config_args.store:
 if config_args.nodl and not config_args.steamapps is None:
   steamapps = config_args.steamapps
 else:
-  steamapps = os.path.join(steaminterface.volumes[config["volume"]],
-                           "steamapps")
-
+  steamapps = detectSteamAppsInVolume(steaminterface.volumes[config['volume']])
 print("Obtaining app info...")
 try:
   appinfos = steaminterface.getAppInfo()
@@ -238,7 +260,7 @@ rs_location = steamapps + '/common/' + appinfos["installdir"] + '/'
 if not config_args.nodl:
   print("Downloading " + appinfos["name"] + " via steamcmd...")
   if config_args.depot:
-    steaminterface.depotDownload()
+    steaminterface.depotDownload(rs_location)
   else:
     steaminterface.appUpdate()
 
@@ -255,13 +277,14 @@ if 'regfile' in appinfos:
       env={"WINEPREFIX": config["wineprefix"], "WINEARCH": "win32"})
     p.wait()
 print("Generating the steam_api.dll wrapper just for this game...")
-libsteamapi = findMatchingLibrary(rs_location)
+ldpaths = findMatchingLibrary(rs_location, config['strict'])
 print("Generating runscripts...")
 for name, appinfo in appinfos["infos"].items():
-  runscript = generate_runscript(appinfo, config, libsteamapi, rs_location, steamapps)
+  runscript = generate_runscript(appinfo, config, ldpaths, rs_location, steamapps)
   runscript_location = (rs_location + name + '.sh')
   with open(runscript_location, "w") as f:
     f.write(runscript)
+  os.chmod(runscript_location, S_IRWXU | S_IRWXG | S_IROTH)
 print("Placing steam_appid.txt to the game location...")
 with open(rs_location + '/steam_appid.txt', "w") as f:
   f.write(str(appid))

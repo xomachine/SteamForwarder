@@ -1,0 +1,104 @@
+image: "vookimedlo/debian-gcc:gcc_debian-stable"
+variables:
+  WBRANCH: stable
+  WVERSION: 3.0.1
+
+cache:
+  key: wine
+  paths:
+  - wine
+
+.build:environment: &compiler
+  cache:
+    key: nim-${NIMBRANCH}
+    paths:
+    - nim-${NIMBRANCH}
+    - wine
+  before_script:
+  - dpkg --add-architecture i386
+  - apt-get update
+  - apt-get install -y -f binutils-dev gcc-multilib wget
+  - |
+    if [ ! -f wine/wine.deb ]; then
+      rm -rf wine
+      mkdir -p wine
+      export DVERNAME=$(sed -n 's/^VERSION=.*(\([a-z]\+\)).*/\1/p' /etc/os-release)
+      wget -O wine/wine-i386.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-i386_${WVERSION}~${DVERNAME}_i386.deb
+      wget -O wine/wine-amd64.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-amd64_${WVERSION}~${DVERNAME}_amd64.deb
+      wget -O wine/wine-dev.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-dev_${WVERSION}~${DVERNAME}_amd64.deb
+      wget -O wine/wine.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}_${WVERSION}~${DVERNAME}_amd64.deb
+      wget -O wine/winehq.deb https://dl.winehq.org/wine-builds/debian/pool/main/winehq-${WBRANCH}_${WVERSION}~${DVERNAME}_amd64.deb
+    fi
+    for p in wine wine-dev wine-i386 wine-amd64 winehq; do
+      if [ -f wine/$p.deb ]; then dpkg --force-all -i wine/$p.deb; fi
+    done
+    ln -s /opt/wine-${WBRANCH}/include/wine /usr/include/wine
+    ln -s /opt/wine-${WBRANCH}/lib{,32}
+  - |
+    if [ ! -x nim-${NIMBRANCH}/bin/nim ]; then
+      git clone -b ${NIMBRANCH} --depth 1 git://github.com/nim-lang/nim nim-${NIMBRANCH}/
+      cd nim-${NIMBRANCH}
+      git clone --depth 1 git://github.com/nim-lang/csources csources/
+      cd csources
+      sh build.sh
+      cd ..
+      rm -rf csources
+      bin/nim c koch
+      ./koch boot -d:release
+      ./koch nimble
+    else
+      cd nim-${NIMBRANCH}
+      git fetch origin
+      if ! git merge FETCH_HEAD | grep "Already up-to-date"; then
+        bin/nim c koch
+        ./koch boot -d:release
+        ./koch nimble
+      fi
+    fi
+    cd ..
+    export PATH="$PWD/nim-${NIMBRANCH}/bin${PATH:+:$PATH}"
+
+.test: &testpart
+  stage: test
+  <<: *compiler
+  script:
+  - nim-${NIMBRANCH}/bin/nim -v
+  - winegcc -v
+  - wine64 --version
+  - |
+    export libs="$(find / -name 'crti.o' | sed -z -e 's/\n/:/g' -e 's%/crti.o%%g' -e 's/:$//')"
+    export LIBRARY_PATH="$libs${LIBRARY_PATH:+:$LIBRARY_PATH}"
+    export LD_LIBRARY_PATH="$libs${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    winegcc -print-search-dirs
+    make ARCH=64 DESTDIR=redist PREFIX= install
+
+test:master: &premaster
+  variables:
+    NIMBRANCH: master
+  <<: *testpart
+  except:
+  - tags
+  artifacts:
+    name: "SteamForwarder-devel-$CI_COMMIT_SHA"
+    expire_in: 1 week
+    paths:
+    - redist/
+
+deploy:
+  <<: *premaster
+  stage: deploy
+  except:
+  only:
+  - tags
+  artifacts:
+    name: "SteamForwarder-$CI_COMMIT_TAG"
+    paths:
+    - redist/
+
+test:devel:
+  variables:
+    NIMBRANCH: devel
+  except:
+  - tags
+  allow_failure: true
+  <<: *testpart

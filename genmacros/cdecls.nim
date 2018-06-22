@@ -1,15 +1,15 @@
 
 from utils import parseFullSpec, SpecFile
-from wrapper import wrapIfNecessary
+from wrapper import wrapIfNecessary, unwrapClass
 from generators import genTraceCall, genCall, genArgs
 from wine import trace
 from callback import wrap, unwrap, wrapToOrigin
-from vtables import fastUnWrap
 import macros
 
 type Dummy = object
+  a: uint64
   ## The empty struct needed to be used as return value in some functions and
-  ## cause the compiller to generate code for in-memory return.
+  ## cause the compiller to generate code for in-memory return (CSteamID).
 
 macro generateLinuxDecls*(specs: static[SpecFile]): untyped =
   ## Generates the libsteam_api.so bindings using given SpecFile.
@@ -27,7 +27,8 @@ macro generateLinuxDecls*(specs: static[SpecFile]): untyped =
     if s.swap:
       params[0] = bindSym("Dummy")
     var decl = quote do:
-      proc `name`() {.cdecl, importc: `actualname`.}
+      proc `name`() {.codegenDecl:"extern $# __attribute__((sysv_abi)) $#$#",
+                      importc: `actualname`.}
     decl[3] = params
     result.add(decl)
   when defined(debug):
@@ -94,7 +95,7 @@ macro generateWineDecls*(specs: static[SpecFile]): untyped =
           let unwrappedarg = newIdentNode("unwrapped")
           call[1] = unwrappedarg
           quote do:
-            let `unwrappedarg` = fastUnWrap(`originarg`)
+            let `unwrappedarg` = unwrapClass(`originarg`)
         else: newEmptyNode()
       decl.body = quote do:
         `tracecall`

@@ -22,17 +22,16 @@ def move_over(src, dst):
 
 class LaunchInfo:
   def __init__(self, match_dict, install_dir):
-    self.executable = install_dir + '/' + re.sub(r'\\', r'/',
-                                                 match_dict['executable'])
-    if 'arguments' in match_dict:
-      self.arguments = match_dict["arguments"]
-    else:
-      self.arguments = ""
+    self.executable = join(install_dir, *match_dict['executable'].split('\\'))
+    self.arguments = 'arguments' in match_dict and match_dict["arguments"] or ""
     self.description = match_dict["description"]
+    self.workdir = 'workingdir' in match_dict and match_dict["workingdir"] or ""
+    self.workdir = join(install_dir, *self.workdir.split('\\'))
   def __repr__(self):
-    return "(LaunchInfo: {0} {1} # {2})".format(self.executable,
-                                                self.arguments,
-                                                self.description)
+    return "(LaunchInfo: {3}$ {0} {1} # {2})".format(self.executable,
+                                                     self.arguments,
+                                                     self.description,
+                                                     self.workdir)
 
 class SteamInterface:
   def __init__(self, appid):
@@ -105,10 +104,13 @@ def parse_app_info(steam_json,  appid):
     if 'Registry' in installactions:
       appinfos['regfile'] = makeRegFile(installactions['Registry'], curlang)
     appinfos['install'] = appinfo['install']
+  print("Depots related to the game:")
   for k, v in appinfo['depots'].items():
-    if not 'config' in v:
+    if 'name' in v:
+      print(k + ": " + v['name'])
+    if not 'manifests' in v:
       continue
-    elif (('Language' in v['config'] and
+    elif ((not 'config' in v) or ('Language' in v['config'] and
            v['config']['Language'] == curlang) or
           (not 'oslist' in v['config']) or
           (v['config']['oslist'] == 'windows')):

@@ -51,14 +51,21 @@ app_update {0} validate
         result.append(path)
     return result
 
-  def depotDownload(self):
-    rs_location = (self.config["steamapps"] + '/common/' +
-                           self.appinfo["installdir"] + '/')
+  def depotDownload(self, rs_location):
     print('Preparing depot downloader...')
     os.environ['LD_PRELOAD'] = self.config['depotpath'] + '/steamclient.so'
     os.symlink(self.config['steamcmdclient'], os.environ['LD_PRELOAD'], True)
     steam_script = self.steam_script_header
     for k, v in self.appinfo['depots'].items():
+      if 'dlcappid' in v:
+        print("DLC depot: " + str(k))
+        if not (k in self.config['dlcs']):
+          print("Skipping DLC " + str(k) + ", use --with-dlc to download it")
+          continue
+      elif self.config['dlconly']:
+        print("Skipping the game depot " + k +
+              " since --dlc-only option passed")
+        continue
       print('Adding depot ' + str(k) + ' to schedule...')
       steam_script += """
 download_depot {0} {1}

@@ -27,7 +27,8 @@ proc parseEA(s: string): tuple[register: string, offset: int] =
     return (register: "", offset: parseHexInt(s))
   result.register = splitted[1]
   result.offset =
-    if splitted[0].len == 0 or splitted[0][0] == '%':
+    if splitted[0].len < 3 or splitted[0][0] == '%':
+      # minimal amount of meaningful symbols is 3: 0xX
       0
     elif splitted[0][0] == '-':
       -parseHexInt(splitted[0].strip(true, true, {'-'}))

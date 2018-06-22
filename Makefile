@@ -2,54 +2,57 @@
 SRCDIR                ?= $(CURDIR)
 NIMC                  ?= nim
 WINEDUMP              ?= winedump
+WINEGCC               ?= /usr/bin/winegcc
 MV                    ?= mv
 RM                    ?= rm
 MAKE                  ?= make
-CACHEDIR              ?= $(SRCDIR)
-STEAMCLIENT           ?= $(SRCDIR)/steamclient.so
-SIGNATURESFILE        ?= $(SRCDIR)/signatures.txt
-DLLPARSER             ?= $(SRCDIR)/tools/dllparser
-SIGSEARCH             ?= $(SRCDIR)/tools/sigsearch
-VERSIONSDIR           ?= $(SRCDIR)/versions
+ARCH                  ?= 64
+NOTUNE                ?= 0
+
+STEAMCLIENT           ?= steamclient.so
+SIGNATURESFILE        ?= signatures.txt
+DLL                   ?= steam_api$(LIB_POSTFIX).dll
+DLLPARSER             ?= tools/dllparser
+SIGSEARCH             ?= tools/sigsearch
 PREFIX                ?= /usr/local
+DATAPATH               = $(DESTDIR)$(PREFIX)/share/SteamForwarder
 INSTALL               ?= install -Dm 755
 INSTALLDATA           ?= install -Dm 644
 
-ARCH                  ?= 32
-NOTUNE                ?= 0
-ifeq ($(ARCH), 64)
-  LIB_POSTFIX = 64
-  NIMARCH = x86
-else
-  LIB_POSTFIX =
-  NIMARCH = i386
-endif
 ifeq ($(NOTUNE), 1)
   TUNEOPTS = --opt:none --passC:'-mtune=generic'
 else
   TUNEOPTS =
 endif
-DLL                    ?= $(SRCDIR)/steam_api$(LIB_POSTFIX).dll
+# Info to build original specs
+DLL                    ?= steam_api$(LIB_POSTFIX).dll
 OUTPUTDLL               = $(DLL).so
-NIMSRCS                 = $(wildcard $(SRCDIR)/genmacros/*.nim)
-VERFILES                = $(wildcard $(SRCDIR)/versions/*/libsteam_api.so)
-WINLIBS                 = $(wildcard $(SRCDIR)/versions/*/steam_api.dll)
+NIMSRCS                 = $(wildcard genmacros/*.nim)
+VERFILES                = $(wildcard versions/*/libsteam_api.so)
+WINLIBS                 = $(wildcard versions/*/steam_api.dll)
 PREORIGS                = $(WINLIBS:%.dll=%.orig_spec)
-ORSPECS                 = $(wildcard $(SRCDIR)/versions/*/steam_api.orig_spec)
+# Info to build specs with arguments
+ORSPECS                 = $(wildcard versions/*/steam_api.orig_spec)
 PRESPECS                = $(ORSPECS:%.orig_spec=%.spec)
 PRETARGETS              = $(ORSPECS:%.orig_spec=%.dll.so)
-INSTALLERSCRIPT         = $(wildcard $(SRCDIR)/installer/*.py)
-VERENDS                 = $(notdir $(VERFILES:%/libsteam_api.so=%))
-VERAVAILABLE            = $(notdir $(ORSPECS:%/steam_api.orig_spec=%))
-INSTALLVERLIBS          = $(foreach sf, $(VERENDS), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/libsteam_api.so $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/libsteam_api.so;)
-INSTALLPRELIBS          = $(foreach sf, $(VERAVAILABLE), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/steam_api.dll.so $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/steam_api.dll.so;)
-INSTALLVERSPECS          = $(foreach sf, $(VERAVAILABLE), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/steam_api.spec $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/steam_api.spec;)
-INSTALLVERORSPECS        = $(foreach sf, $(VERAVAILABLE), $(INSTALLDATA) $(SRCDIR)/versions/$(sf)/steam_api.orig_spec $(DESTDIR)$(PREFIX)/share/SteamForwarder/versions/$(sf)/steam_api.orig_spec;)
+
+ifneq ($(ARCH), 32)
+  LIBS64                = $(wildcard versions64/*/libsteam_api.so)
+  VERSIONS64            = $(dir $(subst versions64,versions,$(LIBS64)))
+  PRESPECS64            = $(VERSIONS64:%/=%/steam_api64.spec)
+  PRETARGETS           += $(PRESPECS64:%.spec=%.dll.so)
+  PRESPECS             += $(PRESPECS64)
+  VERFILES             += $(LIBS64)
+endif
+# Info for installation
+INSTALLERSCRIPT         = $(wildcard installer/*.py)
+# Original specs
+INSTALLALL              = $(foreach path, $(VERFILES) $(ORSPECS) $(PRESPECS) $(PRETARGETS), $(INSTALLDATA) $(path) $(DATAPATH)/$(path);)
 
 .PHONY: all tools clean fullclean install precompile prespec preorig signatures
-.SECONDARY: $(DLL:%.dll=%.spec)
+.SECONDARY: $(PRESPECS)
 
-all: $(OUTPUTDLL)
+all: precompile
 
 tools: $(SIGSEARCH) $(DLLPARSER)
 
@@ -62,41 +65,44 @@ preorig: $(PREORIGS)
 signatures: $(SIGNATURESFILE)
 
 install: tools $(ORSPECS) $(PRESPECS) $(SIGNATURESFILE) $(PRETARGETS)
-	$(INSTALL) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder/tools $(SIGSEARCH) \
-	              $(DLLPARSER)
-	$(INSTALLVERLIBS)
-	$(INSTALLVERSPECS)
-	$(INSTALLPRELIBS)
-	$(INSTALLVERORSPECS)
-	$(INSTALL) $(SRCDIR)/sf_install \
-	           $(DESTDIR)$(PREFIX)/share/SteamForwarder/sf_install
-	$(INSTALLDATA) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder $(SIGNATURESFILE) \
-	                  $(SRCDIR)/steam_api.nim \
-                    $(SRCDIR)/steam_api.nims \
-                    Makefile
-	$(INSTALLDATA) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder/installer \
-	                  $(INSTALLERSCRIPT)
-	$(INSTALLDATA) -t $(DESTDIR)$(PREFIX)/share/SteamForwarder/genmacros \
-	                  $(NIMSRCS)
+	$(INSTALL) -t $(DATAPATH)/tools $(SIGSEARCH) $(DLLPARSER)
+	$(INSTALL) sf_install $(DATAPATH)/sf_install
+	$(INSTALLALL)
+	$(INSTALLDATA) -t $(DATAPATH) $(SIGNATURESFILE) steam_api.nim steam_api.nims \
+	                              Makefile
+	$(INSTALLDATA) -t $(DATAPATH)/installer $(INSTALLERSCRIPT)
+	$(INSTALLDATA) -t $(DATAPATH)/genmacros $(NIMSRCS)
 	$(INSTALL) -d $(DESTDIR)$(PREFIX)/bin
 	ln -s ../share/SteamForwarder/sf_install \
 	      $(DESTDIR)$(PREFIX)/bin/sf_install
 
 $(SIGSEARCH):
-	$(MAKE) -C $(SRCDIR)/tools TUNEOPTS="$(TUNEOPTS)" $(SIGSEARCH)
+	$(MAKE) -C tools TUNEOPTS="$(TUNEOPTS)" $(abspath $(SIGSEARCH))
 
 $(DLLPARSER):
-	$(MAKE) -C tools $(DLLPARSER)
+	$(MAKE) -C tools $(abspath $(DLLPARSER))
 
-%.dll.so: %.spec $(NIMSRCS) $(SRCDIR)/steam_api.nims $(SRCDIR)/steam_api.nim $(SIGNATURESFILE)
-	$(NIMC) c -d:specname=$< -d:cdfile=$(SIGNATURESFILE) \
-            --passC:"-m$(ARCH)" --passL:"-m$(ARCH)" --cpu:$(NIMARCH) \
-            $(TUNEOPTS) \
+%64.dll.so: %64.spec $(NIMSRCS) steam_api.nims steam_api.nim $(SIGNATURESFILE)
+	$(NIMC) c -d:specname="$(abspath $<)" --newruntime\
+	          -d:cdfile="$(abspath $(SIGNATURESFILE))" \
+            --passC:"-m64" --passL:"-m64" --cpu:amd64 \
+            $(TUNEOPTS) --gcc.exe:$(WINEGCC) --gcc.linkerexe:$(WINEGCC) \
             --nimcache:`mktemp -d --tmpdir=$(CACHEDIR) nimcache.XXXX` -o:$@ \
             steam_api.nim
 
+%.dll.so: %.spec $(NIMSRCS) steam_api.nims steam_api.nim $(SIGNATURESFILE)
+	$(NIMC) c -d:specname="$(abspath $<)" --newruntime\
+	          -d:cdfile="$(abspath $(SIGNATURESFILE))" \
+            --passC:"-m32" --passL:"-m32" --cpu:i386 \
+            $(TUNEOPTS) --gcc.exe:$(WINEGCC) --gcc.linkerexe:$(WINEGCC) \
+            --nimcache:`mktemp -d --tmpdir=$(CACHEDIR) nimcache.XXXX` -o:$@ \
+            steam_api.nim
+
+%64.spec: %.orig_spec | $(DLLPARSER)
+	$(DLLPARSER) versions versions64 < $< > $@
+
 %.spec: %.orig_spec | $(DLLPARSER)
-	$(DLLPARSER) $(VERSIONSDIR) < $< > $@
+	$(DLLPARSER) versions < $< > $@
 
 %.orig_spec: %.dll
 	cd "`dirname "$<"`"; \
@@ -113,4 +119,4 @@ fullclean: clean
 
 clean:
 	$(RM) -r $(CACHEDIR)/nimcache.*
-	$(RM) $(SCRDIR)/$(OUTPUTDLL) steam_api_main.c
+	$(RM) $(OUTPUTDLL) steam_api_main.c
