@@ -61,20 +61,22 @@ def findForLib(gamelocation, steamdll, strict):
     postfix = "64"
   origspecfile = join(dirname(steamdll), "steam_api"+postfix+".orig_spec")
   print("Specfile will be generated: "+origspecfile)
-  run(["make", "ARCH="+postfix, "DLL="+esc(steamdll), esc(origspecfile)])
+  run(["make", "DLL="+esc(steamdll), esc(origspecfile)])
   if not isfile(origspecfile):
     raise Exception("Can not generate spec file for steam_api!" +
                     " Ensure that winedump exists in the system.")
-  versionlist = listdir("versions" + postfix)
+  verdir = "versions" + postfix
+  versionlist = listdir(verdir)
   versionlist.sort()
-  print("Searching for precompiled version of steam_api.dll.so...")
+  print("Searching for precompiled version of steam_api" + postfix +
+        ".dll.so...")
   totalcoverage = 0.0
   bestversion = ""
   for version in versionlist:
     stdout.write(version+"...")
     predir = join("versions", version)
     prefile = join(predir, "steam_api.orig_spec")
-    if isfile(prefile):
+    if isfile(join(verdir, version, "libsteam_api.so")) and isfile(prefile):
       coverage = compare_specs(origspecfile, prefile)
       if coverage > totalcoverage:
         totalcoverage = coverage
@@ -86,15 +88,15 @@ def findForLib(gamelocation, steamdll, strict):
     else:
       print("No such file")
   if totalcoverage == 1.0 or (not strict and totalcoverage > 0):
-    thepath = abspath(join("versions" + postfix, version))
+    print("The best matching version is " + bestversion)
+    thepath = abspath(join(verdir, bestversion))
     if len(postfix) > 0:
-      thepath += ":" + abspath(join("versions", version))
+      thepath += ":" + abspath(join("versions", bestversion))
     return thepath
   run(["make", "DLL="+esc(steamdll), "clean"])
   fixedspec = join(gamelocation, "steam_api" + postfix + ".spec")
   with TemporaryDirectory() as tmpdir:
     run(["make", "DLL="+esc(steamdll),
-                 "ARCH="+postfix,
                  "SPECDIR="+esc(gamelocation),
                  "SPECFILE="+esc(fixedspec),
                  "CACHEDIR="+esc(tmpdir),
