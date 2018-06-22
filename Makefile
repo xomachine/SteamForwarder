@@ -6,7 +6,7 @@ WINEGCC               ?= /usr/bin/winegcc
 MV                    ?= mv
 RM                    ?= rm
 MAKE                  ?= make
-ARCH                  ?= 32
+ARCH                  ?= 64
 NOTUNE                ?= 0
 
 STEAMCLIENT           ?= steamclient.so
@@ -36,7 +36,7 @@ ORSPECS                 = $(wildcard versions/*/steam_api.orig_spec)
 PRESPECS                = $(ORSPECS:%.orig_spec=%.spec)
 PRETARGETS              = $(ORSPECS:%.orig_spec=%.dll.so)
 
-ifeq ($(ARCH), 64)
+ifneq ($(ARCH), 32)
   LIBS64                = $(wildcard versions64/*/libsteam_api.so)
   VERSIONS64            = $(dir $(subst versions64,versions,$(LIBS64)))
   PRESPECS64            = $(VERSIONS64:%/=%/steam_api64.spec)
