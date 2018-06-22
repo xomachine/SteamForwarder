@@ -52,7 +52,7 @@ INSTALLALL              = $(foreach path, $(VERFILES) $(ORSPECS) $(PRESPECS) $(P
 .PHONY: all tools clean fullclean install precompile prespec preorig signatures
 .SECONDARY: $(PRESPECS)
 
-all: $(OUTPUTDLL)
+all: precompile
 
 tools: $(SIGSEARCH) $(DLLPARSER)
 
