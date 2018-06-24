@@ -1,3 +1,9 @@
+# [Unreleased]
+
+### Installation script
+- `win32` arch no longer being forced while applying registry file for the game
+  installation
+
 # 0.4.0
 
 ### Installation script:
