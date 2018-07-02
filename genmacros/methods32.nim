@@ -17,14 +17,14 @@ from strutils import toHex
 
 static:
   ## Compile time variables to count which pseudo methods needed to be generated
-  var declared: set[uint8] = {}
+  var mdeclared: set[uint8] = {}
   var swpdeclared: set[uint8] = {}
 
 proc makePseudoMethods(): NimNode =
   ## Generates a both of swapped and non-swapped pseudo methods according
   ## to their invocations.
   result = newStmtList()
-  for i in declared:
+  for i in mdeclared:
     result.add(makePseudoMethod(i, false))
   for i in swpdeclared:
     result.add(makePseudoMethod(i, true))
@@ -123,7 +123,7 @@ proc makeVTableDesc(name: string, sstates: seq[StackState]): VTableDesc =
     if v.swap: # counts what pseudo methods involved to generate them after
       swpdeclared.incl(v.depth.uint8)
     else:
-      declared.incl(v.depth.uint8)
+      mdeclared.incl(v.depth.uint8)
     result.methods.add(makeMethodDesc(i, name, v))
 
 proc makeAPIDesc(classes: Classes): APIDesc =
