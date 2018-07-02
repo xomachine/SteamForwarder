@@ -15,10 +15,9 @@ from generators import genArgs, genCall, genTraceCall, genAsmHiddenCall
 from tables import pairs
 from strutils import toHex
 
-static:
-  ## Compile time variables to count which pseudo methods needed to be generated
-  var mdeclared: set[uint8] = {}
-  var swpdeclared: set[uint8] = {}
+## Compile time variables to count which pseudo methods needed to be generated
+var mdeclared {.compileTime.} : set[uint8] = {}
+var swpdeclared {.compileTime.} : set[uint8] = {}
 
 proc makePseudoMethods(): NimNode =
   ## Generates a both of swapped and non-swapped pseudo methods according

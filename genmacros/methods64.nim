@@ -15,9 +15,8 @@ from tables import pairs
 from generators import genArgs, genCall, genTraceCall, genAsmNativeCall64
 import macros
 
-static:
-  var pmethods: set[uint8]
-  var pmethodsInMemory: set[uint8]
+var pmethods {.compileTime.} : set[uint8]
+var pmethodsInMemory {.compileTime.} : set[uint8]
 
 proc makePseudoMethod(stack: uint8, hidden: bool): NimNode {.compileTime.} =
   result = newProc(newIdentNode(pseudoMethodPrefix &
