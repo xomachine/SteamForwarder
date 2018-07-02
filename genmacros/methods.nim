@@ -6,6 +6,8 @@ type
   VTableDesc* = tuple
     name: string
     methods: seq[MethodDesc]
+    commonDepths: set[uint8]
+    swapDepths: set[uint8]
   APIDesc* = tuple
     pseudomethods: NimNode
     vtables: seq[VTableDesc]
