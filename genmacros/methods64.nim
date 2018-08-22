@@ -3,7 +3,6 @@ from methods import MethodDesc, VTableDesc, APIDesc
 
 const pseudoMethodPrefix = "pseudoMethod"
 {.push, compileTime.}
-proc makePseudoMethods(): NimNode {.compileTime.}
 proc makeMethodDesc(i: int, k: string, v: StackState): MethodDesc
 proc makeVTableDesc(name: string, sstates: seq[StackState]): VTableDesc
 proc makeAPIDesc*(classes: Classes): APIDesc
@@ -14,10 +13,6 @@ from utils import strToAsm, `+`
 from tables import pairs
 from generators import genArgs, genCall, genTraceCall, genAsmNativeCall64
 import macros
-
-static:
-  var pmethods: set[uint8]
-  var pmethodsInMemory: set[uint8]
 
 proc makePseudoMethod(stack: uint8, hidden: bool): NimNode {.compileTime.} =
   result = newProc(newIdentNode(pseudoMethodPrefix &
@@ -57,12 +52,6 @@ proc makePseudoMethod(stack: uint8, hidden: bool): NimNode {.compileTime.} =
     else:
       wrapIfNecessary(res)
 
-proc makePseudoMethods(): NimNode =
-  result = newStmtList()
-  for m in pmethods:
-    result.add(makePseudoMethod(m, false))
-  for m in pmethodsInMemory:
-    result.add(makePseudoMethod(m, true))
 
 proc makeMethodDesc(i: int, k: string, v: StackState): MethodDesc =
   var tq = newNimNode(nnkTripleStrLit)
@@ -80,13 +69,21 @@ proc makeVTableDesc(name: string, sstates: seq[StackState]): VTableDesc =
   result.methods = newSeq[MethodDesc]()
   for i, v in sstates.pairs():
     if v.swap:
-      pmethodsInMemory.incl(v.depth.uint8)
+      result.swapDepths.incl(v.depth.uint8)
     else:
-      pmethods.incl(v.depth.uint8)
+      result.commonDepths.incl(v.depth.uint8)
     result.methods.add(makeMethodDesc(i, name, v))
 
 proc makeAPIDesc*(classes: Classes): APIDesc =
+  var common, swapped: set[uint8]
   result.vtables = newSeq[VTableDesc]()
   for k, v in classes.pairs():
-    result.vtables.add(makeVTableDesc(k, v))
-  result.pseudomethods = makePseudoMethods()
+    let vtable = makeVTableDesc(k, v)
+    result.vtables.add(vtable)
+    common = common + vtable.commonDepths
+    swapped = swapped + vtable.swapDepths
+  result.pseudomethods = newStmtList()
+  for m in common:
+    result.pseudomethods.add(makePseudoMethod(m, false))
+  for m in swapped:
+    result.pseudomethods.add(makePseudoMethod(m, true))

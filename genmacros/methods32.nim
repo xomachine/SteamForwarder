@@ -4,7 +4,6 @@ from methods import MethodDesc, VTableDesc, APIDesc
 
 const pseudoMethodPrefix* = "pMethod" # Just a name prefix for pseudo methods
 {.push, compileTime.}
-proc makePseudoMethods(): NimNode
 proc makePseudoMethod(stack: uint8, swp: bool): NimNode
 proc makeMethodDesc(i: int, k: string, v: StackState): MethodDesc
 proc makeVTableDesc(name: string, sstates: seq[StackState]): VTableDesc
@@ -14,20 +13,6 @@ proc makeAPIDesc*(classes: Classes): APIDesc
 from generators import genArgs, genCall, genTraceCall, genAsmHiddenCall
 from tables import pairs
 from strutils import toHex
-
-static:
-  ## Compile time variables to count which pseudo methods needed to be generated
-  var declared: set[uint8] = {}
-  var swpdeclared: set[uint8] = {}
-
-proc makePseudoMethods(): NimNode =
-  ## Generates a both of swapped and non-swapped pseudo methods according
-  ## to their invocations.
-  result = newStmtList()
-  for i in declared:
-    result.add(makePseudoMethod(i, false))
-  for i in swpdeclared:
-    result.add(makePseudoMethod(i, true))
 
 proc makePseudoMethod(stack: uint8, swp: bool): NimNode =
   ## Generates a pseudo method for stack depth of `stack`.
@@ -121,13 +106,21 @@ proc makeVTableDesc(name: string, sstates: seq[StackState]): VTableDesc =
   result.methods = newSeq[MethodDesc]()
   for i, v in sstates.pairs():
     if v.swap: # counts what pseudo methods involved to generate them after
-      swpdeclared.incl(v.depth.uint8)
+      result.swapDepths.incl(v.depth.uint8)
     else:
-      declared.incl(v.depth.uint8)
+      result.commonDepths.incl(v.depth.uint8)
     result.methods.add(makeMethodDesc(i, name, v))
 
 proc makeAPIDesc(classes: Classes): APIDesc =
+  var common, swapped: set[uint8]
   result.vtables = newSeq[VTableDesc]()
   for k, v in classes.pairs():
-    result.vtables.add(makeVTableDesc(k, v))
-  result.pseudomethods = makePseudoMethods()
+    let vtable = makeVTableDesc(k, v)
+    result.vtables.add(vtable)
+    swapped = swapped + vtable.swapDepths
+    common = common + vtable.commonDepths
+  result.pseudomethods = newStmtList()
+  for i in common:
+    result.pseudomethods.add(makePseudoMethod(i, false))
+  for i in swapped:
+    result.pseudomethods.add(makePseudoMethod(i, true))

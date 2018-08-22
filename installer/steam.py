@@ -1,5 +1,6 @@
 from installer.steaminterface import SteamInterface,  parse_app_info, move_over
 from installer.responsereader import selectReader
+from os.path import isdir
 from select import select
 from glob import iglob
 from time import sleep
@@ -151,4 +152,8 @@ class SteamNativeInterface(SteamInterface):
           print(read)
     os.makedirs(rs_location, exist_ok=True)
     for path in paths:
+      if not isdir(path):
+        print("WARNING: Path " + path + " does not exist!")
+        print("It is OK if there is an empty depot downloaded.")
+        continue
       move_over(path, rs_location)

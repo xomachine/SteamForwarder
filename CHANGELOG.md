@@ -1,13 +1,19 @@
+# [Unreleased]
+
+### Installation script
+- `win32` arch no longer being forced while applying registry file for the game
+  installation
+
 # 0.4.0
 
 ### Installation script:
 - 64-bit `steam_api64.dll` handling support
-- The script now prints a list of all DLCs and able to download them if
+- The script now prints a list of all DLCs and is able to download them if
   they are available
 - The script now prints a list of all depots related to the game, so
   user can see if MSVC++ runtime or directX needs to be installed
 - Fixed some issues related to the steamnative mode answer reading
-- Fixed SteamApps folder register (#2)
+- Fixed SteamApps folder name register (#2)
 - Improved some error messages
 - The `--overlay-dir` option was replaced by `--steam-dir` option, which should
   point to the steam installation folder in the system (`$HOME/.steam` usually)
@@ -16,7 +22,7 @@
   overlay working**
 
 ### Build system:
-- The 64-bit libraries now is being built by default. To make only 32-bit
+- The 64-bit libraries now are being built by default. To make only 32-bit
   libraries use ARCH=32 flag passed to make
 
 ### Forwarding code:
@@ -28,9 +34,9 @@
 - The main repository has been moved to gitlab.com, but github is left as
   a mirror
 - GitLab CI was configured to build and deploy the project every week,
-  so the binary packages is available as artifacts in devel branch at gitlab
+  so the binary packages are available as artifacts in devel branch at gitlab
 - Fixed the supplying of `libsteam_api.so` of wrong version (#22)
-- The 64-bit `libsteam_api.so` libraries now is being deployed
+- The 64-bit `libsteam_api.so` libraries now are being deployed
 
 # 0.3.1
 

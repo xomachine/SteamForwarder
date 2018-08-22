@@ -274,7 +274,7 @@ if 'regfile' in appinfos:
     tmpfile.write(content)
     tmpfile.flush()
     p = subprocess.Popen(["regedit", tmpfile.name],
-      env={"WINEPREFIX": config["wineprefix"], "WINEARCH": "win32"})
+      env={"WINEPREFIX": config["wineprefix"]})
     p.wait()
 print("Generating the steam_api.dll wrapper just for this game...")
 ldpaths = findMatchingLibrary(rs_location, config['strict'])

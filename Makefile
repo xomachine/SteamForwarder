@@ -119,4 +119,5 @@ fullclean: clean
 
 clean:
 	$(RM) -r $(CACHEDIR)/nimcache.*
+	$(RM) -r /tmp/nimcache.*
 	$(RM) $(OUTPUTDLL) steam_api_main.c
