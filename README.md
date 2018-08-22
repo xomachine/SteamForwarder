@@ -2,7 +2,8 @@
 ![https://travis-ci.org/xomachine/SteamForwarder](https://travis-ci.org/xomachine/SteamForwarder.svg?branch=master)[![pipeline status](https://gitlab.com/xomachine/SteamForwarder/badges/master/pipeline.svg)](https://gitlab.com/xomachine/SteamForwarder/commits/master)
 
 `steam_api.dll` implementation for WINE. Your windows games now can interact with your linux steam! What does it mean? It means this tool provides a component for WINE named `steam_api.dll`. It works like for example `opengl32.dll` provided by WINE which allows windows programms to access OpenGL API under linux. If `opengl32.dll` supplies interface to `libGL.so`, the `steam_api.dll` does the same thing but for `libsteam_api.so` (which is provided by Valve for linux steam games).
-
+# ! Attention !
+Recently Valve has [introduced new version of SteamPlay](https://steamcommunity.com/games/221410/announcements/detail/1696055855739350561) that includes a core feature of the SteamForwarder project - to connect Windows games with Linux Steam. So since this moment SteamForwarder can be considered as deprecated and the project won't be in the active developement any more. Nevertheless I will continue trying to fix any bugs reported if any.
 # ! DISCLAIMER !
 **The author is not liable for any damage resulting from the use of this software. User might break his games, steam, OS or even computer. User account might to be banned by Valve. The legal status of the tool is uncertain and nobody have been banned so far but EVERYTHING THAT YOU'RE DOING, YOU'RE DOING ON YOUR OWN RISK!**
 
