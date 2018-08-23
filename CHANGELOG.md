@@ -1,4 +1,14 @@
-# [Unreleased]
+# 0.4.1
+
+### Project status
+- Since Valve introduced their new SteamPlay feature that allows linux users to
+  run windows games directly from Steam, I have stopped the active developement of
+  the project. SteamPlay does almost the same thing that SteamForwarder but better,
+  because Valve has all the source code of their product and understanding how the
+  Steam works. Moreover, Valve provides their own build of WINE, called Proton
+  which includes some patches for better gaming experience (and the steamclient
+  implementation as well). So it probably will be last release of SteamForwarder
+  so far.
 
 ### Installation script
 - `win32` arch no longer being forced while applying registry file for the game
