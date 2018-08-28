@@ -47,7 +47,8 @@ proc readSymbolTable*(b: BFD): seq[Symbol] =
   {.emit: [archsize, " = bfd_get_arch_size(", b, ");"].}
 #  echo "Required to allocate ", tablesize, " in ", archsize, " arch"
   if tablesize < 0:
-    return nil
+    raise newException(Exception,
+      "Incorrect upperbound value obtained from BFD library")
   elif tablesize == 0:
     return @[]
   result = newSeq[Symbol](tablesize div (archsize div 8))

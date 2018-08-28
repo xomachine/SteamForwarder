@@ -5,8 +5,8 @@ from spec import readSpecFile, SpecFile
 from strutils import toHex, join
 from sequtils import repeat
 from spcounter import readProcedure, StackStatus
-from libs.disasm import initDisasm
-from libs.bfd import bfd_init, init, bfd_open, bfd_close, readSymbolTable,
+from libs/disasm import initDisasm
+from libs/bfd import bfd_init, init, bfd_open, bfd_close, readSymbolTable,
                      BFS_DEBUGGING, Symbol, BFD, bfd_get_start_address,
                      bfd_get_section_by_name, getContent, BFS_GLOBAL
 

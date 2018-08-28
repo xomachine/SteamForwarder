@@ -1,4 +1,4 @@
-from libs.disasm import Disasmer
+from libs/disasm import Disasmer
 from tables import Table
 from sets import HashSet
 
@@ -15,7 +15,14 @@ proc readProcedure*(disasmer: var Disasmer, madr: uint32): StackStatus
 from strutils import split, parseHexInt, strip, toHex
 from sets import initSet, incl, contains
 from tables import `[]`, `[]=`, initTable, contains, del
-from libs.disasm import parseInstructions
+from libs/disasm import parseInstructions
+
+const NimVersionCummulative = NimMajor * 10000 + NimMinor * 100 + NimPatch
+# 0.18.1 == 1801
+
+when NimVersionCummulative > 1800:
+  proc isNil(s: string): bool =
+    s.len() == 0
 
 var stackprotector = 0'u32 # address of stack protector procedure
 

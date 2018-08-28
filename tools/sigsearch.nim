@@ -4,9 +4,9 @@ from tables import initTable, `[]`, `[]=`, contains, del, `$`
 from strutils import splitLines, parseHexInt, toHex, splitWhitespace, find,
                      count, contains, split, strip, parseInt, isDigit
 from spcounter import readProcedure
-from libs.bfd import bfd_open, bfd_close, bfd_init, bfd_get_section_by_name,
+from libs/bfd import bfd_open, bfd_close, bfd_init, bfd_get_section_by_name,
                 getContent, bfd_count_sections, init, bfd_get_start_address
-from libs.disasm import initDisasm
+from libs/disasm import initDisasm
 
 proc addr2Pattern(address: Natural): string =
   ## Converts given `address` to its representation in the memory as a string
