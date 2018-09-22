@@ -1,7 +1,7 @@
 {.deadCodeElim: on.}
-from genmacros.wine import trace
-from genmacros.cdecls import generateLinuxDecls, generateWineDecls
-from genmacros.utils import parseFullSpec
+from genmacros/wine import trace
+from genmacros/cdecls import generateLinuxDecls, generateWineDecls
+from genmacros/utils import parseFullSpec
 const specname {.strdefine.} = "steam_api.auto.spec"
 {.passL: "'" & specname & "'".}
 
