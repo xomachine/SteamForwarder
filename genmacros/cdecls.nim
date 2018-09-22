@@ -6,6 +6,11 @@ from wine import trace
 from callback import wrap, unwrap, wrapToOrigin
 import macros
 
+const NimCumulativeVerison = NimMajor.int * 10000 + NimMinor * 100 + NimPatch
+when NimCumulativeVerison > 1800:
+  proc isNil(s: string): bool =
+    s.len() == 0
+
 type Dummy = object
   a: uint64
   ## The empty struct needed to be used as return value in some functions and
