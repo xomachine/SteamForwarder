@@ -1,4 +1,4 @@
-image: "vookimedlo/debian-gcc:gcc_debian-stable"
+image: debian:${DVERNAME}
 variables:
   WBRANCH: stable
   WVERSION: 3.0.1
