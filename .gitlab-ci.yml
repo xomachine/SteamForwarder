@@ -1,4 +1,4 @@
-image: debian:wheezy
+image: debian:sid
 variables:
   WBRANCH: stable
   WVERSION: 3.0.1
