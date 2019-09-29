@@ -17,7 +17,7 @@ cache:
   before_script:
   - dpkg --add-architecture i386
   - apt-get update
-  - apt-get install -y -f binutils-dev gcc-multilib wget
+  - apt-get install -y -f binutils-dev gcc-multilib wget git
   - |
     if [ ! -f wine/wine.deb ]; then
       rm -rf wine
