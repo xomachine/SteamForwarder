@@ -22,7 +22,7 @@ cache:
     if [ ! -f wine/wine.deb ]; then
       rm -rf wine
       mkdir -p wine
-      export DVERNAME=$(sed -n 's/^VERSION=.*(\([a-z]\+\)).*/\1/p' /etc/os-release)
+      export DVERNAME=$(apt-cache policy | fgrep o=Debian, | fgrep ,l=Debian, | fgrep ,c=main, | egrep -o 'n=[^, ]*' | awk -F= '{print $2}' | uniq)
       wget -O wine/wine-i386.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-i386_${WVERSION}~${DVERNAME}_i386.deb
       wget -O wine/wine-amd64.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-amd64_${WVERSION}~${DVERNAME}_amd64.deb
       wget -O wine/wine-dev.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-dev_${WVERSION}~${DVERNAME}_amd64.deb
