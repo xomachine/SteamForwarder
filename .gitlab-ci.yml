@@ -1,4 +1,4 @@
-image: "vookimedlo/debian-gcc:gcc_debian-stable"
+image: "debian:sid"
 variables:
   WBRANCH: stable
   WVERSION: 3.0.1
@@ -17,12 +17,16 @@ cache:
   before_script:
   - dpkg --add-architecture i386
   - apt-get update
-  - apt-get install -y -f binutils-dev gcc-multilib wget
+  - apt-get install -y -f binutils-dev gcc-multilib wget git nim
   - |
     if [ ! -f wine/wine.deb ]; then
       rm -rf wine
       mkdir -p wine
       export DVERNAME=$(sed -n 's/^VERSION=.*(\([a-z]\+\)).*/\1/p' /etc/os-release)
+      if [ x"$DVERNAME" = x ]; then
+        export DVERNAME=$(sed -n 's%^PRETTY_NAME=.*/\([a-z]\+\)"$%\1%p' /etc/os-release)
+      fi
+      echo "Version: $DVERNAME"
       wget -O wine/wine-i386.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-i386_${WVERSION}~${DVERNAME}_i386.deb
       wget -O wine/wine-amd64.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-amd64_${WVERSION}~${DVERNAME}_amd64.deb
       wget -O wine/wine-dev.deb https://dl.winehq.org/wine-builds/debian/pool/main/wine-${WBRANCH}-dev_${WVERSION}~${DVERNAME}_amd64.deb
@@ -35,34 +39,27 @@ cache:
     ln -s /opt/wine-${WBRANCH}/include/wine /usr/include/wine
     ln -s /opt/wine-${WBRANCH}/lib{,32}
   - |
-    if [ ! -x nim-${NIMBRANCH}/bin/nim ]; then
-      git clone -b ${NIMBRANCH} --depth 1 git://github.com/nim-lang/nim nim-${NIMBRANCH}/
-      cd nim-${NIMBRANCH}
-      git clone --depth 1 git://github.com/nim-lang/csources csources/
-      cd csources
-      sh build.sh
-      cd ..
-      rm -rf csources
-      bin/nim c koch
-      ./koch boot -d:release
-      ./koch nimble
-    else
+    if [ ! "${NIMBRANCH}" = "master" ]; then
+      if [ ! -f nim-${NIMBRANCH}/koch.nim ]; then
+        rm -rf nim-${NIMBRANCH}
+        git clone -b ${NIMBRANCH} --depth 1 git://github.com/nim-lang/nim nim-${NIMBRANCH}/
+      fi
       cd nim-${NIMBRANCH}
       git fetch origin
       if ! git merge FETCH_HEAD | grep "Already up-to-date"; then
-        bin/nim c koch
+        nim c koch
         ./koch boot -d:release
         ./koch nimble
       fi
+      cd ..
+      export PATH="$PWD/nim-${NIMBRANCH}/bin${PATH:+:$PATH}"
     fi
-    cd ..
-    export PATH="$PWD/nim-${NIMBRANCH}/bin${PATH:+:$PATH}"
 
 .test: &testpart
   stage: test
   <<: *compiler
   script:
-  - nim-${NIMBRANCH}/bin/nim -v
+  - nim -v
   - winegcc -v
   - wine64 --version
   - |
